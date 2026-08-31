@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>اختبار مصطلحات الشبكات</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F4F7F6;
+    --surface:#FFFFFF;
+    --surface-2:#EBF1EF;
+    --text:#142420;
+    --text-muted:#5B6E68;
+    --border:#D8E3DF;
+    --accent:#0E7C86;
+    --accent-strong:#0A5F67;
+    --accent-soft:#E2F3F2;
+    --accent-ink:#FFFFFF;
+    --level-easy:#2F9E58;
+    --level-easy-soft:#E4F5EA;
+    --level-mid:#B8790E;
+    --level-mid-soft:#FBF0DD;
+    --level-hard:#C1443A;
+    --level-hard-soft:#FBE7E5;
+    --shadow:0 1px 2px rgba(20,36,32,.04), 0 8px 24px -12px rgba(20,36,32,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0A1412;
+      --surface:#101C19;
+      --surface-2:#16221F;
+      --text:#E7F0ED;
+      --text-muted:#93A9A2;
+      --border:#223330;
+      --accent:#34C5CF;
+      --accent-strong:#7BE0E6;
+      --accent-soft:#12302F;
+      --accent-ink:#052625;
+      --level-easy:#4ADE80;
+      --level-easy-soft:#12321F;
+      --level-mid:#FBBF24;
+      --level-mid-soft:#332608;
+      --level-hard:#F87171;
+      --level-hard-soft:#341413;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0A1412;
+    --surface:#101C19;
+    --surface-2:#16221F;
+    --text:#E7F0ED;
+    --text-muted:#93A9A2;
+    --border:#223330;
+    --accent:#34C5CF;
+    --accent-strong:#7BE0E6;
+    --accent-soft:#12302F;
+    --accent-ink:#052625;
+    --level-easy:#4ADE80;
+    --level-easy-soft:#12321F;
+    --level-mid:#FBBF24;
+    --level-mid-soft:#332608;
+    --level-hard:#F87171;
+    --level-hard-soft:#341413;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'IBM Plex Sans Arabic','IBM Plex Sans',system-ui,sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    direction:rtl;
+  }
+
+  .en{font-family:'IBM Plex Sans','IBM Plex Sans Arabic',system-ui,sans-serif;unicode-bidi:isolate;}
+  .mono{font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;}
+
+  .wrap{
+    max-width:820px;
+    margin:0 auto;
+    padding:28px 20px 80px;
+  }
+
+  header.page-head{
+    margin-bottom:22px;
+  }
+  .head-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    letter-spacing:.06em;
+    color:var(--accent-strong);
+    background:var(--accent-soft);
+    padding:5px 12px;
+    border-radius:999px;
+    margin-bottom:14px;
+  }
+  h1{
+    font-family:'Cairo',sans-serif;
+    font-weight:800;
+    font-size:clamp(24px,4.2vw,32px);
+    margin:0 0 8px;
+    text-wrap:balance;
+  }
+  .sub{
+    color:var(--text-muted);
+    font-size:15px;
+    max-width:60ch;
+  }
+  .instructor-credit{
+    color:var(--accent-strong);
+    font-size:13px;
+    font-weight:600;
+    margin-top:8px;
+  }
+  .identity-banner{
+    background:var(--accent-soft);
+    color:var(--accent-strong);
+    border-radius:10px;
+    padding:10px 14px;
+    font-size:14px;
+    margin:0 0 16px;
+  }
+  .identity-banner b{color:inherit;}
+  .mode-link{
+    background:none;
+    border:none;
+    color:var(--accent-strong);
+    font:inherit;
+    font-size:13px;
+    font-weight:600;
+    text-decoration:underline;
+    cursor:pointer;
+    padding:6px 0;
+  }
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:22px;
+    box-shadow:var(--shadow);
+  }
+  .card + .card{margin-top:16px;}
+
+  .field{margin-bottom:16px;}
+  .field:last-child{margin-bottom:0;}
+  label{
+    display:block;
+    font-size:13px;
+    font-weight:600;
+    color:var(--text-muted);
+    margin-bottom:6px;
+  }
+  input[type="text"], select, textarea{
+    width:100%;
+    font:inherit;
+    font-size:16px;
+    padding:11px 13px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:var(--surface-2);
+    color:var(--text);
+  }
+  textarea{resize:vertical;}
+  input[type="text"]:focus, select:focus, textarea:focus, button:focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:1px;
+  }
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  @media (max-width:560px){.field-row{grid-template-columns:1fr;}}
+
+  .seg{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .seg button{
+    flex:1 1 auto;
+    min-width:110px;
+  }
+  .chip-btn{
+    font:inherit;
+    font-size:14px;
+    font-weight:600;
+    padding:10px 14px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:var(--surface-2);
+    color:var(--text);
+    cursor:pointer;
+  }
+  .chip-btn[aria-pressed="true"]{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:var(--accent-ink);
+  }
+  .chip-btn:disabled{
+    opacity:.4;
+    cursor:not-allowed;
+  }
+
+  .btn{
+    font:inherit;
+    font-weight:700;
+    font-size:15px;
+    padding:12px 20px;
+    border-radius:11px;
+    border:1px solid var(--accent);
+    background:var(--accent);
+    color:var(--accent-ink);
+    cursor:pointer;
+  }
+  .btn:hover{background:var(--accent-strong);border-color:var(--accent-strong);}
+  .btn.secondary{
+    background:transparent;
+    color:var(--text);
+    border-color:var(--border);
+  }
+  .btn.secondary:hover{background:var(--surface-2);}
+  .btn.small{padding:8px 14px;font-size:13px;border-radius:9px;}
+  .btn:disabled{opacity:.5;cursor:not-allowed;}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;align-items:center;}
+
+  .progress-line{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;
+    color:var(--text-muted);
+    margin-bottom:14px;
+  }
+  .progress-line strong{color:var(--text);}
+
+  .timer-bar{
+    display:flex;
+    align-items:baseline;
+    justify-content:center;
+    gap:10px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:10px 14px;
+    margin-bottom:12px;
+    box-shadow:var(--shadow);
+  }
+  .timer-label{
+    font-size:12px;
+    font-weight:600;
+    color:var(--text-muted);
+  }
+  .timer-time{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:26px;
+    font-weight:700;
+    color:var(--accent-strong);
+    font-variant-numeric:tabular-nums;
+  }
+  .timer-bar.warn{border-color:var(--level-mid);}
+  .timer-bar.warn .timer-time{color:var(--level-mid);}
+  .timer-bar.danger{border-color:var(--level-hard);}
+  .timer-bar.danger .timer-time{color:var(--level-hard);}
+  @media (prefers-reduced-motion: no-preference){
+    .timer-bar.danger .timer-time{animation:timerPulse 1s ease-in-out infinite;}
+  }
+  @keyframes timerPulse{
+    0%,100%{opacity:1;}
+    50%{opacity:.55;}
+  }
+
+  .exam-bar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    flex-wrap:wrap;
+    background:var(--accent-soft);
+    color:var(--accent-strong);
+    border-radius:10px;
+    padding:8px 14px;
+    font-size:12.5px;
+    font-weight:600;
+    margin-bottom:14px;
+  }
+  .exit-badge{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    font-weight:700;
+    padding:3px 10px;
+    border-radius:999px;
+    background:var(--surface);
+    color:var(--text-muted);
+    white-space:nowrap;
+  }
+  .exit-badge.flagged{
+    background:var(--level-hard-soft);
+    color:var(--level-hard);
+  }
+  .fs-prompt{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    flex-wrap:wrap;
+    background:var(--level-mid-soft);
+    color:var(--level-mid);
+    border-radius:10px;
+    padding:10px 14px;
+    font-size:13px;
+    font-weight:600;
+    margin-bottom:14px;
+  }
+  .exit-log{font-size:12px;color:var(--text-muted);margin-top:4px;}
+
+  .term-list{
+    position:relative;
+    padding-inline-start:0;
+    list-style:none;
+    margin:0;
+  }
+  .term-list::before{
+    content:"";
+    position:absolute;
+    top:22px;
+    bottom:22px;
+    right:21px;
+    width:2px;
+    background:var(--border);
+  }
+
+  .term-item{
+    position:relative;
+    padding-inline-end:52px;
+    margin-bottom:14px;
+  }
+  .term-item:last-child{margin-bottom:0;}
+  .node{
+    position:absolute;
+    top:20px;
+    right:0;
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'IBM Plex Mono',monospace;
+    font-weight:600;
+    font-size:15px;
+    border:2px solid var(--surface);
+    box-shadow:0 0 0 2px var(--border);
+    z-index:1;
+  }
+  .lvl-سهل .node{background:var(--level-easy-soft);color:var(--level-easy);}
+  .lvl-متوسط .node{background:var(--level-mid-soft);color:var(--level-mid);}
+  .lvl-صعب .node{background:var(--level-hard-soft);color:var(--level-hard);}
+
+  .term-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:16px 18px;
+    box-shadow:var(--shadow);
+  }
+  .term-meta{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:8px;
+  }
+  .direction{
+    font-size:12px;
+    color:var(--text-muted);
+  }
+  .level-pill, .status-pill{
+    font-size:11px;
+    font-weight:700;
+    padding:3px 9px;
+    border-radius:999px;
+    white-space:nowrap;
+  }
+  .lvl-سهل .level-pill{background:var(--level-easy-soft);color:var(--level-easy);}
+  .lvl-متوسط .level-pill{background:var(--level-mid-soft);color:var(--level-mid);}
+  .lvl-صعب .level-pill{background:var(--level-hard-soft);color:var(--level-hard);}
+  .status-pill.ok{background:var(--level-easy-soft);color:var(--level-easy);}
+  .status-pill.bad{background:var(--level-hard-soft);color:var(--level-hard);}
+
+  .term-shown{
+    font-family:'Cairo',sans-serif;
+    font-weight:700;
+    font-size:21px;
+    margin-bottom:12px;
+  }
+
+  .hint{
+    font-size:12px;
+    color:var(--text-muted);
+    margin-top:8px;
+  }
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:14px;
+  }
+  thead th{
+    text-align:start;
+    font-size:12px;
+    color:var(--text-muted);
+    font-weight:600;
+    padding:8px 10px;
+    border-bottom:1px solid var(--border);
+    white-space:nowrap;
+  }
+  tbody td{
+    padding:10px;
+    border-bottom:1px solid var(--border);
+    vertical-align:top;
+  }
+  tbody tr:last-child td{border-bottom:none;}
+  .table-wrap{overflow-x:auto;}
+  .your-ans{font-weight:600;}
+  .correct-ans{color:var(--accent-strong);font-weight:600;}
+  .empty-ans{color:var(--text-muted);font-style:italic;}
+  .absent-cell{color:var(--text-muted);font-style:italic;font-size:13px;}
+
+  .notice{
+    font-size:13px;
+    background:var(--level-mid-soft);
+    color:var(--level-mid);
+    border-radius:10px;
+    padding:9px 12px;
+    margin-bottom:14px;
+  }
+
+  .score-banner{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    font-family:'Cairo',sans-serif;
+    margin-bottom:16px;
+  }
+  .score-banner .big{font-size:30px;font-weight:800;color:var(--accent-strong);}
+  .score-banner .small{color:var(--text-muted);font-size:14px;}
+
+  .result-head{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px 18px;
+    font-size:13px;
+    color:var(--text-muted);
+    margin-bottom:16px;
+  }
+  .result-head b{color:var(--text);}
+
+  textarea.copy-area{
+    width:100%;
+    min-height:160px;
+    margin-top:10px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px;
+    padding:10px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:var(--surface-2);
+    color:var(--text);
+  }
+  .copy-status{font-size:12px;color:var(--accent-strong);margin-inline-start:6px;}
+
+  .section-block{margin-top:18px;}
+  .section-block h3{
+    font-family:'Cairo',sans-serif;
+    font-size:16px;
+    margin:0 0 4px;
+  }
+  .section-block .section-sub{font-size:12px;color:var(--text-muted);margin-bottom:10px;}
+
+  [hidden]{display:none!important;}
+
+  @media print{
+    body{background:#fff;color:#000;}
+    .no-print{display:none!important;}
+    .wrap{max-width:100%;padding:0;}
+    .card{box-shadow:none;border:1px solid #ccc;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap" dir="rtl" lang="ar">
+
+  <header class="page-head">
+    <div class="head-row">
+      <div>
+        <span class="eyebrow">تمرين مصطلحات · شبكات الحاسب</span>
+        <h1>اختبار مصطلحات الشبكات</h1>
+        <p class="sub" id="pageSub">اختر شعبتك واسمك والمحاضرة، ثم ترجم كل مصطلح. النتيجة تُصحَّح تلقائيًا فور الانتهاء.</p>
+        <p class="instructor-credit">محاضر المقرر: م. عبدالرحمن الخثعمي</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- LOGIN -->
+  <section id="view-login">
+    <div class="card">
+      <div class="seg" id="roleSeg">
+        <button type="button" class="chip-btn" data-role="trainee">دخول متدرب</button>
+        <button type="button" class="chip-btn" data-role="admin">دخول مسؤول</button>
+      </div>
+      <div class="field" style="margin-top:16px">
+        <label id="loginUserLabel" for="loginUsername">الرقم التدريبي</label>
+        <input type="text" id="loginUsername" inputmode="numeric" placeholder="اكتب رقمك التدريبي" autocomplete="off">
+      </div>
+      <div class="field">
+        <label id="loginPassLabel" for="loginPassword">رقم الشعبة (ككلمة سر)</label>
+        <input type="password" id="loginPassword" inputmode="numeric" placeholder="اكتب رقم شعبتك" autocomplete="off">
+      </div>
+      <p class="notice" id="loginError" hidden></p>
+      <div class="actions">
+        <button class="btn" id="loginBtn">دخول</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SETUP -->
+  <section id="view-setup" hidden>
+    <div class="card">
+      <p class="identity-banner">مرحبًا <b id="setupName"></b> — الشعبة: <b id="setupSection"></b> (<span id="setupId" class="mono"></span>)</p>
+      <div class="field">
+        <label for="weekSelect">الأسبوع</label>
+        <select id="weekSelect"></select>
+      </div>
+      <div class="field">
+        <label>المحاضرة</label>
+        <div class="seg" id="lectureSeg"></div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="startBtn">بدء الاختبار</button>
+      </div>
+    </div>
+    <p class="hint"><button class="mode-link" id="logoutBtn" type="button">تسجيل خروج</button></p>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="view-quiz" hidden>
+    <div class="timer-bar" id="examTimerBar">
+      <span class="timer-label">⏱ الوقت المتبقي</span>
+      <span class="timer-time" id="examTimer">05:00</span>
+    </div>
+    <div class="exam-bar no-print">
+      <span class="exam-lock">🔒 وضع الاختبار الآمن مفعّل — أي خروج من الصفحة أثناء الحل يُسجَّل ويظهر للمحاضر. الاختبار ينتهي تلقائيًا عند انتهاء الوقت.</span>
+      <span id="exitBadge" class="exit-badge">0 مغادرة</span>
+    </div>
+    <div id="fsPrompt" class="fs-prompt no-print" hidden>
+      <span>لقد خرجت من وضع ملء الشاشة.</span>
+      <button class="btn small" id="fsReturnBtn" type="button">العودة لوضع ملء الشاشة</button>
+    </div>
+    <div class="progress-line">
+      <span>الأسبوع <strong id="quizWeek"></strong> — المحاضرة <strong id="quizLecture"></strong></span>
+      <span id="quizRange" class="mono"></span>
+    </div>
+    <ol class="term-list" id="termList"></ol>
+    <div class="actions">
+      <button class="btn secondary" id="backBtn">رجوع</button>
+      <button class="btn" id="finishBtn">إنهاء الاختبار وعرض النتيجة</button>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="view-results" hidden>
+    <div class="card" id="resultsCard">
+      <p class="notice" id="autoSubmitNotice" hidden>⏰ انتهى الوقت المحدد (5 دقائق) — تم إنهاء الاختبار تلقائيًا وتصحيح الإجابات التي تم إدخالها حتى تلك اللحظة.</p>
+      <div class="score-banner">
+        <span class="big" id="scoreBig">0/0</span>
+        <span class="small" id="scorePct"></span>
+      </div>
+      <div class="result-head">
+        <span>الاسم: <b id="resName">—</b></span>
+        <span>الرقم التدريبي: <b id="resId">—</b></span>
+        <span>الشعبة: <b id="resSection">—</b></span>
+        <span>الأسبوع: <b id="resWeek"></b> — المحاضرة: <b id="resLecture"></b></span>
+        <span>التاريخ: <b id="resDate"></b></span>
+        <span>مرات مغادرة الصفحة أثناء الحل: <b id="resExits">0</b></span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>المصطلح المعروض</th>
+              <th>إجابتك</th>
+              <th>الإجابة الصحيحة</th>
+              <th>الصعوبة</th>
+              <th>الحالة</th>
+            </tr>
+          </thead>
+          <tbody id="resultsBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="actions no-print">
+      <button class="btn" id="printBtn">طباعة</button>
+      <button class="btn secondary" id="copyBtn">نسخ النتيجة (سلّمها للمحاضر)</button>
+      <button class="btn secondary" id="retryBtn">اختبار جديد</button>
+      <span class="copy-status" id="copyStatus" hidden>تم النسخ ✓</span>
+    </div>
+    <textarea class="copy-area no-print" id="copyArea" hidden readonly></textarea>
+  </section>
+
+  <!-- INSTRUCTOR -->
+  <section id="view-instructor" hidden>
+    <div class="card">
+      <p class="sub" style="margin:0 0 14px">اطلب من كل متدرب أن يرسل لك النص الذي نسخه بعد الاختبار (زر "نسخ النتيجة"). الصق كل ما استلمته هنا دفعة واحدة — سواء نسخة واحدة أو عدة رسائل ملصقة فوق بعض — وسيتم استخراج النتائج تلقائيًا وتجميعها حسب الشعبة.</p>
+      <div class="field">
+        <label for="instWeek">الأسبوع المطلوب رصده</label>
+        <select id="instWeek"></select>
+      </div>
+      <div class="field">
+        <label for="pasteArea">النصوص المستلمة من المتدربين</label>
+        <textarea id="pasteArea" class="copy-area" style="min-height:180px" placeholder="الصق هنا كل ما استلمته من المتدربين..."></textarea>
+      </div>
+      <div class="actions">
+        <button class="btn" id="compileBtn">تحديث كشف الدرجات</button>
+        <span class="hint" id="parseInfo"></span>
+      </div>
+    </div>
+
+    <div id="instructorResults"></div>
+
+    <div class="actions no-print">
+      <button class="btn secondary" id="backInstBtn">تسجيل خروج</button>
+    </div>
+  </section>
+
+</div><!-- /.wrap -->
+
+<script>
+const TERMS=[{id:1,en:'Computer Network',ar:'شبكة الحاسب',level:'سهل',note:'مجموعة أجهزة متصلة لتبادل البيانات والموارد.'},{id:2,en:'LAN – Local Area Network',ar:'الشبكة المحلية',level:'سهل',note:'شبكة تربط الأجهزة داخل موقع محدود.'},{id:3,en:'Switched Network',ar:'شبكة محولة',level:'سهل',note:'شبكة تستخدم المحولات لربط الأجهزة وإدارة حركة البيانات.'},{id:4,en:'Network Convergence',ar:'تقارب الشبكات',level:'متوسط',note:'دمج خدمات الصوت والفيديو والبيانات في شبكة واحدة.'},{id:5,en:'Data Traffic',ar:'حركة بيانات',level:'سهل',note:'المعلومات التي تنتقل عبر الشبكة بين الأجهزة.'},{id:6,en:'Voice Traffic',ar:'حركة الصوت',level:'سهل',note:'البيانات الخاصة بالمكالمات والخدمات الصوتية.'},{id:7,en:'Video Traffic',ar:'حركة الفيديو',level:'سهل',note:'البيانات الخاصة بالفيديو والمؤتمرات المرئية.'},{id:8,en:'Collaboration',ar:'التعاون',level:'سهل',note:'استخدام الشبكة لدعم العمل والتواصل بين المستخدمين.'},{id:9,en:'IP Phone',ar:'هاتف IP',level:'سهل',note:'هاتف يستخدم شبكة البيانات لإجراء المكالمات.'},{id:10,en:'Voice Gateway',ar:'بوابة الصوت',level:'متوسط',note:'جهاز يربط خدمات الصوت التقليدية بشبكة IP.'},{id:11,en:'Video Conferencing',ar:'المؤتمرات المرئية',level:'سهل',note:'التواصل بالصوت والصورة عبر الشبكة.'},{id:12,en:'Mobility',ar:'قابلية التنقل',level:'سهل',note:'الوصول إلى خدمات الشبكة أثناء التنقل.'},{id:13,en:'High Availability',ar:'الإتاحة العالية',level:'متوسط',note:'تصميم الشبكة بحيث تستمر الخدمات في العمل.'},{id:14,en:'Network Security',ar:'أمن الشبكات',level:'سهل',note:'حماية الشبكة والأجهزة والبيانات.'},{id:15,en:'Network Reliability',ar:'موثوقية الشبكة',level:'متوسط',note:'قدرة الشبكة على العمل بشكل صحيح ومستمر.'},{id:16,en:'Hierarchical Network Design',ar:'التصميم الهرمي للشبكة',level:'متوسط',note:'تقسيم الشبكة إلى طبقات لتسهيل إدارتها.'},{id:17,en:'Three-Tier LAN Design',ar:'تصميم LAN ثلاثي الطبقات',level:'متوسط',note:'تصميم يعتمد على طبقات الوصول والتوزيع والمركز.'},{id:18,en:'Two-Tier LAN Design',ar:'تصميم LAN ثنائي الطبقات',level:'متوسط',note:'تصميم يدمج طبقتي المركز والتوزيع.'},{id:19,en:'Core Layer',ar:'طبقة المركز',level:'متوسط',note:'طبقة توفر نقل البيانات بسرعة عالية بين أجزاء الشبكة.'},{id:20,en:'Distribution Layer',ar:'طبقة التوزيع',level:'متوسط',note:'تربط طبقة الوصول بالمركز وتطبق سياسات الشبكة.'},{id:21,en:'Access Layer',ar:'طبقة الوصول',level:'سهل',note:'الطبقة التي تتصل بها أجهزة المستخدمين مباشرة.'},{id:22,en:'Collapsed Core/Distribution',ar:'مركز/توزيع مدمج',level:'صعب',note:'دمج وظيفتي طبقتي المركز والتوزيع.'},{id:23,en:'Hierarchical',ar:'هرمي',level:'سهل',note:'تنظيم الشبكة في مستويات أو طبقات.'},{id:24,en:'Modularity',ar:'النمطية',level:'متوسط',note:'تقسيم الشبكة إلى أجزاء مستقلة.'},{id:25,en:'Flexibility',ar:'المرونة',level:'سهل',note:'قدرة الشبكة على التكيف مع التغييرات.'},{id:26,en:'Scalability',ar:'قابلية التوسع',level:'متوسط',note:'قدرة الشبكة على النمو دون إعادة تصميمها بالكامل.'},{id:27,en:'Switch',ar:'المحول',level:'سهل',note:'جهاز يربط الأجهزة ويعيد توجيه الإطارات.'},{id:28,en:'LAN Switch',ar:'محول الشبكة المحلية',level:'سهل',note:'محول يستخدم داخل شبكة LAN.'},{id:29,en:'Switched Network Environment',ar:'بيئة الشبكة المحولة',level:'متوسط',note:'بيئة شبكية تعتمد على المحولات.'},{id:30,en:'Form Factor',ar:'عامل الشكل',level:'متوسط',note:'التصميم أو الشكل الفيزيائي للجهاز.'},{id:31,en:'Fixed Configuration Switch',ar:'محول ثابت التكوين',level:'متوسط',note:'محول تكون منافذه ومكوناته محددة مسبقًا.'},{id:32,en:'Modular Switch',ar:'محول تركيبي',level:'متوسط',note:'محول يمكن إضافة وحدات ومكونات إليه.'},{id:33,en:'Stackable Switch',ar:'محول قابل للتجميع',level:'متوسط',note:'محولات يمكن ربطها معًا لتعمل كوحدة منطقية.'},{id:34,en:'Stack',ar:'تجميع المحولات',level:'متوسط',note:'مجموعة محولات مترابطة.'},{id:35,en:'Stack Cable',ar:'كابل التجميع',level:'متوسط',note:'كابل مخصص لربط المحولات القابلة للتجميع.'},{id:36,en:'Chassis',ar:'الهيكل',level:'متوسط',note:'جسم المحول التركيبي الذي يحتوي على فتحات للوحدات.'},{id:37,en:'Line Card',ar:'بطاقة المنافذ',level:'صعب',note:'وحدة يتم تركيبها في الهيكل وتوفر منافذ الشبكة.'},{id:38,en:'Port',ar:'منفذ',level:'سهل',note:'نقطة اتصال في المحول.'},{id:39,en:'High Port Density',ar:'كثافة منافذ عالية',level:'متوسط',note:'وجود عدد كبير من المنافذ في الجهاز.'},{id:40,en:'High-Speed Port',ar:'منفذ عالي السرعة',level:'سهل',note:'منفذ قادر على نقل البيانات بسرعات مرتفعة.'},{id:41,en:'Frame',ar:'إطار',level:'سهل',note:'وحدة البيانات التي يتم التعامل معها في طبقة ربط البيانات.'},{id:42,en:'Frame Forwarding',ar:'إعادة توجيه الإطار',level:'متوسط',note:'إرسال الإطار من منفذ إلى منفذ آخر عبر المحول.'},{id:43,en:'Forwarding Decision',ar:'قرار إعادة التوجيه',level:'متوسط',note:'قرار المحول حول مكان إرسال الإطار.'},{id:44,en:'Ingress Port',ar:'منفذ الدخول',level:'متوسط',note:'المنفذ الذي يدخل منه الإطار إلى المحول.'},{id:45,en:'Destination',ar:'الوجهة',level:'سهل',note:'الجهاز أو الموقع الذي يجب أن تصل إليه البيانات.'},{id:46,en:'Ethernet Frame',ar:'إطار إيثرنت',level:'متوسط',note:'إطار بيانات يستخدم في شبكات Ethernet.'},{id:47,en:'Destination MAC Address',ar:'عنوان MAC للوجهة',level:'متوسط',note:'عنوان الجهاز الذي يجب أن يستقبل الإطار.'},{id:48,en:'Source MAC Address',ar:'عنوان MAC للمصدر',level:'متوسط',note:'عنوان الجهاز الذي قام بإرسال الإطار.'},{id:49,en:'MAC Address',ar:'عنوان MAC',level:'متوسط',note:'عنوان مميز يستخدم للتعرف على واجهة الشبكة.'},{id:50,en:'MAC Address Table',ar:'جدول عناوين MAC',level:'متوسط',note:'جدول يحتفظ بعناوين MAC والمنافذ المرتبطة بها.'},{id:51,en:'Dynamic MAC Address Table',ar:'جدول عناوين MAC الديناميكي',level:'صعب',note:'جدول يتم بناؤه تلقائيًا أثناء استقبال الإطارات.'},{id:52,en:'CAM Table',ar:'جدول CAM',level:'صعب',note:'جدول يستخدمه المحول للبحث السريع عن عناوين MAC.'},{id:53,en:'CAM – Content Addressable Memory',ar:'ذاكرة قابلة للوصول بناءً على المحتوى',level:'صعب',note:'نوع ذاكرة يسمح بالبحث السريع عن المعلومات.'},{id:54,en:'Dynamic Learning',ar:'التعلم الديناميكي',level:'متوسط',note:'تعلم المحول لعناوين MAC تلقائيًا.'},{id:55,en:'Flooding',ar:'الإغراق',level:'صعب',note:'إرسال الإطار إلى عدة منافذ عند عدم معرفة منفذ الوجهة.'},{id:56,en:'Incoming Frame',ar:'إطار وارد',level:'سهل',note:'إطار يصل إلى المحول من جهاز آخر.'},{id:57,en:'Switching Method',ar:'طريقة التحويل',level:'متوسط',note:'الأسلوب الذي يستخدمه المحول لإعادة توجيه الإطارات.'},{id:58,en:'Store-and-Forward Switching',ar:'التحويل بالتخزين وإعادة التوجيه',level:'صعب',note:'يستقبل المحول الإطار بالكامل ثم يفحصه قبل إرساله.'},{id:59,en:'Cut-Through Switching',ar:'التحويل المباشر',level:'صعب',note:'يبدأ المحول إعادة التوجيه قبل استلام الإطار بالكامل.'},{id:60,en:'Error Checking',ar:'التحقق من الأخطاء',level:'متوسط',note:'فحص الإطار للتأكد من سلامته.'},{id:61,en:'FCS – Frame Check Sequence',ar:'تسلسل فحص الإطار',level:'صعب',note:'قيمة تستخدم للتحقق من وجود أخطاء في الإطار.'},{id:62,en:'CRC – Cyclic Redundancy Check',ar:'الفحص الدوري للتكرار',level:'صعب',note:'آلية للتحقق من الأخطاء في البيانات.'},{id:63,en:'Buffering',ar:'التخزين المؤقت',level:'متوسط',note:'الاحتفاظ المؤقت بالبيانات داخل ذاكرة الجهاز.'},{id:64,en:'Frame Header',ar:'ترويسة الإطار',level:'متوسط',note:'جزء يحتوي على معلومات التحكم والعناوين.'},{id:65,en:'Network Header',ar:'ترويسة الشبكة',level:'متوسط',note:'معلومات مرتبطة بطبقة الشبكة.'},{id:66,en:'Transport Header',ar:'ترويسة النقل',level:'متوسط',note:'معلومات مرتبطة بطبقة النقل.'},{id:67,en:'Data',ar:'البيانات',level:'سهل',note:'المحتوى الفعلي الذي يتم نقله.'},{id:68,en:'Preamble',ar:'المقدمة التمهيدية',level:'صعب',note:'جزء في بداية الإطار يساعد في التزامن.'},{id:69,en:'Type Field',ar:'حقل النوع',level:'متوسط',note:'حقل يحدد نوع البيانات أو البروتوكول.'},{id:70,en:'Checksum',ar:'المجموع الاختباري',level:'صعب',note:'قيمة تستخدم للمساعدة في اكتشاف الأخطاء.'},{id:71,en:'Jumbo Frame',ar:'إطار ضخم',level:'متوسط',note:'إطار بحجم أكبر من الإطارات التقليدية.'},{id:72,en:'Microsecond',ar:'ميكروثانية',level:'سهل',note:'وحدة زمنية تساوي جزءًا من مليون من الثانية.'},{id:73,en:'Switching Domain',ar:'مجال التحويل',level:'متوسط',note:'نطاق الشبكة الذي تتم داخله عمليات التحويل.'},{id:74,en:'Collision Domain',ar:'مجال التصادم',level:'متوسط',note:'جزء من الشبكة يمكن أن يحدث فيه تنافس أو تصادم.'},{id:75,en:'Broadcast Domain',ar:'مجال البث',level:'متوسط',note:'نطاق الأجهزة التي تستقبل رسائل البث.'},{id:76,en:'Collision',ar:'تصادم',level:'سهل',note:'حدوث تداخل بين عمليات إرسال في بيئة مشتركة.'},{id:77,en:'Broadcast',ar:'بث',level:'سهل',note:'إرسال رسالة إلى جميع الأجهزة ضمن نطاق البث.'},{id:78,en:'Broadcast Frame',ar:'إطار البث',level:'متوسط',note:'إطار موجه إلى جميع الأجهزة في مجال البث.'},{id:79,en:'Network Segment',ar:'مقطع الشبكة',level:'متوسط',note:'جزء من الشبكة يمثل نطاقًا معينًا للاتصال.'},{id:80,en:'Hub',ar:'لوحة الوصل',level:'سهل',note:'جهاز يربط الأجهزة في بيئة مشتركة.'},{id:81,en:'Separate Collision Domain',ar:'مجال تصادم منفصل',level:'صعب',note:'نطاق تصادم مستقل عن بقية المنافذ.'},{id:82,en:'Network Congestion',ar:'اختناق الشبكة',level:'متوسط',note:'انخفاض الأداء بسبب زيادة حركة البيانات.'},{id:83,en:'Network Performance',ar:'أداء الشبكة',level:'سهل',note:'مستوى كفاءة الشبكة في نقل البيانات.'},{id:84,en:'Broadcast Message',ar:'رسالة بث',level:'متوسط',note:'رسالة يتم إرسالها لجميع الأجهزة ضمن مجال البث.'},{id:85,en:'Full-Duplex',ar:'الإرسال المزدوج الاتجاه المتزامن',level:'متوسط',note:'إرسال واستقبال البيانات في الوقت نفسه.'},{id:86,en:'Internal Switching',ar:'التحويل الداخلي',level:'صعب',note:'عملية معالجة البيانات داخل بنية المحول.'},{id:87,en:'Network Bottleneck',ar:'عنق زجاجة الشبكة',level:'متوسط',note:'نقطة تسبب بطئًا في أداء الشبكة.'},{id:88,en:'Congestion Reduction',ar:'تخفيف الاختناق',level:'متوسط',note:'تقليل التزاحم وتحسين تدفق البيانات.'},{id:89,en:'Traffic Management',ar:'إدارة حركة البيانات',level:'متوسط',note:'تنظيم حركة البيانات داخل الشبكة.'},{id:90,en:'Quality of Service (QoS)',ar:'جودة الخدمة',level:'صعب',note:'إعطاء أولوية لأنواع معينة من حركة البيانات.'},{id:91,en:'Wireless Connectivity',ar:'الاتصال اللاسلكي',level:'سهل',note:'الاتصال بالشبكة دون استخدام كابلات.'},{id:92,en:'Wireless Access Point (WAP)',ar:'نقطة الوصول اللاسلكية',level:'متوسط',note:'جهاز يتيح للأجهزة اللاسلكية الاتصال بالشبكة.'},{id:93,en:'Unified Communications',ar:'الاتصال الموحد',level:'متوسط',note:'دمج وسائل الاتصال مثل الصوت والرسائل والفيديو.'},{id:94,en:'IT Management',ar:'إدارة تقنية المعلومات',level:'سهل',note:'إدارة البنية التقنية والخدمات المرتبطة بها.'}];
+
+const SECTIONS=[{code:'63854',label:'الشعبة النظرية(63854)',students:[{id:'446158780',name:'احمد محمد عائض الحارثي'},{id:'446158867',name:'أنس بن ابراهيم بن عبدالله آل مشاري القرني'},{id:'446158632',name:'حزام رجاء عبدالله العموده'},{id:'446158594',name:'خالد بن سعيد بن طامي السراري الشهراني'},{id:'446158835',name:'خالد محمد خالد الاكلبي'},{id:'446158812',name:'رائد بن عبدالرحمن بن عبدالله السراري الشهراني'},{id:'446158734',name:'ريان علي عبدالله القرني'},{id:'446158683',name:'سعيد بن خالد بن سعيد الشهراني'},{id:'446158703',name:'سعيد بن عبدالله بن محمد السراري الشهراني'},{id:'445178019',name:'سلطان عبدالله بن محمد الشهراني'},{id:'446158677',name:'صقر بن حامد بن صقر السعدي'},{id:'446158853',name:'عبدالرحمن بن عبدالله بن كميخ المنبهي الشهراني'},{id:'446158613',name:'عبدالرحمن عبيد عبدالله آل عيسى'},{id:'443314344',name:'عبدالرحمن محمد راجح الاكلبي'},{id:'446254039',name:'عبدالله شارع عبدالله الجنبه'},{id:'445105461',name:'عبدالله محمد عبدالله الشهراني'},{id:'446158244',name:'عبدالمجيد بن سعود بن بريك آل مهديه الحارثي'},{id:'446158606',name:'عبدالمجيد محمد عبدالرحمن الصعيري'},{id:'446158799',name:'فراس بن حزام بن عايض الشهراني'},{id:'446158793',name:'فواز هياف فواز الهاجري'},{id:'446158623',name:'مبارك بن عائض بن ظافر الشبوي القحطاني'},{id:'446158681',name:'محمد بن عبدالله بن عايض آل مهديه الحارثي'},{id:'446158806',name:'مهند بن عبدالرحمن بن عبدالله السراري الشهراني'}]},{code:'63857',label:'الشعبة النظرية (63857)',students:[{id:'446158874',name:'ابراهيم بن عايض بن ظافر المنبهي الشهراني'},{id:'446158652',name:'أنس عبدالله مبارك الشهراني'},{id:'446158849',name:'بندر بن محمد بن سيف القربي الشهراني'},{id:'446253892',name:'سعد بن عبدالرحمن بن عبدالله آل عوضه'},{id:'446158850',name:'سعيد شارع عبدالله الشهراني'},{id:'446158639',name:'سلطان فايز مفرح آل هتيل'},{id:'446254026',name:'سلطان معيض بن عايض الحارثي'},{id:'446227159',name:'عامر بن محمد بن عامر القوبع'},{id:'446227199',name:'عبدالعزيز بن احمد بن محمد الفزعي الشمراني'},{id:'446158736',name:'علي بن دشيش بن علي الاعمشي الاكلبي'},{id:'446158610',name:'علي بن عبدالله بن علي السراري الشهراني'},{id:'446156447',name:'علي ناصر مسفر الشهراني'},{id:'446158814',name:'عناد بن فهد بن عايض المنبهي الشهراني'},{id:'446258229',name:'فيصل بن علي بن ناصر الحريزي الشهراني'},{id:'446158778',name:'مبارك بن ناصر بن علي الدرعاني الشهراني'},{id:'446158571',name:'محمد بن راجح بن محمد الجبيري الأكلبي'},{id:'446158810',name:'محمد بن سعود بن هيف الشبوي'},{id:'446158593',name:'محمد بن علي بن محمد الشهراني'},{id:'446266804',name:'محمد خالد محمد عسل'},{id:'446158625',name:'منصور بن محمد بن حضينان الفاضلي الخالدي'},{id:'446158817',name:'مهند بن بريك بن محمد الذويب الاكلبي'},{id:'446158654',name:'موسى بن محمد بن فراج الحليسي الشهراني'},{id:'446158873',name:'نواف بن محمد بن زبران الفزعي الشمراني'}]},{code:'74306',label:'الشعبة النظري(74306)',students:[{id:'446158627',name:'احمد بن عايض بن بديع المهداني الحارثي'},{id:'446158815',name:'أنس بن هياف بن جريب السراري الشهراني'},{id:'446158704',name:'تركي بن قباس بن محمد آل فالح الجهمي'},{id:'445239356',name:'حسن عبدالكريم عون القحطاني'},{id:'444121250',name:'سعد مشبب مسعر المعاوي'},{id:'446158660',name:'سلمان عايض بن سالم الحارثي'},{id:'446158644',name:'ظافر صبيخان بن محمد الشهراني'},{id:'446158686',name:'عبدالرحمن بن عبدالله بن عامر المنبهي الشهراني'},{id:'446158626',name:'عبدالرحمن علي بن ظافر القرني'},{id:'446158685',name:'عبدالسلام بن علي بن محمد الثابتي الشهري'},{id:'446158595',name:'عبدالعزيز بن علي بن عبدالرحمن المليحي الشهراني'},{id:'446158771',name:'عبدالعزيز محمد ظافر الشهراني'},{id:'446158813',name:'عبدالعزيز ناصر بن عبدالعزيز الاكلبي'},{id:'446158592',name:'علي مسعود علي الشهراني'},{id:'446158664',name:'فيصل بن محمد بن ناصر الحارثي'},{id:'446158621',name:'متعب بن عبدالله بن جبل بن محمد السريعي الشهراني'},{id:'446158836',name:'محمد سعد بن سياف الشهراني'},{id:'446158874',name:'ابراهيم بن عايض بن ظافر المنبهي الشهراني'},{id:'446188430',name:'بدر ظافر جريب الشهراني'},{id:'446156828',name:'بندر ظافر جريب الشهراني'},{id:'446174476',name:'عبدالسلام علي عايض الشهراني'}]}];
+
+const LECTURE_SIZE = 5;
+const LECTURES_PER_WEEK = 3;
+const CODE_PREFIX = 'NETQ1';
+const EXAM_DURATION_SECONDS = 5 * 60;
+
+function chunk(arr, size){
+  const out = [];
+  for(let i=0;i<arr.length;i+=size) out.push(arr.slice(i,i+size));
+  return out;
+}
+
+const lectureChunks = chunk(TERMS, LECTURE_SIZE);
+const LECTURES = lectureChunks.map((terms,i)=>({
+  index:i+1,
+  terms: terms.map(t=>({...t, dir: (t.id % 2 === 0) ? 'ar2en' : 'en2ar'}))
+}));
+const weekChunks = chunk(LECTURES, LECTURES_PER_WEEK);
+const WEEKS = weekChunks.map((lects,i)=>({index:i+1, lectures:lects}));
+
+const STORE_KEY = 'nettermquiz.v2';
+function loadPrefs(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  }catch(e){ return {}; }
+}
+function savePrefs(p){
+  try{ localStorage.setItem(STORE_KEY, JSON.stringify(p)); }catch(e){}
+}
+
+const prefs = loadPrefs();
+let state = {
+  sectionCode: null,
+  studentId: null,
+  weekIndex: prefs.weekIndex || 1,
+  lectureIndex: prefs.lectureIndex || 1
+};
+
+const el = id => document.getElementById(id);
+
+/* ---------- normalization & grading ---------- */
+function normalize(s){
+  let x = String(s||'').trim();
+  x = x.replace(/[ؐ-ًؚ-ٰٟۖ-ۜ۟-۪ۨ-ۭـ]/g,'');
+  x = x.replace(/[آأإٱ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه');
+  x = x.toLowerCase();
+  x = x.replace(/[^؀-ۿa-z0-9\s]/g,' ');
+  x = x.replace(/\s+/g,' ').trim();
+  return x;
+}
+function buildAlternatives(text){
+  const raw = String(text||'');
+  const alts = new Set();
+  alts.add(raw);
+  raw.split(/\s[–—-]\s/).forEach(p=>{ if(p.trim()) alts.add(p.trim()); });
+  const m = raw.match(/^(.*?)\(([^)]+)\)\s*$/);
+  if(m){ alts.add(m[1].trim()); alts.add(m[2].trim()); }
+  alts.add(raw.replace(/\([^)]*\)/g,'').trim());
+  return Array.from(alts).filter(Boolean);
+}
+function isCorrectAnswer(term, answer){
+  const correctRaw = term.dir === 'ar2en' ? term.en : term.ar;
+  const alts = buildAlternatives(correctRaw);
+  const userNorm = normalize(answer);
+  if(!userNorm) return false;
+  return alts.some(a => normalize(a) === userNorm);
+}
+
+/* ---------- setup view ---------- */
+function currentSection(){
+  return SECTIONS.find(s=>s.code===state.sectionCode) || null;
+}
+
+function buildSetup(){
+  const weekSelect = el('weekSelect');
+  weekSelect.innerHTML = WEEKS.map(w=>{
+    const first = w.lectures[0].index, last = w.lectures[w.lectures.length-1].index;
+    return `<option value="${w.index}">الأسبوع ${w.index} (المحاضرات ${first}–${last})</option>`;
+  }).join('');
+  if(WEEKS.some(w=>w.index===state.weekIndex)) weekSelect.value = state.weekIndex;
+  else state.weekIndex = Number(weekSelect.value);
+
+  weekSelect.addEventListener('change', ()=>{
+    state.weekIndex = Number(weekSelect.value);
+    state.lectureIndex = 1;
+    buildLectureSeg();
+  });
+
+  buildLectureSeg();
+
+  el('instWeek').innerHTML = weekSelect.innerHTML;
+}
+
+function renderIdentityBanner(){
+  if(!loggedInIdentity) return;
+  el('setupName').textContent = loggedInIdentity.name;
+  el('setupSection').textContent = loggedInIdentity.sectionLabel;
+  el('setupId').textContent = loggedInIdentity.id;
+}
+
+function buildLectureSeg(){
+  const week = WEEKS.find(w=>w.index===state.weekIndex);
+  const seg = el('lectureSeg');
+  seg.innerHTML = week.lectures.map(l=>`<button type="button" class="chip-btn" data-lecture="${l.index}">المحاضرة ${l.index}</button>`).join('');
+  if(!week.lectures.some(l=>l.index===state.lectureIndex)) state.lectureIndex = week.lectures[0].index;
+  seg.querySelectorAll('.chip-btn').forEach(btn=>{
+    btn.setAttribute('aria-pressed', String(Number(btn.dataset.lecture)===state.lectureIndex));
+    btn.addEventListener('click', ()=>{
+      state.lectureIndex = Number(btn.dataset.lecture);
+      seg.querySelectorAll('.chip-btn').forEach(b=>b.setAttribute('aria-pressed', String(b===btn)));
+    });
+  });
+}
+
+function currentLecture(){
+  const week = WEEKS.find(w=>w.index===state.weekIndex);
+  return week.lectures.find(l=>l.index===state.lectureIndex);
+}
+
+/* ---------- login (trainee: ID + section code / admin: fixed credentials) ---------- */
+const ADMIN_USERNAME = '0018542';
+const ADMIN_PASSWORD = '1004345144';
+let loggedInIdentity = null;
+let currentLoginRole = 'trainee';
+
+function setLoginRole(role){
+  currentLoginRole = role;
+  el('roleSeg').querySelectorAll('.chip-btn').forEach(b=>{
+    b.setAttribute('aria-pressed', String(b.dataset.role === role));
+  });
+  if(role === 'admin'){
+    el('loginUserLabel').textContent = 'اسم المستخدم';
+    el('loginUsername').placeholder = 'اسم مستخدم المسؤول';
+    el('loginPassLabel').textContent = 'كلمة السر';
+    el('loginPassword').placeholder = 'كلمة سر المسؤول';
+  }else{
+    el('loginUserLabel').textContent = 'الرقم التدريبي';
+    el('loginUsername').placeholder = 'اكتب رقمك التدريبي';
+    el('loginPassLabel').textContent = 'رقم الشعبة (ككلمة سر)';
+    el('loginPassword').placeholder = 'اكتب رقم شعبتك';
+  }
+  el('loginError').hidden = true;
+}
+
+function findTraineeByCredentials(username, password){
+  const id = String(username||'').trim();
+  const sectionCode = String(password||'').trim();
+  const sec = SECTIONS.find(s=>s.code === sectionCode);
+  if(!sec) return null;
+  const student = sec.students.find(st=>st.id === id);
+  if(!student) return null;
+  return { id: student.id, name: student.name, sectionCode: sec.code, sectionLabel: sec.label };
+}
+
+function attemptLogin(){
+  const username = el('loginUsername').value;
+  const password = el('loginPassword').value;
+  const errorEl = el('loginError');
+  if(currentLoginRole === 'admin'){
+    if(username.trim() === ADMIN_USERNAME && password === ADMIN_PASSWORD){
+      errorEl.hidden = true;
+      el('loginUsername').value = '';
+      el('loginPassword').value = '';
+      el('instWeek').innerHTML = el('weekSelect').innerHTML;
+      showView('view-instructor');
+    }else{
+      errorEl.textContent = 'اسم المستخدم أو كلمة السر غير صحيحة.';
+      errorEl.hidden = false;
+    }
+    return;
+  }
+  const identity = findTraineeByCredentials(username, password);
+  if(identity){
+    loggedInIdentity = identity;
+    state.sectionCode = identity.sectionCode;
+    state.studentId = identity.id;
+    savePrefs({ studentId: identity.id, weekIndex: state.weekIndex, lectureIndex: state.lectureIndex });
+    errorEl.hidden = true;
+    el('loginPassword').value = '';
+    renderIdentityBanner();
+    showView('view-setup');
+  }else{
+    errorEl.textContent = 'الرقم التدريبي أو رقم الشعبة غير صحيح.';
+    errorEl.hidden = false;
+  }
+}
+
+function logout(){
+  loggedInIdentity = null;
+  state.sectionCode = null;
+  state.studentId = null;
+  el('loginPassword').value = '';
+  el('loginError').hidden = true;
+  showView('view-login');
+}
+
+/* ---------- exam lock (best-effort: a web page cannot truly block
+   switching tabs/apps — browsers deliberately prevent that. Instead we
+   try fullscreen as a soft deterrent, and reliably DETECT + LOG every
+   time the trainee leaves the exam so the instructor can see it). ---------- */
+let examActive = false;
+let exitEvents = [];
+
+function requestFullscreenSafe(){
+  try{
+    const node = document.documentElement;
+    const req = node.requestFullscreen || node.webkitRequestFullscreen || node.msRequestFullscreen;
+    if(req){ const p = req.call(node); if(p && p.catch) p.catch(()=>{}); }
+  }catch(e){}
+}
+function exitFullscreenSafe(){
+  try{
+    const fsEl = document.fullscreenElement || document.webkitFullscreenElement;
+    const exit = document.exitFullscreen || document.webkitExitFullscreen;
+    if(fsEl && exit) exit.call(document).catch(()=>{});
+  }catch(e){}
+}
+function isFullscreen(){
+  return !!(document.fullscreenElement || document.webkitFullscreenElement);
+}
+
+function logExit(reason){
+  if(!examActive) return;
+  exitEvents.push({ reason, at: new Date().toISOString() });
+  updateExitBadge();
+}
+function updateExitBadge(){
+  const badge = el('exitBadge');
+  if(!badge) return;
+  const n = exitEvents.length;
+  badge.textContent = n === 0 ? '0 مغادرة' : `${n} مغادرة مسجّلة`;
+  badge.classList.toggle('flagged', n > 0);
+}
+
+function onVisibilityChange(){
+  if(!examActive) return;
+  if(document.hidden) logExit('تبديل التبويب أو الخروج للتطبيقات');
+}
+function onWindowBlur(){
+  if(!examActive) return;
+  if(!document.hidden) logExit('فقد نافذة الاختبار التركيز');
+}
+function onFullscreenChange(){
+  if(!examActive) return;
+  if(!isFullscreen()){
+    logExit('خروج من وضع ملء الشاشة');
+    const prompt = el('fsPrompt');
+    if(prompt) prompt.hidden = false;
+  }else{
+    const prompt = el('fsPrompt');
+    if(prompt) prompt.hidden = true;
+  }
+}
+function onBeforeUnload(e){
+  if(!examActive) return;
+  e.preventDefault();
+  e.returnValue = '';
+  return '';
+}
+
+function enterExamMode(){
+  examActive = true;
+  exitEvents = [];
+  updateExitBadge();
+  el('fsPrompt').hidden = true;
+  requestFullscreenSafe();
+  document.addEventListener('visibilitychange', onVisibilityChange);
+  window.addEventListener('blur', onWindowBlur);
+  window.addEventListener('beforeunload', onBeforeUnload);
+  document.addEventListener('fullscreenchange', onFullscreenChange);
+  document.addEventListener('webkitfullscreenchange', onFullscreenChange);
+}
+function exitExamMode(){
+  examActive = false;
+  document.removeEventListener('visibilitychange', onVisibilityChange);
+  window.removeEventListener('blur', onWindowBlur);
+  window.removeEventListener('beforeunload', onBeforeUnload);
+  document.removeEventListener('fullscreenchange', onFullscreenChange);
+  document.removeEventListener('webkitfullscreenchange', onFullscreenChange);
+  exitFullscreenSafe();
+  stopExamTimer();
+}
+
+/* ---------- 5-minute exam timer ---------- */
+let examTimerInterval = null;
+let examEndAt = null;
+
+function formatTime(totalSeconds){
+  const s = Math.max(0, Math.round(totalSeconds));
+  const mm = String(Math.floor(s/60)).padStart(2,'0');
+  const ss = String(s%60).padStart(2,'0');
+  return `${mm}:${ss}`;
+}
+
+function startExamTimer(){
+  stopExamTimer();
+  examEndAt = Date.now() + EXAM_DURATION_SECONDS*1000;
+  tickExamTimer();
+  examTimerInterval = setInterval(tickExamTimer, 250);
+}
+function stopExamTimer(){
+  if(examTimerInterval){ clearInterval(examTimerInterval); examTimerInterval = null; }
+}
+function tickExamTimer(){
+  const remaining = (examEndAt - Date.now())/1000;
+  const bar = el('examTimerBar');
+  const label = el('examTimer');
+  if(label) label.textContent = formatTime(remaining);
+  if(bar){
+    bar.classList.toggle('warn', remaining <= 120 && remaining > 30);
+    bar.classList.toggle('danger', remaining <= 30 && remaining > 0);
+  }
+  if(remaining <= 0){
+    stopExamTimer();
+    autoFinishQuiz();
+  }
+}
+
+function autoFinishQuiz(){
+  if(!examActive) return;
+  const records = collectAnswers();
+  lastRecords = records;
+  lastExitCount = exitEvents.length;
+  lastAutoSubmitted = true;
+  exitExamMode();
+  renderResults(lastIdentity, records);
+  showView('view-results');
+}
+
+/* ---------- quiz view ---------- */
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function renderQuiz(){
+  const lecture = currentLecture();
+  el('quizWeek').textContent = state.weekIndex;
+  el('quizLecture').textContent = state.lectureIndex;
+  const firstId = lecture.terms[0].id, lastId = lecture.terms[lecture.terms.length-1].id;
+  el('quizRange').textContent = `المصطلحات ${firstId}–${lastId}`;
+
+  el('termList').innerHTML = lecture.terms.map((t,i)=>{
+    const shown = t.dir === 'ar2en' ? t.ar : t.en;
+    const shownClass = t.dir === 'ar2en' ? '' : 'en';
+    const askLabel = t.dir === 'ar2en' ? 'اكتب الترجمة الإنجليزية' : 'اكتب الترجمة العربية';
+    const inputDir = t.dir === 'ar2en' ? 'ltr' : 'rtl';
+    return `
+      <li class="term-item lvl-${t.level}">
+        <div class="node">${i+1}</div>
+        <div class="term-card">
+          <div class="term-meta">
+            <span class="direction">${askLabel}</span>
+            <span class="level-pill">${t.level}</span>
+          </div>
+          <div class="term-shown ${shownClass}">${escapeHtml(shown)}</div>
+          <input type="text" class="ans-input" data-id="${t.id}" dir="${inputDir}" placeholder="إجابتك">
+        </div>
+      </li>`;
+  }).join('');
+}
+
+function collectAnswers(){
+  const lecture = currentLecture();
+  const inputs = document.querySelectorAll('.ans-input');
+  const map = {};
+  inputs.forEach(inp => { map[inp.dataset.id] = inp.value.trim(); });
+  return lecture.terms.map(t => {
+    const answer = map[t.id] || '';
+    return { term: t, answer, correct: isCorrectAnswer(t, answer) };
+  });
+}
+
+/* ---------- results view ---------- */
+function renderResults(identity, records){
+  const score = records.filter(r=>r.correct).length;
+  const total = records.length;
+  el('autoSubmitNotice').hidden = !lastAutoSubmitted;
+  el('scoreBig').textContent = `${score}/${total}`;
+  el('scorePct').textContent = total ? `(${Math.round(score/total*100)}%)` : '';
+  el('resName').textContent = identity.name;
+  el('resId').textContent = identity.id;
+  el('resSection').textContent = identity.sectionLabel;
+  el('resWeek').textContent = state.weekIndex;
+  el('resLecture').textContent = state.lectureIndex;
+  el('resDate').textContent = new Date().toLocaleDateString('ar-SA', { year:'numeric', month:'long', day:'numeric' });
+  el('resExits').textContent = lastExitCount;
+
+  el('resultsBody').innerHTML = records.map((r,i)=>{
+    const shown = r.term.dir === 'ar2en' ? r.term.ar : r.term.en;
+    const shownClass = r.term.dir === 'ar2en' ? '' : 'en';
+    const correct = r.term.dir === 'ar2en' ? r.term.en : r.term.ar;
+    const correctClass = r.term.dir === 'ar2en' ? 'en' : '';
+    const ansClass = r.term.dir === 'ar2en' ? 'en' : '';
+    const answerHtml = r.answer
+      ? `<span class="your-ans ${ansClass}">${escapeHtml(r.answer)}</span>`
+      : `<span class="empty-ans">بدون إجابة</span>`;
+    const statusHtml = r.correct
+      ? `<span class="status-pill ok">✓ صحيح</span>`
+      : `<span class="status-pill bad">✗ خطأ</span>`;
+    return `<tr>
+      <td class="mono">${i+1}</td>
+      <td class="${shownClass}">${escapeHtml(shown)}</td>
+      <td>${answerHtml}</td>
+      <td class="correct-ans ${correctClass}">${escapeHtml(correct)}</td>
+      <td>${r.term.level}</td>
+      <td>${statusHtml}</td>
+    </tr>`;
+  }).join('');
+}
+
+function buildCopyText(identity, records){
+  const score = records.filter(r=>r.correct).length;
+  const total = records.length;
+  const lines = [];
+  lines.push('نتائج اختبار مصطلحات الشبكات');
+  lines.push(`الاسم: ${identity.name}`);
+  lines.push(`الرقم التدريبي: ${identity.id}`);
+  lines.push(`الشعبة: ${identity.sectionLabel}`);
+  lines.push(`الأسبوع: ${state.weekIndex} — المحاضرة: ${state.lectureIndex}`);
+  lines.push(`النتيجة: ${score}/${total}`);
+  lines.push(`مرات مغادرة الصفحة أثناء الحل: ${lastExitCount}`);
+  if(lastAutoSubmitted) lines.push('⏰ تنبيه: انتهى الوقت (5 دقائق) وتم إنهاء الاختبار تلقائيًا.');
+  lines.push(`التاريخ: ${new Date().toLocaleDateString('ar-SA')}`);
+  lines.push('');
+  records.forEach((r,i)=>{
+    const shown = r.term.dir === 'ar2en' ? r.term.ar : r.term.en;
+    const correct = r.term.dir === 'ar2en' ? r.term.en : r.term.ar;
+    const mark = r.correct ? '✓' : '✗';
+    lines.push(`${i+1}. [${mark}] ${shown}  →  إجابتك: ${r.answer || '(بدون إجابة)'}  |  الصحيح: ${correct}`);
+  });
+  lines.push('');
+  lines.push('---');
+  lines.push('لا تحذف السطر التالي — يستخدمه المحاضر لرصد الدرجات آليًا:');
+  lines.push(`${CODE_PREFIX}|${identity.id}|${identity.sectionCode}|${state.weekIndex}|${state.lectureIndex}|${score}|${total}|${lastExitCount}`);
+  return lines.join('\n');
+}
+
+/* ---------- generic copy helper ---------- */
+async function copyToClipboard(text, area, status){
+  let copied = false;
+  try{
+    await navigator.clipboard.writeText(text);
+    copied = true;
+  }catch(e){
+    try{
+      area.value = text;
+      area.hidden = false;
+      area.focus();
+      area.select();
+      copied = document.execCommand('copy');
+    }catch(e2){ copied = false; }
+  }
+  if(copied && status){
+    status.hidden = false;
+    setTimeout(()=>{ status.hidden = true; }, 2500);
+  }else if(!copied){
+    area.value = text;
+    area.hidden = false;
+    area.focus();
+    area.select();
+  }
+}
+
+async function useCapability(name){
+  try{
+    if(!window.claude || typeof window.claude.use !== 'function') return null;
+    return await window.claude.use(name);
+  }catch(e){ return null; }
+}
+
+/* ---------- instructor view ---------- */
+function parseCodes(text){
+  const re = new RegExp(CODE_PREFIX + '\\|([^\\|\\n\\r]+)\\|([^\\|\\n\\r]+)\\|(\\d+)\\|(\\d+)\\|(\\d+)\\|(\\d+)(?:\\|(\\d+))?', 'g');
+  const map = {};
+  let m;
+  let count = 0;
+  while((m = re.exec(text))){
+    count++;
+    const studentId = m[1].trim();
+    const sectionCode = m[2].trim();
+    const week = Number(m[3]), lecture = Number(m[4]), score = Number(m[5]), total = Number(m[6]);
+    const exits = m[7] !== undefined ? Number(m[7]) : 0;
+    if(!map[studentId]) map[studentId] = { sectionCode, lectures:{} };
+    map[studentId].sectionCode = sectionCode;
+    map[studentId].lectures[`${week}_${lecture}`] = { week, lecture, score, total, exits };
+  }
+  return { map, count };
+}
+
+function compileWeek(map, weekIndex){
+  const week = WEEKS.find(w=>w.index===weekIndex);
+  const lecIndexes = week.lectures.map(l=>l.index);
+  const bySection = SECTIONS.map(sec=>{
+    const rows = sec.students.map(st=>{
+      const rec = map[st.id];
+      let sumScore = 0, sumTotal = 0, sumExits = 0;
+      const cells = lecIndexes.map(li=>{
+        const lecMeta = LECTURES.find(l=>l.index===li);
+        const size = lecMeta.terms.length;
+        const entry = rec && rec.lectures[`${weekIndex}_${li}`];
+        if(entry){
+          sumScore += entry.score; sumTotal += entry.total; sumExits += (entry.exits||0);
+          return { present:true, score:entry.score, total:entry.total, exits:entry.exits||0 };
+        }
+        sumTotal += size;
+        return { present:false, score:0, total:size, exits:0 };
+      });
+      return { id: st.id, name: st.name, cells, sumScore, sumTotal, sumExits };
+    });
+    return { section: sec, rows };
+  });
+  return { weekIndex, lecIndexes, bySection };
+}
+
+function renderInstructorResults(compiled){
+  const box = el('instructorResults');
+  const parts = compiled.bySection.map(({section, rows})=>{
+    const head = [`<th>#</th>`, `<th>الرقم التدريبي</th>`, `<th>الاسم</th>`]
+      .concat(compiled.lecIndexes.map(li=>`<th>محاضرة ${li}</th>`))
+      .concat([`<th>الإجمالي</th>`, `<th>النسبة%</th>`, `<th>مغادرات</th>`]).join('');
+    const body = rows.map((r,i)=>{
+      const cells = r.cells.map(c=> c.present
+        ? `<td class="mono">${c.score}/${c.total}</td>`
+        : `<td class="absent-cell">لم يقدم</td>`).join('');
+      const pct = r.sumTotal ? Math.round(r.sumScore/r.sumTotal*100) : 0;
+      const exitsHtml = r.sumExits > 0
+        ? `<span class="status-pill bad">${r.sumExits}</span>`
+        : `<span class="status-pill ok">0</span>`;
+      return `<tr><td class="mono">${i+1}</td><td class="mono">${r.id}</td><td>${escapeHtml(r.name)}</td>${cells}<td class="mono correct-ans">${r.sumScore}/${r.sumTotal}</td><td class="mono">${pct}%</td><td>${exitsHtml}</td></tr>`;
+    }).join('');
+    return `
+      <div class="section-block card">
+        <h3>${escapeHtml(section.label)}</h3>
+        <p class="section-sub">عدد المتدربين: ${rows.length}</p>
+        <div class="table-wrap">
+          <table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>
+        </div>
+        <div class="actions no-print">
+          <button class="btn small secondary" data-copy-section="${section.code}">نسخ الجدول كنص</button>
+          <button class="btn small secondary" data-csv-section="${section.code}">تنزيل CSV لهذه الشعبة</button>
+        </div>
+      </div>`;
+  }).join('');
+
+  const toolbar = `
+    <div class="actions no-print" style="margin-top:18px">
+      <button class="btn small" id="csvAllBtn">تنزيل CSV لجميع الشعب</button>
+      <button class="btn small secondary" id="copyAllBtn">نسخ الكشف الكامل كنص</button>
+    </div>`;
+
+  box.innerHTML = parts + toolbar;
+
+  box.querySelectorAll('[data-copy-section]').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const sec = compiled.bySection.find(s=>s.section.code===btn.dataset.copySection);
+      await copyToClipboard(sectionToTsv(compiled, sec), ensureScratchArea(), null);
+      alert('تم تجهيز النص — الصقه في أي مكان (Ctrl+V).');
+    });
+  });
+  box.querySelectorAll('[data-csv-section]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const sec = compiled.bySection.find(s=>s.section.code===btn.dataset.csvSection);
+      exportCsv(compiled, [sec], `كشف_${sec.section.code}_الاسبوع${compiled.weekIndex}.csv`);
+    });
+  });
+  const csvAll = el('csvAllBtn');
+  if(csvAll) csvAll.addEventListener('click', ()=> exportCsv(compiled, compiled.bySection, `كشف_درجات_الاسبوع${compiled.weekIndex}.csv`));
+  const copyAll = el('copyAllBtn');
+  if(copyAll) copyAll.addEventListener('click', async ()=>{
+    const text = compiled.bySection.map(sec=>sectionToTsv(compiled, sec)).join('\n\n');
+    await copyToClipboard(text, ensureScratchArea(), null);
+    alert('تم تجهيز النص — الصقه في أي مكان (Ctrl+V).');
+  });
+}
+
+function ensureScratchArea(){
+  let a = document.getElementById('scratchCopyArea');
+  if(!a){
+    a = document.createElement('textarea');
+    a.id = 'scratchCopyArea';
+    a.className = 'copy-area no-print';
+    a.style.position = 'fixed';
+    a.style.left = '-9999px';
+    document.body.appendChild(a);
+  }
+  return a;
+}
+
+function sectionToTsv(compiled, sec){
+  const header = ['#','الرقم التدريبي','الاسم', ...compiled.lecIndexes.map(li=>`محاضرة ${li}`), 'الإجمالي', 'النسبة%', 'مغادرات'];
+  const rows = [sec.section.label, header.join('\t')];
+  sec.rows.forEach((r,i)=>{
+    const pct = r.sumTotal ? Math.round(r.sumScore/r.sumTotal*100) : 0;
+    const cells = r.cells.map(c=> c.present ? `${c.score}/${c.total}` : 'لم يقدم');
+    rows.push([i+1, r.id, r.name, ...cells, `${r.sumScore}/${r.sumTotal}`, `${pct}%`, r.sumExits].join('\t'));
+  });
+  return rows.join('\n');
+}
+
+function csvEscape(v){
+  const s = String(v);
+  if(/[",\n]/.test(s)) return '"' + s.replace(/"/g,'""') + '"';
+  return s;
+}
+
+async function exportCsv(compiled, sections, filename){
+  const rows = [];
+  rows.push(['القسم','الرقم التدريبي','الاسم', ...compiled.lecIndexes.map(li=>'محاضرة '+li), 'الإجمالي', 'النسبة%', 'مغادرات']);
+  sections.forEach(sec=>{
+    sec.rows.forEach(r=>{
+      const pct = r.sumTotal ? Math.round(r.sumScore/r.sumTotal*100) : 0;
+      const cells = r.cells.map(c=> c.present ? `${c.score}/${c.total}` : 'لم يقدم');
+      rows.push([sec.section.label, r.id, r.name, ...cells, `${r.sumScore}/${r.sumTotal}`, pct+'%', r.sumExits]);
+    });
+  });
+  const csv = '﻿' + rows.map(r=>r.map(csvEscape).join(',')).join('\r\n');
+  const downloads = await useCapability('downloads');
+  if(!downloads){
+    alert('التنزيل المباشر غير متاح في هذا العارض. استخدم زر "نسخ الجدول كنص" ثم الصقه في إكسل.');
+    return;
+  }
+  try{
+    await downloads.save({ filename, data: csv });
+  }catch(e){
+    if(e && e.code === 'declined') return;
+    alert('تعذر حفظ الملف. جرّب زر "نسخ الجدول كنص" بدلاً من ذلك.');
+  }
+}
+
+let lastCompiled = null;
+
+/* ---------- view switching ---------- */
+function showView(name){
+  ['view-login','view-setup','view-quiz','view-results','view-instructor'].forEach(id=>{
+    el(id).hidden = (id !== name);
+  });
+  window.scrollTo({top:0, behavior:'instant'});
+}
+
+let lastRecords = [];
+let lastIdentity = null;
+let lastExitCount = 0;
+let lastAutoSubmitted = false;
+
+el('roleSeg').querySelectorAll('.chip-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=> setLoginRole(btn.dataset.role));
+});
+el('loginBtn').addEventListener('click', attemptLogin);
+el('loginPassword').addEventListener('keydown', (e)=>{ if(e.key === 'Enter') attemptLogin(); });
+el('logoutBtn').addEventListener('click', logout);
+
+el('startBtn').addEventListener('click', ()=>{
+  lastIdentity = loggedInIdentity;
+  savePrefs({ studentId: state.studentId, weekIndex: state.weekIndex, lectureIndex: state.lectureIndex });
+  renderQuiz();
+  showView('view-quiz');
+  enterExamMode();
+  startExamTimer();
+});
+
+el('fsReturnBtn').addEventListener('click', ()=>{
+  requestFullscreenSafe();
+});
+
+el('backBtn').addEventListener('click', ()=>{
+  if(exitEvents.length > 0){
+    const proceed = confirm(`تم تسجيل ${exitEvents.length} مغادرة للصفحة أثناء هذه المحاولة. الرجوع الآن سيُلغي المحاولة الحالية. متابعة؟`);
+    if(!proceed) return;
+  }
+  exitExamMode();
+  showView('view-setup');
+});
+
+el('finishBtn').addEventListener('click', ()=>{
+  const records = collectAnswers();
+  const emptyCount = records.filter(r=>!r.answer).length;
+  if(emptyCount > 0){
+    const proceed = confirm(`لديك ${emptyCount} مصطلح بدون إجابة. هل تريد إنهاء الاختبار على أي حال؟`);
+    if(!proceed) return;
+  }
+  lastRecords = records;
+  lastExitCount = exitEvents.length;
+  lastAutoSubmitted = false;
+  exitExamMode();
+  renderResults(lastIdentity, records);
+  showView('view-results');
+});
+
+el('printBtn').addEventListener('click', ()=> window.print());
+
+el('copyBtn').addEventListener('click', ()=>{
+  const text = buildCopyText(lastIdentity, lastRecords);
+  copyToClipboard(text, el('copyArea'), el('copyStatus'));
+});
+
+el('retryBtn').addEventListener('click', ()=>{
+  el('copyArea').hidden = true;
+  showView('view-setup');
+});
+
+el('backInstBtn').addEventListener('click', logout);
+
+el('compileBtn').addEventListener('click', ()=>{
+  const text = el('pasteArea').value;
+  const weekIndex = Number(el('instWeek').value);
+  const { map, count } = parseCodes(text);
+  const compiled = compileWeek(map, weekIndex);
+  lastCompiled = compiled;
+  const studentsFound = Object.keys(map).length;
+  el('parseInfo').textContent = `تم العثور على ${count} رمز نتيجة لعدد ${studentsFound} متدرب.`;
+  renderInstructorResults(compiled);
+});
+
+buildSetup();
+setLoginRole('trainee');
+if(prefs.studentId) el('loginUsername').value = prefs.studentId;
+showView('view-login');
+</script>
+</body>
+</html>
