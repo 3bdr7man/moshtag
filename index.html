@@ -497,6 +497,7 @@
 </style>
 </head>
 <body>
+
 <div class="wrap" dir="rtl" lang="ar">
 
   <header class="page-head">
@@ -793,9 +794,21 @@ function setLoginRole(role){
   el('loginError').hidden = true;
 }
 
+function normalizeDigitsInput(s){
+  // Normalize Arabic-Indic (٠-٩) and Extended Arabic-Indic/Persian (۰-۹) digits to
+  // ASCII 0-9, and strip bidi/invisible control characters some mobile keyboards
+  // insert. Many trainee phones show Arabic-Indic numerals on numeric keypads,
+  // which otherwise silently fail the exact-string login match.
+  return String(s || '')
+    .replace(/[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/g, '')
+    .replace(/[٠-٩]/g, d => String(d.charCodeAt(0) - 0x0660))
+    .replace(/[۰-۹]/g, d => String(d.charCodeAt(0) - 0x06F0))
+    .trim();
+}
+
 function findTraineeByCredentials(username, password){
-  const id = String(username||'').trim();
-  const sectionCode = String(password||'').trim();
+  const id = normalizeDigitsInput(username);
+  const sectionCode = normalizeDigitsInput(password);
   const sec = SECTIONS.find(s=>s.code === sectionCode);
   if(!sec) return null;
   const student = sec.students.find(st=>st.id === id);
@@ -804,11 +817,11 @@ function findTraineeByCredentials(username, password){
 }
 
 function attemptLogin(){
-  const username = el('loginUsername').value;
-  const password = el('loginPassword').value;
+  const username = normalizeDigitsInput(el('loginUsername').value);
+  const password = normalizeDigitsInput(el('loginPassword').value);
   const errorEl = el('loginError');
   if(currentLoginRole === 'admin'){
-    if(username.trim() === ADMIN_USERNAME && password === ADMIN_PASSWORD){
+    if(username === ADMIN_USERNAME && password === ADMIN_PASSWORD){
       errorEl.hidden = true;
       el('loginUsername').value = '';
       el('loginPassword').value = '';
