@@ -522,7 +522,7 @@
         <label id="loginUserLabel" for="loginUsername">الرقم التدريبي</label>
         <input type="text" id="loginUsername" inputmode="numeric" placeholder="اكتب رقمك التدريبي" autocomplete="off">
       </div>
-      <div class="field">
+      <div class="field" id="loginPasswordField">
         <label id="loginPassLabel" for="loginPassword">رقم الشعبة (ككلمة سر)</label>
         <input type="password" id="loginPassword" inputmode="numeric" placeholder="اكتب رقم شعبتك" autocomplete="off">
       </div>
@@ -785,11 +785,12 @@ function setLoginRole(role){
     el('loginUsername').placeholder = 'اسم مستخدم المسؤول';
     el('loginPassLabel').textContent = 'كلمة السر';
     el('loginPassword').placeholder = 'كلمة سر المسؤول';
+    el('loginPasswordField').hidden = false;
   }else{
     el('loginUserLabel').textContent = 'الرقم التدريبي';
     el('loginUsername').placeholder = 'اكتب رقمك التدريبي';
-    el('loginPassLabel').textContent = 'رقم الشعبة (ككلمة سر)';
-    el('loginPassword').placeholder = 'اكتب رقم شعبتك';
+    el('loginPassword').value = '';
+    el('loginPasswordField').hidden = true;
   }
   el('loginError').hidden = true;
 }
@@ -806,21 +807,25 @@ function normalizeDigitsInput(s){
     .trim();
 }
 
-function findTraineeByCredentials(username, password){
+function findTraineeById(username){
+  // Login by training ID only. We search every section's roster in order,
+  // so a trainee whose ID happens to appear in more than one section list
+  // (a known data duplicate — see id 446158874) is matched to the first
+  // section that lists it.
   const id = normalizeDigitsInput(username);
-  const sectionCode = normalizeDigitsInput(password);
-  const sec = SECTIONS.find(s=>s.code === sectionCode);
-  if(!sec) return null;
-  const student = sec.students.find(st=>st.id === id);
-  if(!student) return null;
-  return { id: student.id, name: student.name, sectionCode: sec.code, sectionLabel: sec.label };
+  if(!id) return null;
+  for(const sec of SECTIONS){
+    const student = sec.students.find(st=>st.id === id);
+    if(student) return { id: student.id, name: student.name, sectionCode: sec.code, sectionLabel: sec.label };
+  }
+  return null;
 }
 
 function attemptLogin(){
   const username = normalizeDigitsInput(el('loginUsername').value);
-  const password = normalizeDigitsInput(el('loginPassword').value);
   const errorEl = el('loginError');
   if(currentLoginRole === 'admin'){
+    const password = normalizeDigitsInput(el('loginPassword').value);
     if(username === ADMIN_USERNAME && password === ADMIN_PASSWORD){
       errorEl.hidden = true;
       el('loginUsername').value = '';
@@ -833,7 +838,7 @@ function attemptLogin(){
     }
     return;
   }
-  const identity = findTraineeByCredentials(username, password);
+  const identity = findTraineeById(username);
   if(identity){
     loggedInIdentity = identity;
     state.sectionCode = identity.sectionCode;
@@ -844,7 +849,7 @@ function attemptLogin(){
     renderIdentityBanner();
     showView('view-setup');
   }else{
-    errorEl.textContent = 'الرقم التدريبي أو رقم الشعبة غير صحيح.';
+    errorEl.textContent = 'الرقم التدريبي غير مسجّل في قائمة المتدربين. تأكد من كتابته بدقة.';
     errorEl.hidden = false;
   }
 }
@@ -1310,6 +1315,7 @@ el('roleSeg').querySelectorAll('.chip-btn').forEach(btn=>{
   btn.addEventListener('click', ()=> setLoginRole(btn.dataset.role));
 });
 el('loginBtn').addEventListener('click', attemptLogin);
+el('loginUsername').addEventListener('keydown', (e)=>{ if(e.key === 'Enter') attemptLogin(); });
 el('loginPassword').addEventListener('keydown', (e)=>{ if(e.key === 'Enter') attemptLogin(); });
 el('logoutBtn').addEventListener('click', logout);
 
