@@ -497,6 +497,7 @@
 </style>
 </head>
 <body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 <div class="wrap" dir="rtl" lang="ar">
 
@@ -590,6 +591,7 @@
         <span>الرقم التدريبي: <b id="resId">—</b></span>
         <span>الشعبة: <b id="resSection">—</b></span>
         <span>الأسبوع: <b id="resWeek"></b> — المحاضرة: <b id="resLecture"></b></span>
+        <span>الدرجة (نقاط): <b id="resPoints">—</b></span>
         <span>التاريخ: <b id="resDate"></b></span>
         <span>مرات مغادرة الصفحة أثناء الحل: <b id="resExits">0</b></span>
       </div>
@@ -610,8 +612,9 @@
       </div>
     </div>
     <div class="actions no-print">
-      <button class="btn" id="printBtn">طباعة</button>
-      <button class="btn secondary" id="copyBtn">نسخ النتيجة (سلّمها للمحاضر)</button>
+      <button class="btn" id="downloadXlsxBtn">تنزيل ملف Excel للنتيجة (أرسله للمحاضر)</button>
+      <button class="btn secondary" id="copyBtn">نسخ النتيجة كنص (طريقة بديلة)</button>
+      <button class="btn secondary" id="printBtn">طباعة</button>
       <button class="btn secondary" id="retryBtn">اختبار جديد</button>
       <span class="copy-status" id="copyStatus" hidden>تم النسخ ✓</span>
     </div>
@@ -621,14 +624,19 @@
   <!-- INSTRUCTOR -->
   <section id="view-instructor" hidden>
     <div class="card">
-      <p class="sub" style="margin:0 0 14px">اطلب من كل متدرب أن يرسل لك النص الذي نسخه بعد الاختبار (زر "نسخ النتيجة"). الصق كل ما استلمته هنا دفعة واحدة — سواء نسخة واحدة أو عدة رسائل ملصقة فوق بعض — وسيتم استخراج النتائج تلقائيًا وتجميعها حسب الشعبة.</p>
+      <p class="sub" style="margin:0 0 14px">الطريقة الموصى بها: اطلب من كل متدرب أن يرسل لك ملف Excel الذي يُنزّله بعد الاختبار (زر "تنزيل ملف Excel للنتيجة")، ثم ارفع كل الملفات التي وصلتك دفعة واحدة أدناه. كطريقة بديلة يمكنك أيضًا لصق نصوص النتائج (زر "نسخ النتيجة كنص") في المربع أسفله.</p>
       <div class="field">
         <label for="instWeek">الأسبوع المطلوب رصده</label>
         <select id="instWeek"></select>
       </div>
       <div class="field">
-        <label for="pasteArea">النصوص المستلمة من المتدربين</label>
-        <textarea id="pasteArea" class="copy-area" style="min-height:180px" placeholder="الصق هنا كل ما استلمته من المتدربين..."></textarea>
+        <label for="xlsxUpload">ملفات Excel المستلمة من المتدربين (يمكن اختيار عدة ملفات دفعة واحدة)</label>
+        <input type="file" id="xlsxUpload" accept=".xlsx" multiple>
+        <span class="hint" id="xlsxUploadStatus" hidden></span>
+      </div>
+      <div class="field">
+        <label for="pasteArea">أو الصق النصوص المستلمة من المتدربين (طريقة بديلة)</label>
+        <textarea id="pasteArea" class="copy-area" style="min-height:120px" placeholder="الصق هنا كل ما استلمته من المتدربين..."></textarea>
       </div>
       <div class="actions">
         <button class="btn" id="compileBtn">تحديث كشف الدرجات</button>
@@ -648,12 +656,14 @@
 <script>
 const TERMS=[{id:1,en:'Computer Network',ar:'شبكة الحاسب',level:'سهل',note:'مجموعة أجهزة متصلة لتبادل البيانات والموارد.'},{id:2,en:'LAN – Local Area Network',ar:'الشبكة المحلية',level:'سهل',note:'شبكة تربط الأجهزة داخل موقع محدود.'},{id:3,en:'Switched Network',ar:'شبكة محولة',level:'سهل',note:'شبكة تستخدم المحولات لربط الأجهزة وإدارة حركة البيانات.'},{id:4,en:'Network Convergence',ar:'تقارب الشبكات',level:'متوسط',note:'دمج خدمات الصوت والفيديو والبيانات في شبكة واحدة.'},{id:5,en:'Data Traffic',ar:'حركة بيانات',level:'سهل',note:'المعلومات التي تنتقل عبر الشبكة بين الأجهزة.'},{id:6,en:'Voice Traffic',ar:'حركة الصوت',level:'سهل',note:'البيانات الخاصة بالمكالمات والخدمات الصوتية.'},{id:7,en:'Video Traffic',ar:'حركة الفيديو',level:'سهل',note:'البيانات الخاصة بالفيديو والمؤتمرات المرئية.'},{id:8,en:'Collaboration',ar:'التعاون',level:'سهل',note:'استخدام الشبكة لدعم العمل والتواصل بين المستخدمين.'},{id:9,en:'IP Phone',ar:'هاتف IP',level:'سهل',note:'هاتف يستخدم شبكة البيانات لإجراء المكالمات.'},{id:10,en:'Voice Gateway',ar:'بوابة الصوت',level:'متوسط',note:'جهاز يربط خدمات الصوت التقليدية بشبكة IP.'},{id:11,en:'Video Conferencing',ar:'المؤتمرات المرئية',level:'سهل',note:'التواصل بالصوت والصورة عبر الشبكة.'},{id:12,en:'Mobility',ar:'قابلية التنقل',level:'سهل',note:'الوصول إلى خدمات الشبكة أثناء التنقل.'},{id:13,en:'High Availability',ar:'الإتاحة العالية',level:'متوسط',note:'تصميم الشبكة بحيث تستمر الخدمات في العمل.'},{id:14,en:'Network Security',ar:'أمن الشبكات',level:'سهل',note:'حماية الشبكة والأجهزة والبيانات.'},{id:15,en:'Network Reliability',ar:'موثوقية الشبكة',level:'متوسط',note:'قدرة الشبكة على العمل بشكل صحيح ومستمر.'},{id:16,en:'Hierarchical Network Design',ar:'التصميم الهرمي للشبكة',level:'متوسط',note:'تقسيم الشبكة إلى طبقات لتسهيل إدارتها.'},{id:17,en:'Three-Tier LAN Design',ar:'تصميم LAN ثلاثي الطبقات',level:'متوسط',note:'تصميم يعتمد على طبقات الوصول والتوزيع والمركز.'},{id:18,en:'Two-Tier LAN Design',ar:'تصميم LAN ثنائي الطبقات',level:'متوسط',note:'تصميم يدمج طبقتي المركز والتوزيع.'},{id:19,en:'Core Layer',ar:'طبقة المركز',level:'متوسط',note:'طبقة توفر نقل البيانات بسرعة عالية بين أجزاء الشبكة.'},{id:20,en:'Distribution Layer',ar:'طبقة التوزيع',level:'متوسط',note:'تربط طبقة الوصول بالمركز وتطبق سياسات الشبكة.'},{id:21,en:'Access Layer',ar:'طبقة الوصول',level:'سهل',note:'الطبقة التي تتصل بها أجهزة المستخدمين مباشرة.'},{id:22,en:'Collapsed Core/Distribution',ar:'مركز/توزيع مدمج',level:'صعب',note:'دمج وظيفتي طبقتي المركز والتوزيع.'},{id:23,en:'Hierarchical',ar:'هرمي',level:'سهل',note:'تنظيم الشبكة في مستويات أو طبقات.'},{id:24,en:'Modularity',ar:'النمطية',level:'متوسط',note:'تقسيم الشبكة إلى أجزاء مستقلة.'},{id:25,en:'Flexibility',ar:'المرونة',level:'سهل',note:'قدرة الشبكة على التكيف مع التغييرات.'},{id:26,en:'Scalability',ar:'قابلية التوسع',level:'متوسط',note:'قدرة الشبكة على النمو دون إعادة تصميمها بالكامل.'},{id:27,en:'Switch',ar:'المحول',level:'سهل',note:'جهاز يربط الأجهزة ويعيد توجيه الإطارات.'},{id:28,en:'LAN Switch',ar:'محول الشبكة المحلية',level:'سهل',note:'محول يستخدم داخل شبكة LAN.'},{id:29,en:'Switched Network Environment',ar:'بيئة الشبكة المحولة',level:'متوسط',note:'بيئة شبكية تعتمد على المحولات.'},{id:30,en:'Form Factor',ar:'عامل الشكل',level:'متوسط',note:'التصميم أو الشكل الفيزيائي للجهاز.'},{id:31,en:'Fixed Configuration Switch',ar:'محول ثابت التكوين',level:'متوسط',note:'محول تكون منافذه ومكوناته محددة مسبقًا.'},{id:32,en:'Modular Switch',ar:'محول تركيبي',level:'متوسط',note:'محول يمكن إضافة وحدات ومكونات إليه.'},{id:33,en:'Stackable Switch',ar:'محول قابل للتجميع',level:'متوسط',note:'محولات يمكن ربطها معًا لتعمل كوحدة منطقية.'},{id:34,en:'Stack',ar:'تجميع المحولات',level:'متوسط',note:'مجموعة محولات مترابطة.'},{id:35,en:'Stack Cable',ar:'كابل التجميع',level:'متوسط',note:'كابل مخصص لربط المحولات القابلة للتجميع.'},{id:36,en:'Chassis',ar:'الهيكل',level:'متوسط',note:'جسم المحول التركيبي الذي يحتوي على فتحات للوحدات.'},{id:37,en:'Line Card',ar:'بطاقة المنافذ',level:'صعب',note:'وحدة يتم تركيبها في الهيكل وتوفر منافذ الشبكة.'},{id:38,en:'Port',ar:'منفذ',level:'سهل',note:'نقطة اتصال في المحول.'},{id:39,en:'High Port Density',ar:'كثافة منافذ عالية',level:'متوسط',note:'وجود عدد كبير من المنافذ في الجهاز.'},{id:40,en:'High-Speed Port',ar:'منفذ عالي السرعة',level:'سهل',note:'منفذ قادر على نقل البيانات بسرعات مرتفعة.'},{id:41,en:'Frame',ar:'إطار',level:'سهل',note:'وحدة البيانات التي يتم التعامل معها في طبقة ربط البيانات.'},{id:42,en:'Frame Forwarding',ar:'إعادة توجيه الإطار',level:'متوسط',note:'إرسال الإطار من منفذ إلى منفذ آخر عبر المحول.'},{id:43,en:'Forwarding Decision',ar:'قرار إعادة التوجيه',level:'متوسط',note:'قرار المحول حول مكان إرسال الإطار.'},{id:44,en:'Ingress Port',ar:'منفذ الدخول',level:'متوسط',note:'المنفذ الذي يدخل منه الإطار إلى المحول.'},{id:45,en:'Destination',ar:'الوجهة',level:'سهل',note:'الجهاز أو الموقع الذي يجب أن تصل إليه البيانات.'},{id:46,en:'Ethernet Frame',ar:'إطار إيثرنت',level:'متوسط',note:'إطار بيانات يستخدم في شبكات Ethernet.'},{id:47,en:'Destination MAC Address',ar:'عنوان MAC للوجهة',level:'متوسط',note:'عنوان الجهاز الذي يجب أن يستقبل الإطار.'},{id:48,en:'Source MAC Address',ar:'عنوان MAC للمصدر',level:'متوسط',note:'عنوان الجهاز الذي قام بإرسال الإطار.'},{id:49,en:'MAC Address',ar:'عنوان MAC',level:'متوسط',note:'عنوان مميز يستخدم للتعرف على واجهة الشبكة.'},{id:50,en:'MAC Address Table',ar:'جدول عناوين MAC',level:'متوسط',note:'جدول يحتفظ بعناوين MAC والمنافذ المرتبطة بها.'},{id:51,en:'Dynamic MAC Address Table',ar:'جدول عناوين MAC الديناميكي',level:'صعب',note:'جدول يتم بناؤه تلقائيًا أثناء استقبال الإطارات.'},{id:52,en:'CAM Table',ar:'جدول CAM',level:'صعب',note:'جدول يستخدمه المحول للبحث السريع عن عناوين MAC.'},{id:53,en:'CAM – Content Addressable Memory',ar:'ذاكرة قابلة للوصول بناءً على المحتوى',level:'صعب',note:'نوع ذاكرة يسمح بالبحث السريع عن المعلومات.'},{id:54,en:'Dynamic Learning',ar:'التعلم الديناميكي',level:'متوسط',note:'تعلم المحول لعناوين MAC تلقائيًا.'},{id:55,en:'Flooding',ar:'الإغراق',level:'صعب',note:'إرسال الإطار إلى عدة منافذ عند عدم معرفة منفذ الوجهة.'},{id:56,en:'Incoming Frame',ar:'إطار وارد',level:'سهل',note:'إطار يصل إلى المحول من جهاز آخر.'},{id:57,en:'Switching Method',ar:'طريقة التحويل',level:'متوسط',note:'الأسلوب الذي يستخدمه المحول لإعادة توجيه الإطارات.'},{id:58,en:'Store-and-Forward Switching',ar:'التحويل بالتخزين وإعادة التوجيه',level:'صعب',note:'يستقبل المحول الإطار بالكامل ثم يفحصه قبل إرساله.'},{id:59,en:'Cut-Through Switching',ar:'التحويل المباشر',level:'صعب',note:'يبدأ المحول إعادة التوجيه قبل استلام الإطار بالكامل.'},{id:60,en:'Error Checking',ar:'التحقق من الأخطاء',level:'متوسط',note:'فحص الإطار للتأكد من سلامته.'},{id:61,en:'FCS – Frame Check Sequence',ar:'تسلسل فحص الإطار',level:'صعب',note:'قيمة تستخدم للتحقق من وجود أخطاء في الإطار.'},{id:62,en:'CRC – Cyclic Redundancy Check',ar:'الفحص الدوري للتكرار',level:'صعب',note:'آلية للتحقق من الأخطاء في البيانات.'},{id:63,en:'Buffering',ar:'التخزين المؤقت',level:'متوسط',note:'الاحتفاظ المؤقت بالبيانات داخل ذاكرة الجهاز.'},{id:64,en:'Frame Header',ar:'ترويسة الإطار',level:'متوسط',note:'جزء يحتوي على معلومات التحكم والعناوين.'},{id:65,en:'Network Header',ar:'ترويسة الشبكة',level:'متوسط',note:'معلومات مرتبطة بطبقة الشبكة.'},{id:66,en:'Transport Header',ar:'ترويسة النقل',level:'متوسط',note:'معلومات مرتبطة بطبقة النقل.'},{id:67,en:'Data',ar:'البيانات',level:'سهل',note:'المحتوى الفعلي الذي يتم نقله.'},{id:68,en:'Preamble',ar:'المقدمة التمهيدية',level:'صعب',note:'جزء في بداية الإطار يساعد في التزامن.'},{id:69,en:'Type Field',ar:'حقل النوع',level:'متوسط',note:'حقل يحدد نوع البيانات أو البروتوكول.'},{id:70,en:'Checksum',ar:'المجموع الاختباري',level:'صعب',note:'قيمة تستخدم للمساعدة في اكتشاف الأخطاء.'},{id:71,en:'Jumbo Frame',ar:'إطار ضخم',level:'متوسط',note:'إطار بحجم أكبر من الإطارات التقليدية.'},{id:72,en:'Microsecond',ar:'ميكروثانية',level:'سهل',note:'وحدة زمنية تساوي جزءًا من مليون من الثانية.'},{id:73,en:'Switching Domain',ar:'مجال التحويل',level:'متوسط',note:'نطاق الشبكة الذي تتم داخله عمليات التحويل.'},{id:74,en:'Collision Domain',ar:'مجال التصادم',level:'متوسط',note:'جزء من الشبكة يمكن أن يحدث فيه تنافس أو تصادم.'},{id:75,en:'Broadcast Domain',ar:'مجال البث',level:'متوسط',note:'نطاق الأجهزة التي تستقبل رسائل البث.'},{id:76,en:'Collision',ar:'تصادم',level:'سهل',note:'حدوث تداخل بين عمليات إرسال في بيئة مشتركة.'},{id:77,en:'Broadcast',ar:'بث',level:'سهل',note:'إرسال رسالة إلى جميع الأجهزة ضمن نطاق البث.'},{id:78,en:'Broadcast Frame',ar:'إطار البث',level:'متوسط',note:'إطار موجه إلى جميع الأجهزة في مجال البث.'},{id:79,en:'Network Segment',ar:'مقطع الشبكة',level:'متوسط',note:'جزء من الشبكة يمثل نطاقًا معينًا للاتصال.'},{id:80,en:'Hub',ar:'لوحة الوصل',level:'سهل',note:'جهاز يربط الأجهزة في بيئة مشتركة.'},{id:81,en:'Separate Collision Domain',ar:'مجال تصادم منفصل',level:'صعب',note:'نطاق تصادم مستقل عن بقية المنافذ.'},{id:82,en:'Network Congestion',ar:'اختناق الشبكة',level:'متوسط',note:'انخفاض الأداء بسبب زيادة حركة البيانات.'},{id:83,en:'Network Performance',ar:'أداء الشبكة',level:'سهل',note:'مستوى كفاءة الشبكة في نقل البيانات.'},{id:84,en:'Broadcast Message',ar:'رسالة بث',level:'متوسط',note:'رسالة يتم إرسالها لجميع الأجهزة ضمن مجال البث.'},{id:85,en:'Full-Duplex',ar:'الإرسال المزدوج الاتجاه المتزامن',level:'متوسط',note:'إرسال واستقبال البيانات في الوقت نفسه.'},{id:86,en:'Internal Switching',ar:'التحويل الداخلي',level:'صعب',note:'عملية معالجة البيانات داخل بنية المحول.'},{id:87,en:'Network Bottleneck',ar:'عنق زجاجة الشبكة',level:'متوسط',note:'نقطة تسبب بطئًا في أداء الشبكة.'},{id:88,en:'Congestion Reduction',ar:'تخفيف الاختناق',level:'متوسط',note:'تقليل التزاحم وتحسين تدفق البيانات.'},{id:89,en:'Traffic Management',ar:'إدارة حركة البيانات',level:'متوسط',note:'تنظيم حركة البيانات داخل الشبكة.'},{id:90,en:'Quality of Service (QoS)',ar:'جودة الخدمة',level:'صعب',note:'إعطاء أولوية لأنواع معينة من حركة البيانات.'},{id:91,en:'Wireless Connectivity',ar:'الاتصال اللاسلكي',level:'سهل',note:'الاتصال بالشبكة دون استخدام كابلات.'},{id:92,en:'Wireless Access Point (WAP)',ar:'نقطة الوصول اللاسلكية',level:'متوسط',note:'جهاز يتيح للأجهزة اللاسلكية الاتصال بالشبكة.'},{id:93,en:'Unified Communications',ar:'الاتصال الموحد',level:'متوسط',note:'دمج وسائل الاتصال مثل الصوت والرسائل والفيديو.'},{id:94,en:'IT Management',ar:'إدارة تقنية المعلومات',level:'سهل',note:'إدارة البنية التقنية والخدمات المرتبطة بها.'}];
 
-const SECTIONS=[{code:'63854',label:'الشعبة النظرية(63854)',students:[{id:'446158780',name:'احمد محمد عائض الحارثي'},{id:'446158867',name:'أنس بن ابراهيم بن عبدالله آل مشاري القرني'},{id:'446158632',name:'حزام رجاء عبدالله العموده'},{id:'446158594',name:'خالد بن سعيد بن طامي السراري الشهراني'},{id:'446158835',name:'خالد محمد خالد الاكلبي'},{id:'446158812',name:'رائد بن عبدالرحمن بن عبدالله السراري الشهراني'},{id:'446158734',name:'ريان علي عبدالله القرني'},{id:'446158683',name:'سعيد بن خالد بن سعيد الشهراني'},{id:'446158703',name:'سعيد بن عبدالله بن محمد السراري الشهراني'},{id:'445178019',name:'سلطان عبدالله بن محمد الشهراني'},{id:'446158677',name:'صقر بن حامد بن صقر السعدي'},{id:'446158853',name:'عبدالرحمن بن عبدالله بن كميخ المنبهي الشهراني'},{id:'446158613',name:'عبدالرحمن عبيد عبدالله آل عيسى'},{id:'443314344',name:'عبدالرحمن محمد راجح الاكلبي'},{id:'446254039',name:'عبدالله شارع عبدالله الجنبه'},{id:'445105461',name:'عبدالله محمد عبدالله الشهراني'},{id:'446158244',name:'عبدالمجيد بن سعود بن بريك آل مهديه الحارثي'},{id:'446158606',name:'عبدالمجيد محمد عبدالرحمن الصعيري'},{id:'446158799',name:'فراس بن حزام بن عايض الشهراني'},{id:'446158793',name:'فواز هياف فواز الهاجري'},{id:'446158623',name:'مبارك بن عائض بن ظافر الشبوي القحطاني'},{id:'446158681',name:'محمد بن عبدالله بن عايض آل مهديه الحارثي'},{id:'446158806',name:'مهند بن عبدالرحمن بن عبدالله السراري الشهراني'}]},{code:'63857',label:'الشعبة النظرية (63857)',students:[{id:'446158849',name:'بندر بن محمد بن سيف القربي الشهراني'},{id:'446184582',name:'زياد صالح محمد القرني'},{id:'446253892',name:'سعد بن عبدالرحمن بن عبدالله آل عوضه'},{id:'446158850',name:'سعيد شارع عبدالله الشهراني'},{id:'446158639',name:'سلطان فايز مفرح آل هتيل'},{id:'446227159',name:'عامر بن محمد بن عامر القوبع'},{id:'446227199',name:'عبدالعزيز بن احمد بن محمد الفزعي الشمراني'},{id:'446158655',name:'عبدالله بن هويج بن شارع الجنيبي الاكلبي'},{id:'446179546',name:'عبدالله سعيد سالم الشهراني'},{id:'446158736',name:'علي بن دشيش بن علي الاعمشي الاكلبي'},{id:'446158610',name:'علي بن عبدالله بن علي السراري الشهراني'},{id:'446156447',name:'علي ناصر مسفر الشهراني'},{id:'446158814',name:'عناد بن فهد بن عايض المنبهي الشهراني'},{id:'446158778',name:'مبارك بن ناصر بن علي الدرعاني الشهراني'},{id:'446158571',name:'محمد بن راجح بن محمد الجبيري الأكلبي'},{id:'446158810',name:'محمد بن سعود بن هيف الشبوي'},{id:'446158593',name:'محمد بن علي بن محمد الشهراني'},{id:'446266804',name:'محمد خالد محمد عسل'},{id:'446158625',name:'منصور بن محمد بن حضينان الفاضلي الخالدي'},{id:'446158817',name:'مهند بن بريك بن محمد الذويب الاكلبي'},{id:'446158654',name:'موسى بن محمد بن فراج الحليسي الشهراني'},{id:'446158873',name:'نواف بن محمد بن زبران الفزعي الشمراني'}]},{code:'74306',label:'الشعبة النظري(74306)',students:[{id:'446158874',name:'ابراهيم بن عايض بن ظافر المنبهي الشهراني'},{id:'446158627',name:'احمد بن عايض بن بديع المهداني الحارثي'},{id:'446158815',name:'أنس بن هياف بن جريب السراري الشهراني'},{id:'446188430',name:'بدر ظافر جريب الشهراني'},{id:'446156828',name:'بندر ظافر جريب الشهراني'},{id:'446158704',name:'تركي بن قباس بن محمد آل فالح الجهمي'},{id:'445239356',name:'حسن عبدالكريم عون القحطاني'},{id:'444121250',name:'سعد مشبب مسعر المعاوي'},{id:'446158660',name:'سلمان عايض بن سالم الحارثي'},{id:'446158644',name:'ظافر صبيخان بن محمد الشهراني'},{id:'446158686',name:'عبدالرحمن بن عبدالله بن عامر المنبهي الشهراني'},{id:'446158626',name:'عبدالرحمن علي بن ظافر القرني'},{id:'446158685',name:'عبدالسلام بن علي بن محمد الثابتي الشهري'},{id:'446174476',name:'عبدالسلام علي عايض الشهراني'},{id:'446158595',name:'عبدالعزيز بن علي بن عبدالرحمن المليحي الشهراني'},{id:'446158771',name:'عبدالعزيز محمد ظافر الشهراني'},{id:'446158813',name:'عبدالعزيز ناصر بن عبدالعزيز الاكلبي'},{id:'446158592',name:'علي مسعود علي الشهراني'},{id:'446158664',name:'فيصل بن محمد بن ناصر الحارثي'},{id:'446158621',name:'متعب بن عبدالله بن جبل بن محمد السريعي الشهراني'},{id:'446158836',name:'محمد سعد بن سياف الشهراني'}]}];
+const SECTIONS=[{code:'63854',label:'الشعبة النظرية(63854)',students:[{id:'446158780',name:'احمد محمد عائض الحارثي'},{id:'446158867',name:'أنس بن ابراهيم بن عبدالله آل مشاري القرني'},{id:'446158632',name:'حزام رجاء عبدالله العموده'},{id:'446158594',name:'خالد بن سعيد بن طامي السراري الشهراني'},{id:'446158835',name:'خالد محمد خالد الاكلبي'},{id:'446158812',name:'رائد بن عبدالرحمن بن عبدالله السراري الشهراني'},{id:'446158734',name:'ريان علي عبدالله القرني'},{id:'446158683',name:'سعيد بن خالد بن سعيد الشهراني'},{id:'446158703',name:'سعيد بن عبدالله بن محمد السراري الشهراني'},{id:'445178019',name:'سلطان عبدالله بن محمد الشهراني'},{id:'446158677',name:'صقر بن حامد بن صقر السعدي'},{id:'446158853',name:'عبدالرحمن بن عبدالله بن كميخ المنبهي الشهراني'},{id:'446158613',name:'عبدالرحمن عبيد عبدالله آل عيسى'},{id:'443314344',name:'عبدالرحمن محمد راجح الاكلبي'},{id:'446254039',name:'عبدالله شارع عبدالله الجنبه'},{id:'445105461',name:'عبدالله محمد عبدالله الشهراني'},{id:'446158244',name:'عبدالمجيد بن سعود بن بريك آل مهديه الحارثي'},{id:'446158606',name:'عبدالمجيد محمد عبدالرحمن الصعيري'},{id:'446158799',name:'فراس بن حزام بن عايض الشهراني'},{id:'446158793',name:'فواز هياف فواز الهاجري'},{id:'446158623',name:'مبارك بن عائض بن ظافر الشبوي القحطاني'},{id:'446158681',name:'محمد بن عبدالله بن عايض آل مهديه الحارثي'},{id:'446158806',name:'مهند بن عبدالرحمن بن عبدالله السراري الشهراني'},{id:'18542',name:'حساب تجريبي (للاختبار فقط)'}]},{code:'63857',label:'الشعبة النظرية (63857)',students:[{id:'446158849',name:'بندر بن محمد بن سيف القربي الشهراني'},{id:'446184582',name:'زياد صالح محمد القرني'},{id:'446253892',name:'سعد بن عبدالرحمن بن عبدالله آل عوضه'},{id:'446158850',name:'سعيد شارع عبدالله الشهراني'},{id:'446158639',name:'سلطان فايز مفرح آل هتيل'},{id:'446227159',name:'عامر بن محمد بن عامر القوبع'},{id:'446227199',name:'عبدالعزيز بن احمد بن محمد الفزعي الشمراني'},{id:'446158655',name:'عبدالله بن هويج بن شارع الجنيبي الاكلبي'},{id:'446179546',name:'عبدالله سعيد سالم الشهراني'},{id:'446158736',name:'علي بن دشيش بن علي الاعمشي الاكلبي'},{id:'446158610',name:'علي بن عبدالله بن علي السراري الشهراني'},{id:'446156447',name:'علي ناصر مسفر الشهراني'},{id:'446158814',name:'عناد بن فهد بن عايض المنبهي الشهراني'},{id:'446158778',name:'مبارك بن ناصر بن علي الدرعاني الشهراني'},{id:'446158571',name:'محمد بن راجح بن محمد الجبيري الأكلبي'},{id:'446158810',name:'محمد بن سعود بن هيف الشبوي'},{id:'446158593',name:'محمد بن علي بن محمد الشهراني'},{id:'446266804',name:'محمد خالد محمد عسل'},{id:'446158625',name:'منصور بن محمد بن حضينان الفاضلي الخالدي'},{id:'446158817',name:'مهند بن بريك بن محمد الذويب الاكلبي'},{id:'446158654',name:'موسى بن محمد بن فراج الحليسي الشهراني'},{id:'446158873',name:'نواف بن محمد بن زبران الفزعي الشمراني'},{id:'18542',name:'حساب تجريبي (للاختبار فقط)'}]},{code:'74306',label:'الشعبة النظري(74306)',students:[{id:'446158874',name:'ابراهيم بن عايض بن ظافر المنبهي الشهراني'},{id:'446158627',name:'احمد بن عايض بن بديع المهداني الحارثي'},{id:'446158815',name:'أنس بن هياف بن جريب السراري الشهراني'},{id:'446188430',name:'بدر ظافر جريب الشهراني'},{id:'446156828',name:'بندر ظافر جريب الشهراني'},{id:'446158704',name:'تركي بن قباس بن محمد آل فالح الجهمي'},{id:'445239356',name:'حسن عبدالكريم عون القحطاني'},{id:'444121250',name:'سعد مشبب مسعر المعاوي'},{id:'446158660',name:'سلمان عايض بن سالم الحارثي'},{id:'446158644',name:'ظافر صبيخان بن محمد الشهراني'},{id:'446158686',name:'عبدالرحمن بن عبدالله بن عامر المنبهي الشهراني'},{id:'446158626',name:'عبدالرحمن علي بن ظافر القرني'},{id:'446158685',name:'عبدالسلام بن علي بن محمد الثابتي الشهري'},{id:'446174476',name:'عبدالسلام علي عايض الشهراني'},{id:'446158595',name:'عبدالعزيز بن علي بن عبدالرحمن المليحي الشهراني'},{id:'446158771',name:'عبدالعزيز محمد ظافر الشهراني'},{id:'446158813',name:'عبدالعزيز ناصر بن عبدالعزيز الاكلبي'},{id:'446158592',name:'علي مسعود علي الشهراني'},{id:'446158664',name:'فيصل بن محمد بن ناصر الحارثي'},{id:'446158621',name:'متعب بن عبدالله بن جبل بن محمد السريعي الشهراني'},{id:'446158836',name:'محمد سعد بن سياف الشهراني'},{id:'18542',name:'حساب تجريبي (للاختبار فقط)'}]}];
 
 const LECTURE_SIZE = 5;
 const LECTURES_PER_WEEK = 3;
 const CODE_PREFIX = 'NETQ1';
 const EXAM_DURATION_SECONDS = 5 * 60;
+const POINTS_PER_TERM = 0.02; // درجة كل مصطلح من الدرجة الكلية للمقرر
+const ACTIVE_WEEKS_COUNT = 6; // عدد الأسابيع الفعلية المعروضة في النموذج هذا الفصل
 
 function chunk(arr, size){
   const out = [];
@@ -667,7 +677,13 @@ const LECTURES = lectureChunks.map((terms,i)=>({
   terms: terms.map(t=>({...t, dir: (t.id % 2 === 0) ? 'ar2en' : 'en2ar'}))
 }));
 const weekChunks = chunk(LECTURES, LECTURES_PER_WEEK);
-const WEEKS = weekChunks.map((lects,i)=>({index:i+1, lectures:lects}));
+const WEEKS = weekChunks.map((lects,i)=>({index:i+1, lectures:lects})).slice(0, ACTIVE_WEEKS_COUNT);
+
+function pointsFor(termCount){
+  return Math.round(termCount * POINTS_PER_TERM * 100) / 100;
+}
+const COURSE_TOTAL_TERMS = WEEKS.reduce((s,w)=> s + w.lectures.reduce((s2,l)=> s2 + l.terms.length, 0), 0);
+const COURSE_TOTAL_POINTS = pointsFor(COURSE_TOTAL_TERMS);
 
 const STORE_KEY = 'nettermquiz.v2';
 function loadPrefs(){
@@ -740,7 +756,11 @@ function buildSetup(){
 
   buildLectureSeg();
 
-  el('instWeek').innerHTML = weekSelect.innerHTML;
+  refreshInstWeekOptions();
+}
+
+function refreshInstWeekOptions(){
+  el('instWeek').innerHTML = '<option value="all">الإجمالي (جميع الأسابيع)</option>' + el('weekSelect').innerHTML;
 }
 
 function renderIdentityBanner(){
@@ -830,7 +850,7 @@ function attemptLogin(){
       errorEl.hidden = true;
       el('loginUsername').value = '';
       el('loginPassword').value = '';
-      el('instWeek').innerHTML = el('weekSelect').innerHTML;
+      refreshInstWeekOptions();
       showView('view-instructor');
     }else{
       errorEl.textContent = 'اسم المستخدم أو كلمة السر غير صحيحة.';
@@ -1043,9 +1063,12 @@ function collectAnswers(){
 function renderResults(identity, records){
   const score = records.filter(r=>r.correct).length;
   const total = records.length;
+  const points = pointsFor(score);
+  const maxPoints = pointsFor(total);
   el('autoSubmitNotice').hidden = !lastAutoSubmitted;
   el('scoreBig').textContent = `${score}/${total}`;
   el('scorePct').textContent = total ? `(${Math.round(score/total*100)}%)` : '';
+  el('resPoints').textContent = `${points} من ${maxPoints}`;
   el('resName').textContent = identity.name;
   el('resId').textContent = identity.id;
   el('resSection').textContent = identity.sectionLabel;
@@ -1087,6 +1110,7 @@ function buildCopyText(identity, records){
   lines.push(`الشعبة: ${identity.sectionLabel}`);
   lines.push(`الأسبوع: ${state.weekIndex} — المحاضرة: ${state.lectureIndex}`);
   lines.push(`النتيجة: ${score}/${total}`);
+  lines.push(`الدرجة (نقاط): ${pointsFor(score)} من ${pointsFor(total)}`);
   lines.push(`مرات مغادرة الصفحة أثناء الحل: ${lastExitCount}`);
   if(lastAutoSubmitted) lines.push('⏰ تنبيه: انتهى الوقت (5 دقائق) وتم إنهاء الاختبار تلقائيًا.');
   lines.push(`التاريخ: ${new Date().toLocaleDateString('ar-SA')}`);
@@ -1102,6 +1126,47 @@ function buildCopyText(identity, records){
   lines.push('لا تحذف السطر التالي — يستخدمه المحاضر لرصد الدرجات آليًا:');
   lines.push(`${CODE_PREFIX}|${identity.id}|${identity.sectionCode}|${state.weekIndex}|${state.lectureIndex}|${score}|${total}|${lastExitCount}`);
   return lines.join('\n');
+}
+
+/* ---------- Excel (.xlsx) result export for trainees ---------- */
+function buildResultWorkbook(identity, records){
+  const score = records.filter(r=>r.correct).length;
+  const total = records.length;
+  const points = pointsFor(score);
+  const maxPoints = pointsFor(total);
+  const wb = XLSX.utils.book_new();
+
+  const summaryRows = [
+    ['المفتاح','الرقم التدريبي','الاسم','رمز الشعبة','الأسبوع','المحاضرة','الدرجة (عدد صحيح)','من (عدد)','الدرجة (نقاط)','من (نقاط)','مرات المغادرة','التاريخ'],
+    [CODE_PREFIX, identity.id, identity.name, identity.sectionCode, state.weekIndex, state.lectureIndex, score, total, points, maxPoints, lastExitCount, new Date().toLocaleDateString('ar-SA')]
+  ];
+  const wsSummary = XLSX.utils.aoa_to_sheet(summaryRows);
+  XLSX.utils.book_append_sheet(wb, wsSummary, 'بيانات');
+
+  const detailRows = [['#','المصطلح المعروض','إجابة المتدرب','الإجابة الصحيحة','الصعوبة','الحالة']];
+  records.forEach((r,i)=>{
+    const shown = r.term.dir === 'ar2en' ? r.term.ar : r.term.en;
+    const correct = r.term.dir === 'ar2en' ? r.term.en : r.term.ar;
+    detailRows.push([i+1, shown, r.answer || '', correct, r.term.level, r.correct ? 'صحيح' : 'خطأ']);
+  });
+  const wsDetails = XLSX.utils.aoa_to_sheet(detailRows);
+  XLSX.utils.book_append_sheet(wb, wsDetails, 'التفاصيل');
+
+  return wb;
+}
+
+function downloadResultXlsx(identity, records){
+  if(typeof XLSX === 'undefined'){
+    alert('تعذر تحميل مكتبة Excel (تأكد من اتصالك بالإنترنت). استخدم زر "نسخ النتيجة كنص" بدلاً من ذلك.');
+    return;
+  }
+  try{
+    const wb = buildResultWorkbook(identity, records);
+    const filename = `نتيجة_${identity.id}_اسبوع${state.weekIndex}_محاضرة${state.lectureIndex}.xlsx`;
+    XLSX.writeFile(wb, filename);
+  }catch(e){
+    alert('تعذر تنزيل ملف Excel. استخدم زر "نسخ النتيجة كنص" بدلاً من ذلك.');
+  }
 }
 
 /* ---------- generic copy helper ---------- */
@@ -1138,6 +1203,55 @@ async function useCapability(name){
 }
 
 /* ---------- instructor view ---------- */
+let uploadedXlsxMap = {};
+let uploadedFileNames = new Set();
+
+function mergeRecordMaps(maps){
+  const out = {};
+  maps.forEach(m=>{
+    Object.keys(m).forEach(sid=>{
+      if(!out[sid]) out[sid] = { sectionCode: m[sid].sectionCode, lectures:{} };
+      out[sid].sectionCode = m[sid].sectionCode;
+      Object.assign(out[sid].lectures, m[sid].lectures);
+    });
+  });
+  return out;
+}
+
+async function handleXlsxUpload(fileList){
+  const files = Array.from(fileList || []);
+  let readCount = 0;
+  for(const file of files){
+    try{
+      const buf = await file.arrayBuffer();
+      const wb = XLSX.read(buf, { type:'array' });
+      const sheetName = wb.SheetNames.includes('بيانات') ? 'بيانات' : wb.SheetNames[0];
+      const ws = wb.Sheets[sheetName];
+      const rows = XLSX.utils.sheet_to_json(ws, { header:1 });
+      const dataRow = rows.find(r => String(r[0]).trim() === CODE_PREFIX);
+      if(!dataRow) continue;
+      const studentId = String(dataRow[1]).trim();
+      const sectionCode = String(dataRow[3]).trim();
+      const week = Number(dataRow[4]);
+      const lecture = Number(dataRow[5]);
+      const score = Number(dataRow[6]);
+      const total = Number(dataRow[7]);
+      const exits = Number(dataRow[10] || 0);
+      if(!studentId || !sectionCode || !week || !lecture) continue;
+      if(!uploadedXlsxMap[studentId]) uploadedXlsxMap[studentId] = { sectionCode, lectures:{} };
+      uploadedXlsxMap[studentId].sectionCode = sectionCode;
+      uploadedXlsxMap[studentId].lectures[`${week}_${lecture}`] = { week, lecture, score, total, exits };
+      uploadedFileNames.add(file.name);
+      readCount++;
+    }catch(e){ /* تجاهل الملفات غير القابلة للقراءة */ }
+  }
+  const status = el('xlsxUploadStatus');
+  if(status){
+    status.hidden = false;
+    status.textContent = `تم قراءة ${readCount} ملف من أصل ${files.length} بنجاح — إجمالي الملفات المرفوعة حتى الآن: ${uploadedFileNames.size}.`;
+  }
+}
+
 function parseCodes(text){
   const re = new RegExp(CODE_PREFIX + '\\|([^\\|\\n\\r]+)\\|([^\\|\\n\\r]+)\\|(\\d+)\\|(\\d+)\\|(\\d+)\\|(\\d+)(?:\\|(\\d+))?', 'g');
   const map = {};
@@ -1186,16 +1300,18 @@ function renderInstructorResults(compiled){
   const parts = compiled.bySection.map(({section, rows})=>{
     const head = [`<th>#</th>`, `<th>الرقم التدريبي</th>`, `<th>الاسم</th>`]
       .concat(compiled.lecIndexes.map(li=>`<th>محاضرة ${li}</th>`))
-      .concat([`<th>الإجمالي</th>`, `<th>النسبة%</th>`, `<th>مغادرات</th>`]).join('');
+      .concat([`<th>الإجمالي</th>`, `<th>الدرجة (نقاط)</th>`, `<th>النسبة%</th>`, `<th>مغادرات</th>`]).join('');
     const body = rows.map((r,i)=>{
       const cells = r.cells.map(c=> c.present
         ? `<td class="mono">${c.score}/${c.total}</td>`
         : `<td class="absent-cell">لم يقدم</td>`).join('');
       const pct = r.sumTotal ? Math.round(r.sumScore/r.sumTotal*100) : 0;
+      const points = pointsFor(r.sumScore);
+      const maxPoints = pointsFor(r.sumTotal);
       const exitsHtml = r.sumExits > 0
         ? `<span class="status-pill bad">${r.sumExits}</span>`
         : `<span class="status-pill ok">0</span>`;
-      return `<tr><td class="mono">${i+1}</td><td class="mono">${r.id}</td><td>${escapeHtml(r.name)}</td>${cells}<td class="mono correct-ans">${r.sumScore}/${r.sumTotal}</td><td class="mono">${pct}%</td><td>${exitsHtml}</td></tr>`;
+      return `<tr><td class="mono">${i+1}</td><td class="mono">${r.id}</td><td>${escapeHtml(r.name)}</td>${cells}<td class="mono correct-ans">${r.sumScore}/${r.sumTotal}</td><td class="mono correct-ans">${points}/${maxPoints}</td><td class="mono">${pct}%</td><td>${exitsHtml}</td></tr>`;
     }).join('');
     return `
       <div class="section-block card">
@@ -1242,6 +1358,60 @@ function renderInstructorResults(compiled){
   });
 }
 
+function compileAllWeeks(map){
+  const bySection = SECTIONS.map(sec=>{
+    const rows = sec.students.map(st=>{
+      const rec = map[st.id];
+      const perWeek = WEEKS.map(w=>{
+        const lecIndexes = w.lectures.map(l=>l.index);
+        let wScore = 0, wTotal = 0;
+        lecIndexes.forEach(li=>{
+          const lecMeta = LECTURES.find(l=>l.index===li);
+          const size = lecMeta.terms.length;
+          const entry = rec && rec.lectures[`${w.index}_${li}`];
+          if(entry){ wScore += entry.score; wTotal += entry.total; }
+          else { wTotal += size; }
+        });
+        return { weekIndex: w.index, score: wScore, total: wTotal };
+      });
+      const sumScore = perWeek.reduce((s,w)=>s+w.score,0);
+      const sumTotal = perWeek.reduce((s,w)=>s+w.total,0);
+      let sumExits = 0;
+      if(rec) Object.values(rec.lectures).forEach(e=>{ sumExits += (e.exits||0); });
+      return { id: st.id, name: st.name, perWeek, sumScore, sumTotal, sumExits };
+    });
+    return { section: sec, rows };
+  });
+  return { bySection };
+}
+
+function renderInstructorAllWeeks(compiled){
+  const box = el('instructorResults');
+  const parts = compiled.bySection.map(({section, rows})=>{
+    const head = [`<th>#</th>`, `<th>الرقم التدريبي</th>`, `<th>الاسم</th>`]
+      .concat(WEEKS.map(w=>`<th>الأسبوع ${w.index}</th>`))
+      .concat([`<th>الإجمالي</th>`, `<th>الدرجة (نقاط)</th>`, `<th>النسبة%</th>`, `<th>مغادرات</th>`]).join('');
+    const body = rows.map((r,i)=>{
+      const weekCells = r.perWeek.map(w=> `<td class="mono">${w.score}/${w.total}</td>`).join('');
+      const pct = r.sumTotal ? Math.round(r.sumScore/r.sumTotal*100) : 0;
+      const points = pointsFor(r.sumScore);
+      const exitsHtml = r.sumExits > 0
+        ? `<span class="status-pill bad">${r.sumExits}</span>`
+        : `<span class="status-pill ok">0</span>`;
+      return `<tr><td class="mono">${i+1}</td><td class="mono">${r.id}</td><td>${escapeHtml(r.name)}</td>${weekCells}<td class="mono correct-ans">${r.sumScore}/${r.sumTotal}</td><td class="mono correct-ans">${points}/${COURSE_TOTAL_POINTS}</td><td class="mono">${pct}%</td><td>${exitsHtml}</td></tr>`;
+    }).join('');
+    return `
+      <div class="section-block card">
+        <h3>${escapeHtml(section.label)}</h3>
+        <p class="section-sub">عدد المتدربين: ${rows.length} — الدرجة القصوى للمقرر (جميع الأسابيع): ${COURSE_TOTAL_POINTS}</p>
+        <div class="table-wrap">
+          <table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>
+        </div>
+      </div>`;
+  }).join('');
+  box.innerHTML = parts;
+}
+
 function ensureScratchArea(){
   let a = document.getElementById('scratchCopyArea');
   if(!a){
@@ -1256,12 +1426,12 @@ function ensureScratchArea(){
 }
 
 function sectionToTsv(compiled, sec){
-  const header = ['#','الرقم التدريبي','الاسم', ...compiled.lecIndexes.map(li=>`محاضرة ${li}`), 'الإجمالي', 'النسبة%', 'مغادرات'];
+  const header = ['#','الرقم التدريبي','الاسم', ...compiled.lecIndexes.map(li=>`محاضرة ${li}`), 'الإجمالي', 'الدرجة (نقاط)', 'النسبة%', 'مغادرات'];
   const rows = [sec.section.label, header.join('\t')];
   sec.rows.forEach((r,i)=>{
     const pct = r.sumTotal ? Math.round(r.sumScore/r.sumTotal*100) : 0;
     const cells = r.cells.map(c=> c.present ? `${c.score}/${c.total}` : 'لم يقدم');
-    rows.push([i+1, r.id, r.name, ...cells, `${r.sumScore}/${r.sumTotal}`, `${pct}%`, r.sumExits].join('\t'));
+    rows.push([i+1, r.id, r.name, ...cells, `${r.sumScore}/${r.sumTotal}`, `${pointsFor(r.sumScore)}/${pointsFor(r.sumTotal)}`, `${pct}%`, r.sumExits].join('\t'));
   });
   return rows.join('\n');
 }
@@ -1274,12 +1444,12 @@ function csvEscape(v){
 
 async function exportCsv(compiled, sections, filename){
   const rows = [];
-  rows.push(['القسم','الرقم التدريبي','الاسم', ...compiled.lecIndexes.map(li=>'محاضرة '+li), 'الإجمالي', 'النسبة%', 'مغادرات']);
+  rows.push(['القسم','الرقم التدريبي','الاسم', ...compiled.lecIndexes.map(li=>'محاضرة '+li), 'الإجمالي', 'الدرجة (نقاط)', 'النسبة%', 'مغادرات']);
   sections.forEach(sec=>{
     sec.rows.forEach(r=>{
       const pct = r.sumTotal ? Math.round(r.sumScore/r.sumTotal*100) : 0;
       const cells = r.cells.map(c=> c.present ? `${c.score}/${c.total}` : 'لم يقدم');
-      rows.push([sec.section.label, r.id, r.name, ...cells, `${r.sumScore}/${r.sumTotal}`, pct+'%', r.sumExits]);
+      rows.push([sec.section.label, r.id, r.name, ...cells, `${r.sumScore}/${r.sumTotal}`, `${pointsFor(r.sumScore)}/${pointsFor(r.sumTotal)}`, pct+'%', r.sumExits]);
     });
   });
   const csv = '﻿' + rows.map(r=>r.map(csvEscape).join(',')).join('\r\n');
@@ -1358,6 +1528,10 @@ el('finishBtn').addEventListener('click', ()=>{
 
 el('printBtn').addEventListener('click', ()=> window.print());
 
+el('downloadXlsxBtn').addEventListener('click', ()=>{
+  downloadResultXlsx(lastIdentity, lastRecords);
+});
+
 el('copyBtn').addEventListener('click', ()=>{
   const text = buildCopyText(lastIdentity, lastRecords);
   copyToClipboard(text, el('copyArea'), el('copyStatus'));
@@ -1370,15 +1544,27 @@ el('retryBtn').addEventListener('click', ()=>{
 
 el('backInstBtn').addEventListener('click', logout);
 
+el('xlsxUpload').addEventListener('change', (e)=>{
+  handleXlsxUpload(e.target.files);
+});
+
 el('compileBtn').addEventListener('click', ()=>{
   const text = el('pasteArea').value;
-  const weekIndex = Number(el('instWeek').value);
-  const { map, count } = parseCodes(text);
-  const compiled = compileWeek(map, weekIndex);
-  lastCompiled = compiled;
+  const weekVal = el('instWeek').value;
+  const { map: textMap, count } = parseCodes(text);
+  const map = mergeRecordMaps([textMap, uploadedXlsxMap]);
   const studentsFound = Object.keys(map).length;
-  el('parseInfo').textContent = `تم العثور على ${count} رمز نتيجة لعدد ${studentsFound} متدرب.`;
-  renderInstructorResults(compiled);
+  el('parseInfo').textContent = `تم العثور على ${count} رمز نتيجة من النص المُلصق، و${uploadedFileNames.size} ملف Excel مرفوع — لعدد ${studentsFound} متدرب إجمالاً.`;
+  if(weekVal === 'all'){
+    lastCompiled = null;
+    const compiled = compileAllWeeks(map);
+    renderInstructorAllWeeks(compiled);
+  }else{
+    const weekIndex = Number(weekVal);
+    const compiled = compileWeek(map, weekIndex);
+    lastCompiled = compiled;
+    renderInstructorResults(compiled);
+  }
 });
 
 buildSetup();
@@ -1386,5 +1572,6 @@ setLoginRole('trainee');
 if(prefs.studentId) el('loginUsername').value = prefs.studentId;
 showView('view-login');
 </script>
+
 </body>
 </html>
