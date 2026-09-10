@@ -390,6 +390,12 @@
   .lvl-صعب .level-pill{background:var(--level-hard-soft);color:var(--level-hard);}
   .status-pill.ok{background:var(--level-easy-soft);color:var(--level-easy);}
   .status-pill.bad{background:var(--level-hard-soft);color:var(--level-hard);}
+  .status-pill.warn{background:var(--level-mid-soft);color:var(--level-mid);}
+  .att-banner{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:16px;margin:14px 0;text-align:center;}
+  .att-banner.live{border-color:#16a34a;}
+  .att-code-big{font-size:44px;font-weight:800;letter-spacing:6px;font-family:'Courier New',monospace;margin:6px 0;color:var(--accent-strong);}
+  .att-countdown{font-size:20px;font-weight:700;color:#b45309;}
+  .att-session-log{font-size:12px;color:var(--text-muted);margin-top:10px;}
 
   .term-shown{
     font-family:'Cairo',sans-serif;
@@ -549,6 +555,20 @@
         <button class="btn" id="startBtn">بدء الاختبار</button>
       </div>
     </div>
+    <div class="card" id="attTraineeCard">
+      <h3 style="margin:0 0 8px;font-size:15px">✅ تأكيد الحضور</h3>
+      <p class="sub" style="margin:0 0 12px">عند إعلان المحاضر عن كود التحضير في القاعة، اكتبه هنا خلال ٣٠ ثانية للأسبوع والمحاضرة المختارين أعلاه.</p>
+      <div class="field">
+        <label for="attCodeInput">كود التحضير</label>
+        <input type="text" id="attCodeInput" inputmode="numeric" maxlength="4" placeholder="مثال: 4821" autocomplete="off">
+      </div>
+      <p class="notice" id="attConfirmError" hidden></p>
+      <p class="notice" id="attConfirmStatus" hidden>✅ تم تسجيل تأكيد حضورك محليًا. اضغط زر التنزيل أدناه وأرسل الملف للمحاضر.</p>
+      <div class="actions">
+        <button class="btn secondary" id="attConfirmBtn" type="button">تأكيد الحضور الآن</button>
+        <button class="btn secondary" id="attDownloadBtn" type="button" hidden>تنزيل تأكيد الحضور (Excel)</button>
+      </div>
+    </div>
     <p class="hint"><button class="mode-link" id="logoutBtn" type="button">تسجيل خروج</button></p>
   </section>
 
@@ -673,6 +693,48 @@
 
     <div id="instructorResults"></div>
 
+    <div class="card" id="attAdminCard">
+      <h3 style="margin:0 0 10px;font-size:16px">📋 تحضير المتدربين (Roll Call)</h3>
+      <p class="sub" style="margin:0 0 12px">اضغط "بدء التحضير" وأعلن الكود الظاهر أدناه بصوت مرتفع أو اعرضه على الشاشة. يُغلق التحضير تلقائيًا بعد ٣٠ ثانية، ولا يمكن فتحه من جديد إلا من حسابك.</p>
+      <div class="field">
+        <label for="attWeekSelect">الأسبوع</label>
+        <select id="attWeekSelect"></select>
+      </div>
+      <div class="field">
+        <label>المحاضرة</label>
+        <div class="seg" id="attLectureSeg"></div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="attStartBtn" type="button">بدء التحضير الآن (٣٠ ثانية)</button>
+        <button class="btn secondary" id="attStopBtn" type="button" hidden>إنهاء التحضير الآن</button>
+      </div>
+      <div class="att-banner no-print" id="attAdminBanner" hidden>
+        <div>كود التحضير لهذه الجلسة</div>
+        <div class="att-code-big" id="attAdminCode">----</div>
+        <div class="att-countdown" id="attAdminCountdown">00:30</div>
+      </div>
+      <p class="att-session-log" id="attSessionLog"></p>
+    </div>
+
+    <div class="card" id="attReportCard">
+      <h3 style="margin:0 0 10px;font-size:16px">تقرير الحضور والغياب</h3>
+      <div class="field">
+        <label for="attReportWeek">الأسبوع</label>
+        <select id="attReportWeek"></select>
+      </div>
+      <div class="field">
+        <label for="attXlsxUpload">ملفات تأكيد الحضور المستلمة من المتدربين (Excel)</label>
+        <input type="file" id="attXlsxUpload" accept=".xlsx" multiple>
+        <span class="hint" id="attXlsxUploadStatus" hidden></span>
+      </div>
+      <div class="actions">
+        <button class="btn" id="attCompileBtn" type="button">تحديث تقرير الحضور</button>
+        <span class="hint" id="attParseInfo"></span>
+      </div>
+    </div>
+
+    <div id="attendanceResults"></div>
+
     <div class="actions no-print">
       <button class="btn secondary" id="backInstBtn">تسجيل خروج</button>
     </div>
@@ -725,6 +787,113 @@ const OSI_QUESTIONS = [
 ];
 LECTURE_QUESTIONS['2_5'] = OSI_QUESTIONS;
 LECTURE_QUESTIONS['2_6'] = OSI_QUESTIONS;
+
+// أسئلة الأسابيع 3-6 (المحاضرات 7-18) — من محتوى وحدة SRWE Module 1: التكوين الأساسي للجهاز
+// (مصدرها ملف العرض SRWE_Module_1.pptx المرسل من المحاضر). 3 أسئلة اختيار من متعدد لكل محاضرة.
+
+// الأسبوع 3 — 1.1 تكوين مبدل بالإعدادات الأولية
+LECTURE_QUESTIONS['3_7'] = [
+  { type:'mcq', text:'ما أول خطوة في تسلسل تمهيد مبدل Cisco بعد تشغيله؟',
+    options:['تحميل برنامج الاختبار الذاتي عند بدء التشغيل (POST) المخزّن في ذاكرة ROM','تحميل صورة نظام التشغيل IOS من ذاكرة الفلاش مباشرة','تكوين عنوان IP لواجهة الإدارة','تشغيل أداة تحميل التمهيد قبل POST'], correctIndex:0 },
+  { type:'mcq', text:'ما الغرض الرئيسي من اختبار POST عند بدء تشغيل المبدل؟',
+    options:['تحميل ملف التكوين النشط (running-config)','فحص واختبار النظام الفرعي لوحدة المعالجة المركزية وذاكرة DRAM وجزء من الفلاش','تمكين بروتوكول SSH تلقائيًا','تعيين عنوان IP الافتراضي للمبدل'], correctIndex:1 },
+  { type:'mcq', text:'بعد اكتمال POST بنجاح، ما البرنامج الذي يتم تشغيله فورًا؟',
+    options:['نظام التشغيل IOS كاملاً','أداة تحميل التمهيد (boot loader)','بروتوكول SSH','خادم DHCP'], correctIndex:1 }
+];
+LECTURE_QUESTIONS['3_8'] = [
+  { type:'mcq', text:'ما وظيفة الأمر boot system في وضع التكوين العام على المبدل؟',
+    options:['تعيين متغير بيئة BOOT لتحديد ملف IOS المطلوب تحميله من ذاكرة الفلاش','تكوين عنوان IP لواجهة الإدارة','حذف زوج مفاتيح RSA','عرض سجل الأوامر المدخلة'], correctIndex:0 },
+  { type:'mcq', text:'ملف تكوين بدء التشغيل الذي يقرأ منه IOS إعدادات الواجهات يُسمى؟',
+    options:['running-config','startup-config (config.text)','vlan.dat','boot.ini'], correctIndex:1 },
+  { type:'mcq', text:'ما الذي يشير إليه مؤشر LED لحالة المنفذ (STAT) باللون الأخضر، وهو الوضع الافتراضي؟',
+    options:['حالة تشغيل المنفذ (Link Up / نشاط)','سرعة المنفذ','وضع الازدواج (duplex)','دعم PoE'], correctIndex:0 }
+];
+LECTURE_QUESTIONS['3_9'] = [
+  { type:'mcq', text:'للوصول إلى أداة تحميل التمهيد واسترداد مبدل لا يستطيع تشغيل IOS، ماذا يجب أن تضغط خلال 15 ثانية من إعادة توصيل الطاقة بينما مؤشر النظام لا يزال يومض أخضر؟',
+    options:['زر Mode','زر Reset','مفتاح Ctrl+C من الطرفية','لا يوجد زر، يتم ذلك تلقائيًا'], correctIndex:0 },
+  { type:'mcq', text:'لتمكين إدارة المبدل عن بُعد، أين يجب تكوين عنوان IP؟',
+    options:['أي منفذ فعلي عشوائي في المبدل','واجهة SVI (الواجهة الظاهرية للمحول)، مثل VLAN 99','منفذ وحدة التحكم (Console) فقط','لا حاجة لعنوان IP لإدارة المبدل'], correctIndex:1 },
+  { type:'mcq', text:'عند إدارة المبدل من شبكة غير متصلة مباشرة، ما الذي يجب تكوينه إضافة إلى عنوان IP وقناع الشبكة الفرعية؟',
+    options:['بوابة افتراضية (default gateway)','خادم DNS','عنوان MAC ثابت','كلمة سر SSH فقط'], correctIndex:0 }
+];
+
+// الأسبوع 4 — 1.2 تكوين منافذ التبديل
+LECTURE_QUESTIONS['4_10'] = [
+  { type:'mcq', text:'ما الإعداد الافتراضي لكل من وضع الازدواج (duplex) والسرعة (speed) على منافذ مبدلات Cisco Catalyst؟',
+    options:['نصف مزدوج (half-duplex) ثابت','تلقائي (auto)','كامل مزدوج (full-duplex) ثابت بسرعة 1000 ميجابت','لا يوجد إعداد افتراضي'], correctIndex:1 },
+  { type:'mcq', text:'أي أمرين يُستخدمان في وضع تكوين الواجهة لتحديد الازدواج والسرعة يدويًا؟',
+    options:['duplex و speed','mode و rate','link و bandwidth','port-duplex و port-speed'], correctIndex:0 },
+  { type:'mcq', text:'ما السبب الشائع لحدوث "عدم تطابق" (mismatch) في وضع الازدواج بين جهازين متصلين؟',
+    options:['فشل عملية التفاوض التلقائي (autonegotiation)','استخدام كابل ألياف ضوئية','تفعيل SSH','تغيير اسم المضيف'], correctIndex:0 }
+];
+LECTURE_QUESTIONS['4_11'] = [
+  { type:'mcq', text:'ما وظيفة ميزة Auto-MDIX على منفذ المبدل؟',
+    options:['اكتشاف نوع توصيل الكابل المطلوب (مباشر أو عكسي) تلقائيًا وتكوين الاتصال وفقًا لذلك','تشفير حركة البيانات على المنفذ','تحديد سرعة المنفذ فقط دون الازدواج','تعطيل المنفذ تلقائيًا عند حدوث تصادم'], correctIndex:0 },
+  { type:'mcq', text:'عند تفعيل Auto-MDIX على واجهة ما، ما الإعداد الذي يجب أن يكون عليه وضع السرعة والازدواج لتعمل الميزة بشكل صحيح؟',
+    options:['auto','full فقط','half فقط','لا علاقة بينهما'], correctIndex:0 },
+  { type:'mcq', text:'أي أمر يُستخدم لعرض جدول عناوين MAC الذي تعلّمه المبدل؟',
+    options:['show mac-address-table','show ip route','show vlan brief','show ip ssh'], correctIndex:0 }
+];
+LECTURE_QUESTIONS['4_12'] = [
+  { type:'mcq', text:'عندما تكون الواجهة up لكن بروتوكول الخط (line protocol) down عند تنفيذ show interfaces، فما التفسير الأرجح؟',
+    options:['عدم تطابق في نوع التضمين أو مشكلة في الطرف الآخر من الوصلة','المنفذ مُعطّل إداريًا','الكابل غير موصول إطلاقًا','تم تكوين SSH بشكل خاطئ'], correctIndex:0 },
+  { type:'mcq', text:'الإطارات الأقصر من 64 بايت التي يتم تجاهلها تُعرف باسم؟',
+    options:['Giants','Runts','Jumbo Frames','Broadcast Frames'], correctIndex:1 },
+  { type:'mcq', text:'أخطاء CRC (Cyclic Redundancy Check) في واجهات Ethernet تشير غالبًا إلى؟',
+    options:['خطأ في الوسائط أو الكابلات (تداخل كهربائي، توصيلات رديئة)','نجاح عملية المصادقة عبر SSH','أن المنفذ يعمل بكامل الكفاءة','أن المبدل بحاجة لإعادة تشغيل فقط'], correctIndex:0 }
+];
+
+// الأسبوع 5 — 1.3 الوصول الآمن عن بُعد
+LECTURE_QUESTIONS['5_13'] = [
+  { type:'mcq', text:'أي منفذ TCP يستخدمه بروتوكول Telnet؟',
+    options:['TCP 22','TCP 23','TCP 80','TCP 443'], correctIndex:1 },
+  { type:'mcq', text:'ما العيب الأمني الرئيسي لبروتوكول Telnet؟',
+    options:['إرسال بيانات المصادقة والبيانات بصيغة نص عادي غير مشفر','بطء شديد في الاتصال','لا يدعم إلا IPv6','يتطلب زوج مفاتيح RSA'], correctIndex:0 },
+  { type:'mcq', text:'أي منفذ TCP يستخدمه بروتوكول SSH؟',
+    options:['TCP 21','TCP 22','TCP 23','TCP 25'], correctIndex:1 }
+];
+LECTURE_QUESTIONS['5_14'] = [
+  { type:'mcq', text:'ما الأمر الذي يُنشئ زوج مفاتيح RSA ويُمكّن خادم SSH تلقائيًا على المبدل؟',
+    options:['crypto key generate rsa','ip domain-name','username secret','transport input ssh'], correctIndex:0 },
+  { type:'mcq', text:'أي أمر يُستخدم في وضع تكوين الأسطر (line vty) للسماح بالمصادقة المحلية عبر SSH؟',
+    options:['login local مع transport input ssh','transport input telnet','enable secret','no shutdown'], correctIndex:0 },
+  { type:'mcq', text:'قبل إنشاء زوج مفاتيح RSA، ما الأمر اللازم لتكوين اسم مجال IP للشبكة؟',
+    options:['ip domain-name domain-name','hostname','ip default-gateway','banner motd'], correctIndex:0 }
+];
+LECTURE_QUESTIONS['5_15'] = [
+  { type:'mcq', text:'أي أمر يُستخدم للتحقق من أن المبدل يدعم SSH ولعرض بيانات إصداره وتكوينه؟',
+    options:['show ip ssh','show mac-address-table','show vlan','show cdp neighbors'], correctIndex:0 },
+  { type:'mcq', text:'اسم ملف IOS الذي يتضمن الحرفين "k9" يشير إلى أن الجهاز يدعم؟',
+    options:['ميزات وإمكانيات التشفير (Cryptographic features)','دعم الشبكات اللاسلكية فقط','دعم بروتوكول Telnet فقط','عدم دعم أي بروتوكولات إدارة'], correctIndex:0 },
+  { type:'mcq', text:'ما الإصدار المفضّل من SSH الذي يُنصح بتفعيله باستخدام الأمر ip ssh version 2؟',
+    options:['الإصدار 2 لتحسين الأمان مقارنة بالإصدار 1','الإصدار 1 لأنه الأحدث','لا فرق بين الإصدارين','الإصدار 3'], correctIndex:0 }
+];
+
+// الأسبوع 6 — 1.4 التكوين الأساسي لجهاز التوجيه + 1.5 التحقق من الشبكات المتصلة مباشرة
+LECTURE_QUESTIONS['6_16'] = [
+  { type:'mcq', text:'من مهام التكوين الأساسية التي يجب تنفيذها دائمًا على الموجّه (Router) مثل المبدل تمامًا؟',
+    options:['تسمية الجهاز وتكوين كلمات المرور وبانر تنبيه قانوني','تكوين VLAN فقط','تعطيل جميع الواجهات','حذف كل زوج مفاتيح RSA'], correctIndex:0 },
+  { type:'mcq', text:'ما الغرض من تكوين banner على جهاز التوجيه؟',
+    options:['تقديم إخطار قانوني بشأن الوصول غير المصرح به','تسريع أداء التوجيه','تشفير حركة البيانات','تحديد عنوان IP للواجهة'], correctIndex:0 },
+  { type:'mcq', text:'أي أمر يحفظ التكوين الحالي (running-config) ليصبح تكوين بدء التشغيل (startup-config)؟',
+    options:['copy running-config startup-config','reload','show running-config','erase startup-config'], correctIndex:0 }
+];
+LECTURE_QUESTIONS['6_17'] = [
+  { type:'mcq', text:'لتكون واجهة الموجّه متاحة (up/up)، ما الشروط الواجب توفرها؟',
+    options:['تكوين عنوان IP وتفعيلها بالأمر no shutdown والاتصال بجهاز آخر','تكوين عنوان MAC يدويًا فقط','تفعيل SSH عليها فقط','لا تحتاج أي إعداد'], correctIndex:0 },
+  { type:'mcq', text:'ما وصف واجهة الاسترجاع (Loopback Interface) على جهاز التوجيه؟',
+    options:['واجهة منطقية داخلية غير مرتبطة بمنفذ مادي وتبقى قيد التشغيل طالما الموجّه يعمل','منفذ فعلي إضافي للاتصال بالمبدل','واجهة لاسلكية فقط','واجهة تُستخدم فقط لبروتوكول Telnet'], correctIndex:0 },
+  { type:'mcq', text:'أي أمر يُستخدم لإنشاء وتكوين واجهة استرجاع على الموجّه؟',
+    options:['interface loopback number ثم ip address','interface vlan 99','crypto key generate rsa','ip ssh version 2'], correctIndex:0 }
+];
+LECTURE_QUESTIONS['6_18'] = [
+  { type:'mcq', text:'أي أمر يعرض ملخصًا سريعًا لجميع واجهات الموجّه وحالتها التشغيلية وعناوين IPv4؟',
+    options:['show ip interface brief','show ip ssh','show mac-address-table','show history'], correctIndex:0 },
+  { type:'mcq', text:'في جدول التوجيه، أي رمز يشير إلى أن الشبكة متصلة بشكل مباشر (Connected)؟',
+    options:['الرمز C','الرمز S','الرمز D','الرمز R'], correctIndex:0 },
+  { type:'mcq', text:'لتصفية إخراج أمر show وعرض الأسطر التي تحتوي على كلمة معينة فقط بعد الرمز |، أي معامل تصفية يُستخدم؟',
+    options:['include','begin فقط بدون بديل','format','filter-only'], correctIndex:0 }
+];
 
 function directQuestionsFor(week, lecture){
   return LECTURE_QUESTIONS[`${week}_${lecture}`] || [];
@@ -830,6 +999,7 @@ function buildSetup(){
   buildLectureSeg();
 
   refreshInstWeekOptions();
+  buildAttAdminSelectors();
 }
 
 function refreshInstWeekOptions(){
@@ -924,6 +1094,8 @@ function attemptLogin(){
       el('loginUsername').value = '';
       el('loginPassword').value = '';
       refreshInstWeekOptions();
+      buildAttAdminSelectors();
+      renderAttendanceSessionBanner();
       showView('view-instructor');
     }else{
       errorEl.textContent = 'اسم المستخدم أو كلمة السر غير صحيحة.';
@@ -940,6 +1112,7 @@ function attemptLogin(){
     errorEl.hidden = true;
     el('loginPassword').value = '';
     renderIdentityBanner();
+    resetAttendanceUI();
     showView('view-setup');
   }else{
     errorEl.textContent = 'الرقم التدريبي غير مسجّل في قائمة المتدربين. تأكد من كتابته بدقة.';
@@ -953,6 +1126,7 @@ function logout(){
   state.studentId = null;
   el('loginPassword').value = '';
   el('loginError').hidden = true;
+  clearInterval(attCountdownInterval);
   showView('view-login');
 }
 
@@ -1494,6 +1668,355 @@ async function useCapability(name){
   }catch(e){ return null; }
 }
 
+/* ---------- attendance / roll-call (admin-controlled, 30-second window) ----------
+   لا يوجد خادم خلفي (backend) في هذا النموذج — إنه صفحة ثابتة. لذلك يعتمد "الإغلاق
+   التلقائي بعد 30 ثانية" على أن المسؤول يبدأ الجلسة ويُعلن الكود (بصوته أو على الشاشة)
+   ثم يكتبه كل متدرب حاضر في نافذته الخاصة؛ ساعة كل جهاز تتحقق محليًا من الوقت. عند
+   التجميع لاحقًا، يقارن حساب المسؤول توقيت كل تأكيد بسجل الجلسات المحفوظ في متصفحه
+   (بنفس أسلوب حفظ التفضيلات المستخدم في بقية النموذج) لتمييز من أكّد ضمن الوقت. ---------- */
+let attAdminState = { weekIndex: null, lectureIndex: null };
+const ATTENDANCE_CODE_PREFIX = 'NETATT1';
+const ATTENDANCE_WINDOW_SECONDS = 30;
+const ATTENDANCE_GRACE_SECONDS = 15; // مهلة إضافية لبطء الكتابة/الشبكة عند تأكيد المتدرب
+const ATTENDANCE_STORE_KEY = 'nettermquiz.attendance.sessions.v1';
+
+function loadAttendanceSessions(){
+  try{
+    const raw = localStorage.getItem(ATTENDANCE_STORE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  }catch(e){ return []; }
+}
+function saveAttendanceSessions(){
+  try{ localStorage.setItem(ATTENDANCE_STORE_KEY, JSON.stringify(attendanceSessions)); }catch(e){}
+}
+let attendanceSessions = loadAttendanceSessions();
+let activeAttendanceSession = null;
+let attCountdownInterval = null;
+let lastAttendanceRecord = null;
+
+function genAttendanceCode(){
+  return String(Math.floor(1000 + Math.random() * 9000));
+}
+function formatSeconds(totalSeconds){
+  const s = Math.max(0, Math.ceil(totalSeconds));
+  const mm = String(Math.floor(s/60)).padStart(2,'0');
+  const ss = String(s%60).padStart(2,'0');
+  return `${mm}:${ss}`;
+}
+
+/* --- admin: week/lecture pickers for a new attendance session --- */
+function buildAttAdminSelectors(){
+  const weekSelect = el('attWeekSelect');
+  if(!weekSelect) return;
+  weekSelect.innerHTML = el('weekSelect').innerHTML;
+  if(!attAdminState.weekIndex || !WEEKS.some(w=>w.index===attAdminState.weekIndex)){
+    attAdminState.weekIndex = WEEKS[0].index;
+  }
+  weekSelect.value = attAdminState.weekIndex;
+  weekSelect.onchange = ()=>{
+    attAdminState.weekIndex = Number(weekSelect.value);
+    attAdminState.lectureIndex = null;
+    buildAttLectureSeg();
+  };
+  buildAttLectureSeg();
+
+  const reportWeek = el('attReportWeek');
+  if(reportWeek) reportWeek.innerHTML = el('weekSelect').innerHTML;
+}
+
+function buildAttLectureSeg(){
+  const seg = el('attLectureSeg');
+  if(!seg) return;
+  const week = WEEKS.find(w=>w.index===attAdminState.weekIndex) || WEEKS[0];
+  if(!attAdminState.lectureIndex || !week.lectures.some(l=>l.index===attAdminState.lectureIndex)){
+    attAdminState.lectureIndex = week.lectures[0].index;
+  }
+  seg.innerHTML = week.lectures.map(l=>`<button type="button" class="chip-btn" data-lecture="${l.index}">المحاضرة ${l.index}</button>`).join('');
+  seg.querySelectorAll('.chip-btn').forEach(btn=>{
+    btn.setAttribute('aria-pressed', String(Number(btn.dataset.lecture)===attAdminState.lectureIndex));
+    btn.addEventListener('click', ()=>{
+      attAdminState.lectureIndex = Number(btn.dataset.lecture);
+      seg.querySelectorAll('.chip-btn').forEach(b=>b.setAttribute('aria-pressed', String(b===btn)));
+    });
+  });
+}
+
+/* --- admin: start / stop the 30-second attendance session (full admin control) --- */
+function renderAttendanceSessionBanner(){
+  const banner = el('attAdminBanner');
+  const startBtn = el('attStartBtn');
+  const stopBtn = el('attStopBtn');
+  if(!banner) return;
+  if(activeAttendanceSession){
+    banner.hidden = false;
+    banner.classList.add('live');
+    el('attAdminCode').textContent = activeAttendanceSession.code;
+    startBtn.hidden = true;
+    stopBtn.hidden = false;
+  }else{
+    banner.hidden = true;
+    banner.classList.remove('live');
+    startBtn.hidden = false;
+    stopBtn.hidden = true;
+  }
+  renderAttendanceSessionLog();
+}
+
+function renderAttendanceSessionLog(){
+  const logEl = el('attSessionLog');
+  if(!logEl) return;
+  const recent = attendanceSessions.slice(-5).reverse();
+  if(!recent.length){ logEl.textContent = ''; return; }
+  logEl.textContent = 'آخر الجلسات: ' + recent.map(s=>{
+    const t = new Date(s.startAt).toLocaleTimeString('ar-SA');
+    return `أسبوع ${s.week}/محاضرة ${s.lecture} — كود ${s.code} — ${t}`;
+  }).join(' | ');
+}
+
+function startAttendanceSession(){
+  const week = attAdminState.weekIndex;
+  const lecture = attAdminState.lectureIndex;
+  if(!week || !lecture) return;
+  const code = genAttendanceCode();
+  const startAt = Date.now();
+  const endAt = startAt + ATTENDANCE_WINDOW_SECONDS * 1000;
+  activeAttendanceSession = { id: String(startAt), week, lecture, code, startAt, endAt };
+  attendanceSessions.push(activeAttendanceSession);
+  saveAttendanceSessions();
+  renderAttendanceSessionBanner();
+  clearInterval(attCountdownInterval);
+  attCountdownInterval = setInterval(()=>{
+    if(!activeAttendanceSession){ clearInterval(attCountdownInterval); return; }
+    const remainingMs = activeAttendanceSession.endAt - Date.now();
+    if(remainingMs <= 0){
+      clearInterval(attCountdownInterval);
+      activeAttendanceSession = null;
+      renderAttendanceSessionBanner();
+      return;
+    }
+    const countdownEl = el('attAdminCountdown');
+    if(countdownEl) countdownEl.textContent = formatSeconds(remainingMs/1000);
+  }, 250);
+}
+
+function stopAttendanceSessionNow(){
+  if(!activeAttendanceSession) return;
+  activeAttendanceSession.endAt = Date.now();
+  const idx = attendanceSessions.findIndex(s=>s.id === activeAttendanceSession.id);
+  if(idx > -1) attendanceSessions[idx] = activeAttendanceSession;
+  saveAttendanceSessions();
+  clearInterval(attCountdownInterval);
+  activeAttendanceSession = null;
+  renderAttendanceSessionBanner();
+}
+
+/* --- trainee: confirm attendance with the code announced by the admin --- */
+function resetAttendanceUI(){
+  lastAttendanceRecord = null;
+  const codeInput = el('attCodeInput');
+  if(codeInput) codeInput.value = '';
+  const errorEl = el('attConfirmError');
+  if(errorEl) errorEl.hidden = true;
+  const statusEl = el('attConfirmStatus');
+  if(statusEl) statusEl.hidden = true;
+  const dlBtn = el('attDownloadBtn');
+  if(dlBtn) dlBtn.hidden = true;
+}
+
+function confirmAttendance(){
+  const errorEl = el('attConfirmError');
+  const statusEl = el('attConfirmStatus');
+  errorEl.hidden = true;
+  const code = normalizeDigitsInput(el('attCodeInput').value);
+  if(!code || code.length < 4){
+    errorEl.textContent = 'أدخل كود التحضير المكوّن من 4 أرقام كما أعلنه المحاضر.';
+    errorEl.hidden = false;
+    return;
+  }
+  if(!loggedInIdentity){
+    errorEl.textContent = 'يجب تسجيل الدخول أولاً.';
+    errorEl.hidden = false;
+    return;
+  }
+  lastAttendanceRecord = {
+    studentId: loggedInIdentity.id,
+    name: loggedInIdentity.name,
+    sectionCode: loggedInIdentity.sectionCode,
+    week: state.weekIndex,
+    lecture: state.lectureIndex,
+    code,
+    confirmedAt: Date.now()
+  };
+  statusEl.hidden = false;
+  el('attDownloadBtn').hidden = false;
+}
+
+function buildAttendanceWorkbook(record){
+  const wb = XLSX.utils.book_new();
+  const rows = [
+    ['المفتاح','الرقم التدريبي','الاسم','رمز الشعبة','الأسبوع','المحاضرة','الكود','طابع زمني للتأكيد','وقت التأكيد'],
+    [ATTENDANCE_CODE_PREFIX, record.studentId, record.name, record.sectionCode, record.week, record.lecture, record.code, record.confirmedAt, new Date(record.confirmedAt).toLocaleString('ar-SA')]
+  ];
+  const ws = XLSX.utils.aoa_to_sheet(rows);
+  XLSX.utils.book_append_sheet(wb, ws, 'تحضير');
+  return wb;
+}
+
+function downloadAttendanceXlsx(){
+  if(!lastAttendanceRecord) return;
+  if(typeof XLSX === 'undefined'){
+    alert('تعذر تحميل مكتبة Excel (تأكد من اتصالك بالإنترنت).');
+    return;
+  }
+  try{
+    const wb = buildAttendanceWorkbook(lastAttendanceRecord);
+    const filename = `تحضير_${lastAttendanceRecord.studentId}_اسبوع${lastAttendanceRecord.week}_محاضرة${lastAttendanceRecord.lecture}.xlsx`;
+    XLSX.writeFile(wb, filename);
+  }catch(e){
+    alert('تعذر تنزيل ملف تأكيد الحضور.');
+  }
+}
+
+/* --- admin: compile the attendance/absence report from uploaded confirmation files --- */
+let uploadedAttendanceMap = {};
+let uploadedAttendanceFileNames = new Set();
+
+async function handleAttendanceXlsxUpload(fileList){
+  const files = Array.from(fileList || []);
+  let readCount = 0;
+  for(const file of files){
+    try{
+      const buf = await file.arrayBuffer();
+      const wb = XLSX.read(buf, { type:'array' });
+      const sheetName = wb.SheetNames.includes('تحضير') ? 'تحضير' : wb.SheetNames[0];
+      const ws = wb.Sheets[sheetName];
+      const rows = XLSX.utils.sheet_to_json(ws, { header:1 });
+      const dataRow = rows.find(r => String(r[0]).trim() === ATTENDANCE_CODE_PREFIX);
+      if(!dataRow) continue;
+      const studentId = String(dataRow[1]).trim();
+      const sectionCode = String(dataRow[3]).trim();
+      const week = Number(dataRow[4]);
+      const lecture = Number(dataRow[5]);
+      const code = String(dataRow[6]).trim();
+      const confirmedAt = Number(dataRow[7]);
+      if(!studentId || !sectionCode || !week || !lecture || !code) continue;
+      if(!uploadedAttendanceMap[studentId]) uploadedAttendanceMap[studentId] = { sectionCode, lectures:{} };
+      uploadedAttendanceMap[studentId].sectionCode = sectionCode;
+      uploadedAttendanceMap[studentId].lectures[`${week}_${lecture}`] = { week, lecture, code, confirmedAt };
+      uploadedAttendanceFileNames.add(file.name);
+      readCount++;
+    }catch(e){ /* تجاهل الملفات غير القابلة للقراءة */ }
+  }
+  const status = el('attXlsxUploadStatus');
+  if(status){
+    status.hidden = false;
+    status.textContent = `تم قراءة ${readCount} ملف من أصل ${files.length} بنجاح — إجمالي ملفات التحضير المرفوعة حتى الآن: ${uploadedAttendanceFileNames.size}.`;
+  }
+}
+
+function isAttendanceValid(week, lecture, code, confirmedAt){
+  return attendanceSessions.some(s =>
+    s.week === week && s.lecture === lecture && String(s.code) === String(code) &&
+    confirmedAt >= s.startAt && confirmedAt <= (s.endAt + ATTENDANCE_GRACE_SECONDS * 1000)
+  );
+}
+
+function compileAttendanceWeek(map, weekIndex){
+  const week = WEEKS.find(w=>w.index===weekIndex);
+  const lecIndexes = week.lectures.map(l=>l.index);
+  const bySection = SECTIONS.map(sec=>{
+    const rows = sec.students.map(st=>{
+      const rec = map[st.id];
+      const cells = lecIndexes.map(li=>{
+        const entry = rec && rec.lectures[`${weekIndex}_${li}`];
+        if(!entry) return { state:'absent' };
+        const valid = isAttendanceValid(weekIndex, li, entry.code, entry.confirmedAt);
+        return { state: valid ? 'present' : 'unverified', code: entry.code, confirmedAt: entry.confirmedAt };
+      });
+      const presentCount = cells.filter(c=>c.state==='present').length;
+      return { id: st.id, name: st.name, cells, presentCount, totalLectures: lecIndexes.length };
+    });
+    return { section: sec, rows };
+  });
+  return { weekIndex, lecIndexes, bySection };
+}
+
+function attendanceCellHtml(cell){
+  if(cell.state === 'present') return `<span class="status-pill ok">✓ حاضر</span>`;
+  if(cell.state === 'unverified') return `<span class="status-pill warn" title="تم استلام كود (${escapeHtml(cell.code)}) لكنه لا يطابق أي جلسة تحضير محفوظة على هذا الجهاز">⚠ غير مؤكد</span>`;
+  return `<span class="status-pill bad">✗ غائب</span>`;
+}
+
+function renderAttendanceResults(compiled){
+  const box = el('attendanceResults');
+  if(!box) return;
+  const parts = compiled.bySection.map(({section, rows})=>{
+    const head = [`<th>#</th>`, `<th>الرقم التدريبي</th>`, `<th>الاسم</th>`]
+      .concat(compiled.lecIndexes.map(li=>`<th>محاضرة ${li}</th>`))
+      .concat([`<th>إجمالي الحضور</th>`]).join('');
+    const body = rows.map((r,i)=>{
+      const cells = r.cells.map(c=>`<td>${attendanceCellHtml(c)}</td>`).join('');
+      return `<tr><td class="mono">${i+1}</td><td class="mono">${r.id}</td><td>${escapeHtml(r.name)}</td>${cells}<td class="mono">${r.presentCount}/${r.totalLectures}</td></tr>`;
+    }).join('');
+    return `
+      <div class="section-block card">
+        <h3>${escapeHtml(section.label)}</h3>
+        <p class="section-sub">عدد المتدربين: ${rows.length}</p>
+        <div class="table-wrap">
+          <table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>
+        </div>
+        <div class="actions no-print">
+          <button class="btn small secondary" data-att-csv-section="${section.code}">تنزيل CSV لهذه الشعبة</button>
+        </div>
+      </div>`;
+  }).join('');
+
+  const toolbar = `
+    <div class="actions no-print" style="margin-top:18px">
+      <button class="btn small" id="attCsvAllBtn">تنزيل CSV لجميع الشعب</button>
+    </div>`;
+
+  box.innerHTML = parts + toolbar;
+
+  box.querySelectorAll('[data-att-csv-section]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const sec = compiled.bySection.find(s=>s.section.code===btn.dataset.attCsvSection);
+      exportAttendanceCsv(compiled, [sec], `حضور_${sec.section.code}_الاسبوع${compiled.weekIndex}.csv`);
+    });
+  });
+  const csvAll = el('attCsvAllBtn');
+  if(csvAll) csvAll.addEventListener('click', ()=> exportAttendanceCsv(compiled, compiled.bySection, `حضور_الاسبوع${compiled.weekIndex}.csv`));
+}
+
+function attendanceCellCsvText(cell){
+  if(cell.state === 'present') return 'حاضر';
+  if(cell.state === 'unverified') return 'غير مؤكد';
+  return 'غائب';
+}
+
+async function exportAttendanceCsv(compiled, sections, filename){
+  const rows = [];
+  rows.push(['القسم','الرقم التدريبي','الاسم', ...compiled.lecIndexes.map(li=>'محاضرة '+li), 'إجمالي الحضور']);
+  sections.forEach(sec=>{
+    sec.rows.forEach(r=>{
+      const cells = r.cells.map(attendanceCellCsvText);
+      rows.push([sec.section.label, r.id, r.name, ...cells, `${r.presentCount}/${r.totalLectures}`]);
+    });
+  });
+  const csv = '﻿' + rows.map(r=>r.map(csvEscape).join(',')).join('\r\n');
+  const downloads = await useCapability('downloads');
+  if(!downloads){
+    alert('التنزيل المباشر غير متاح في هذا العارض.');
+    return;
+  }
+  try{
+    await downloads.save({ filename, data: csv });
+  }catch(e){
+    if(e && e.code === 'declined') return;
+    alert('تعذر حفظ ملف تقرير الحضور.');
+  }
+}
+
 /* ---------- instructor view ---------- */
 let uploadedXlsxMap = {};
 let uploadedFileNames = new Set();
@@ -1841,6 +2364,25 @@ el('retryBtn').addEventListener('click', ()=>{
 });
 
 el('backInstBtn').addEventListener('click', logout);
+
+el('attConfirmBtn').addEventListener('click', confirmAttendance);
+el('attCodeInput').addEventListener('keydown', (e)=>{ if(e.key === 'Enter') confirmAttendance(); });
+el('attDownloadBtn').addEventListener('click', downloadAttendanceXlsx);
+
+el('attStartBtn').addEventListener('click', startAttendanceSession);
+el('attStopBtn').addEventListener('click', stopAttendanceSessionNow);
+
+el('attXlsxUpload').addEventListener('change', (e)=>{
+  handleAttendanceXlsxUpload(e.target.files);
+});
+el('attCompileBtn').addEventListener('click', ()=>{
+  const map = uploadedAttendanceMap;
+  const weekIndex = Number(el('attReportWeek').value);
+  const studentsFound = Object.keys(map).length;
+  el('attParseInfo').textContent = `تم رصد ${uploadedAttendanceFileNames.size} ملف تحضير مرفوع — لعدد ${studentsFound} متدرب إجمالاً.`;
+  const compiled = compileAttendanceWeek(map, weekIndex);
+  renderAttendanceResults(compiled);
+});
 
 el('xlsxUpload').addEventListener('change', (e)=>{
   handleXlsxUpload(e.target.files);
