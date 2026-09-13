@@ -480,6 +480,12 @@
   .att-code-big{font-size:44px;font-weight:800;letter-spacing:6px;font-family:'Courier New',monospace;margin:6px 0;color:var(--att-accent-strong);}
   .att-countdown{font-size:20px;font-weight:700;color:var(--att-deep);}
   .att-session-log{font-size:12px;color:var(--text-muted);margin-top:10px;border-inline-start:3px solid var(--att-border);padding-inline-start:8px;}
+  .absentee-panel{margin-bottom:18px;}
+  .absentee-section{margin-bottom:14px;}
+  .absentee-section:last-child{margin-bottom:0;}
+  .absentee-section h4{margin:0 0 6px;font-size:14px;color:var(--text);}
+  .absentee-list{margin:0;padding-inline-start:20px;font-size:13px;}
+  .absentee-list li{margin-bottom:4px;}
 
   .term-shown{
     font-family:'Cairo',sans-serif;
@@ -2457,6 +2463,53 @@ function acaCellHtml(cell){
   return `<span class="absent-cell">—</span>`;
 }
 
+/* --- نافذة "المتدربون الذين لم يحضروا": لكل شعبة، تُحسب آخر تاريخ أُخذ له تحضير
+   فعليًا عبر النظام (آخر عنصر في processedDates، وهي مرتبة زمنيًا لأنها مُشتقة من
+   sec.dates)، ثم تُسرد أسماء/أرقام المتدربين الذين حالتهم في ذلك التاريخ تحديدًا
+   "غائب" (سواء غياب جديد رصده النظام، أو غياب تاريخي كان مُدخلاً سلفًا في الملف
+   الأصلي). شعبة لم يُؤخذ لها أي تحضير بعد تظهر بملاحظة توضيحية بدل قائمة فارغة. --- */
+function computeAbsenteesForSection(sec){
+  const { section, rows, processedDates } = sec;
+  if(!processedDates.length) return { section, date:null, absentees:[] };
+  const lastDate = processedDates[processedDates.length - 1];
+  const dateIdx = section.dates.indexOf(lastDate);
+  const absentees = rows.filter(r=>{
+    const cell = r.cells[dateIdx];
+    if(!cell) return false;
+    if(cell.state === 'absent') return true;
+    if(cell.state === 'historical' && cell.text === 'غائب') return true;
+    return false;
+  }).map(r=>({ id:r.id, name:r.name }));
+  return { section, date:lastDate, absentees };
+}
+
+function buildAbsenteesPanelHtml(compiled){
+  const sections = compiled.bySection.map(sec=>{
+    const { section, date, absentees } = computeAbsenteesForSection(sec);
+    if(date === null){
+      return `<div class="absentee-section">
+        <h4>${escapeHtml(section.label)}</h4>
+        <p class="hint">لم يُؤخذ تحضير بعد لهذه الشعبة.</p>
+      </div>`;
+    }
+    if(!absentees.length){
+      return `<div class="absentee-section">
+        <h4>${escapeHtml(section.label)} — ${date}</h4>
+        <p class="hint">✅ جميع المتدربين حاضرون في آخر تحضير مأخوذ.</p>
+      </div>`;
+    }
+    const items = absentees.map(a=>`<li><span class="mono">${escapeHtml(a.id)}</span> — ${escapeHtml(a.name)}</li>`).join('');
+    return `<div class="absentee-section">
+      <h4>${escapeHtml(section.label)} — ${date} (${absentees.length} غائب)</h4>
+      <ul class="absentee-list">${items}</ul>
+    </div>`;
+  }).join('');
+  return `<div class="card section-block absentee-panel">
+    <h3>📋 المتدربون الذين لم يحضروا (بحسب آخر تاريخ أُخذ له تحضير في كل شعبة)</h3>
+    ${sections}
+  </div>`;
+}
+
 function renderSectionDateResults(compiled, course){
   const boxId = course === 'aca' ? 'attendanceResultsAca' : 'attendanceResultsSrwe';
   const exportCardId = course === 'aca' ? 'acaExportCard' : 'srweExportCard';
@@ -2488,7 +2541,7 @@ function renderSectionDateResults(compiled, course){
     ? `<p class="notice">⚠ يوجد ${compiled.unmatchedCount} تأكيد حضور وارد برمز لا يطابق أي جلسة محفوظة على هذا الجهاز ل${courseNoun}. إن بدأت التحضير من جهاز آخر، نزّل سجل الجلسات من ذلك الجهاز ثم استورده أعلاه في بطاقة التحضير، ثم اضغط "تحديث تقرير الحضور" مجددًا.</p>`
     : '';
 
-  box.innerHTML = warn + parts;
+  box.innerHTML = buildAbsenteesPanelHtml(compiled) + warn + parts;
 
   box.querySelectorAll(`[${xlsxAttr}]`).forEach(btn=>{
     btn.addEventListener('click', ()=>{
