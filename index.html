@@ -28,6 +28,24 @@
     --att-border:#BFDBFE;
     --att-ink:#FFFFFF;
   }
+  /* التوجيه والتحويل 1 (SRWE): أزرق — نفس القيم الافتراضية أعلاه، مُعرَّفة صراحةً للوضوح */
+  :root[data-course="srwe"]{
+    --att-accent:#2563EB;
+    --att-accent-strong:#1D4ED8;
+    --att-deep:#1E3A8A;
+    --att-soft:#EFF6FF;
+    --att-border:#BFDBFE;
+    --att-ink:#FFFFFF;
+  }
+  /* تطبيقات الحاسب المتقدمة (ACA): بنفسجي — لون مختلف ومميز عن كل مقرر آخر */
+  :root[data-course="aca"]{
+    --att-accent:#7C3AED;
+    --att-accent-strong:#6D28D9;
+    --att-deep:#4C1D95;
+    --att-soft:#F5F3FF;
+    --att-border:#DDD6FE;
+    --att-ink:#FFFFFF;
+  }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
       --bg:#0A1412;
@@ -54,6 +72,14 @@
       --att-border:#1E3A5F;
       --att-ink:#08172E;
     }
+    :root:not([data-theme="light"])[data-course="aca"]{
+      --att-accent:#A78BFA;
+      --att-accent-strong:#C4B5FD;
+      --att-deep:#DDD6FE;
+      --att-soft:#2E1065;
+      --att-border:#4C1D95;
+      --att-ink:#1E1B4B;
+    }
   }
   :root[data-theme="dark"]{
     --bg:#0A1412;
@@ -79,6 +105,14 @@
     --att-soft:#122A4D;
     --att-border:#1E3A5F;
     --att-ink:#08172E;
+  }
+  :root[data-theme="dark"][data-course="aca"]{
+    --att-accent:#A78BFA;
+    --att-accent-strong:#C4B5FD;
+    --att-deep:#DDD6FE;
+    --att-soft:#2E1065;
+    --att-border:#4C1D95;
+    --att-ink:#1E1B4B;
   }
 
   *{box-sizing:border-box;}
@@ -409,7 +443,7 @@
   .status-pill.ok{background:var(--level-easy-soft);color:var(--level-easy);}
   .status-pill.bad{background:var(--level-hard-soft);color:var(--level-hard);}
   .status-pill.warn{background:var(--level-mid-soft);color:var(--level-mid);}
-  /* ---------- Attendance tab: distinctive professional blue palette ---------- */
+  /* ---------- Attendance tab: distinctive professional palette per course (colors set via [data-course] on <html>, see selectCourse()) ---------- */
   #attTraineeCard, #attAdminCard, #attReportCard, #attReportCardAca, #srweExportCard, #acaExportCard,
   #attendanceResultsSrwe .section-block, #attendanceResultsAca .section-block{
     border-top:3px solid var(--att-accent);
@@ -1120,6 +1154,7 @@ function sectionByCodeForCourse(code, course){
 
 function selectCourse(course){
   CURRENT_COURSE = course;
+  document.documentElement.setAttribute('data-course', course);
   loggedInIdentity = null;
   setLoginRole('trainee');
   applyCourseVisibility();
@@ -1454,6 +1489,7 @@ function logout(){
 function backToCourseSelect(){
   logout();
   CURRENT_COURSE = null;
+  document.documentElement.removeAttribute('data-course');
   showView('view-course');
 }
 
