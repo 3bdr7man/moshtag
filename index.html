@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"><title>اختبار مصطلحات الشبكات</title>
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>منصة Quiz وتحضير</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
@@ -21,6 +21,12 @@
     --level-hard:#C1443A;
     --level-hard-soft:#FBE7E5;
     --shadow:0 1px 2px rgba(20,36,32,.04), 0 8px 24px -12px rgba(20,36,32,.18);
+    --att-accent:#2563EB;
+    --att-accent-strong:#1D4ED8;
+    --att-deep:#1E3A8A;
+    --att-soft:#EFF6FF;
+    --att-border:#BFDBFE;
+    --att-ink:#FFFFFF;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
@@ -41,6 +47,12 @@
       --level-hard:#F87171;
       --level-hard-soft:#341413;
       --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+      --att-accent:#60A5FA;
+      --att-accent-strong:#93C5FD;
+      --att-deep:#BFDBFE;
+      --att-soft:#122A4D;
+      --att-border:#1E3A5F;
+      --att-ink:#08172E;
     }
   }
   :root[data-theme="dark"]{
@@ -61,6 +73,12 @@
     --level-hard:#F87171;
     --level-hard-soft:#341413;
     --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    --att-accent:#60A5FA;
+    --att-accent-strong:#93C5FD;
+    --att-deep:#BFDBFE;
+    --att-soft:#122A4D;
+    --att-border:#1E3A5F;
+    --att-ink:#08172E;
   }
 
   *{box-sizing:border-box;}
@@ -391,11 +409,43 @@
   .status-pill.ok{background:var(--level-easy-soft);color:var(--level-easy);}
   .status-pill.bad{background:var(--level-hard-soft);color:var(--level-hard);}
   .status-pill.warn{background:var(--level-mid-soft);color:var(--level-mid);}
-  .att-banner{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:16px;margin:14px 0;text-align:center;}
-  .att-banner.live{border-color:#16a34a;}
-  .att-code-big{font-size:44px;font-weight:800;letter-spacing:6px;font-family:'Courier New',monospace;margin:6px 0;color:var(--accent-strong);}
-  .att-countdown{font-size:20px;font-weight:700;color:#b45309;}
-  .att-session-log{font-size:12px;color:var(--text-muted);margin-top:10px;}
+  /* ---------- Attendance tab: distinctive professional blue palette ---------- */
+  #attTraineeCard, #attAdminCard, #attReportCard, #attReportCardAca, #srweExportCard, #acaExportCard,
+  #attendanceResultsSrwe .section-block, #attendanceResultsAca .section-block{
+    border-top:3px solid var(--att-accent);
+  }
+  #attTraineeCard > h3, #attAdminCard > h3, #attReportCard > h3, #attReportCardAca > h3,
+  #srweExportCard > h3, #acaExportCard > h3,
+  #attendanceResultsSrwe .section-block > h3, #attendanceResultsAca .section-block > h3{
+    color:var(--att-accent-strong);
+  }
+  #attTraineeCard .mode-link, #attAdminCard .mode-link{color:var(--att-accent-strong);}
+  #attTraineeCard input[type="text"]:focus, #attAdminCard input[type="text"]:focus,
+  #attAdminCard select:focus{outline-color:var(--att-accent);}
+  #attTraineeCard .btn:not(.secondary), #attAdminCard .btn:not(.secondary),
+  #attReportCard .btn:not(.secondary), #attReportCardAca .btn:not(.secondary),
+  #srweExportCard .btn:not(.secondary), #acaExportCard .btn:not(.secondary){
+    background:var(--att-accent);
+    border-color:var(--att-accent);
+    color:var(--att-ink);
+  }
+  #attTraineeCard .btn:not(.secondary):hover, #attAdminCard .btn:not(.secondary):hover,
+  #attReportCard .btn:not(.secondary):hover, #attReportCardAca .btn:not(.secondary):hover,
+  #srweExportCard .btn:not(.secondary):hover, #acaExportCard .btn:not(.secondary):hover{
+    background:var(--att-accent-strong);
+    border-color:var(--att-accent-strong);
+  }
+  #attTraineeCard .notice, #attAdminCard .notice,
+  #attendanceResultsSrwe > .notice, #attendanceResultsAca > .notice{
+    background:var(--att-soft);
+    color:var(--att-deep);
+  }
+  #attAdminCard .hint b.mono{color:var(--att-accent-strong);}
+  .att-banner{background:var(--att-soft);border:2px solid var(--att-border);border-radius:14px;padding:16px;margin:14px 0;text-align:center;}
+  .att-banner.live{border-color:var(--att-accent-strong);box-shadow:0 0 0 3px var(--att-border);}
+  .att-code-big{font-size:44px;font-weight:800;letter-spacing:6px;font-family:'Courier New',monospace;margin:6px 0;color:var(--att-accent-strong);}
+  .att-countdown{font-size:20px;font-weight:700;color:var(--att-deep);}
+  .att-session-log{font-size:12px;color:var(--text-muted);margin-top:10px;border-inline-start:3px solid var(--att-border);padding-inline-start:8px;}
 
   .term-shown{
     font-family:'Cairo',sans-serif;
@@ -509,16 +559,27 @@
   <header class="page-head">
     <div class="head-row">
       <div>
-        <span class="eyebrow">تمرين مصطلحات · شبكات الحاسب</span>
-        <h1>اختبار مصطلحات الشبكات</h1>
-        <p class="sub" id="pageSub">اختر شعبتك واسمك والمحاضرة، ثم ترجم كل مصطلح. النتيجة تُصحَّح تلقائيًا فور الانتهاء.</p>
+        <span class="eyebrow">اختبارات وتحضير إلكتروني</span>
+        <h1>منصة Quiz وتحضير</h1>
+        <p class="sub" id="pageSub">اختر مقررك أولًا، ثم سجّل دخولك لإكمال ما يخصه (اختبار وتحضير، أو تحضير فقط).</p>
         <p class="instructor-credit">محاضر المقرر: م. عبدالرحمن الخثعمي</p>
       </div>
     </div>
   </header>
 
+  <!-- COURSE SELECT -->
+  <section id="view-course">
+    <div class="card">
+      <p class="sub" style="margin:0 0 14px">اختر المقرر الذي تريد الدخول إليه:</p>
+      <div class="actions" style="flex-direction:column;align-items:stretch">
+        <button class="btn" type="button" id="courseSrweBtn" style="margin-bottom:10px">مقرر التوجيه والتحويل 1</button>
+        <button class="btn secondary" type="button" id="courseAcaBtn">مقرر تطبيقات الحاسب المتقدمة (تحضير فقط)</button>
+      </div>
+    </div>
+  </section>
+
   <!-- LOGIN -->
-  <section id="view-login">
+  <section id="view-login" hidden>
     <div class="card">
       <div class="seg" id="roleSeg">
         <button type="button" class="chip-btn" data-role="trainee">دخول متدرب</button>
@@ -536,13 +597,26 @@
       <div class="actions">
         <button class="btn" id="loginBtn">دخول</button>
       </div>
+      <p class="hint"><button class="mode-link" id="backToCourseBtn" type="button">تغيير المقرر</button></p>
     </div>
   </section>
 
   <!-- SETUP -->
   <section id="view-setup" hidden>
-    <div class="card">
-      <p class="identity-banner">مرحبًا <b id="setupName"></b> — الشعبة: <b id="setupSection"></b> (<span id="setupId" class="mono"></span>)</p>
+    <p class="identity-banner">مرحبًا <b id="setupName"></b> — المقرر: <b id="setupCourse"></b> — الشعبة: <b id="setupSection"></b> (<span id="setupId" class="mono"></span>)</p>
+
+    <div class="card" id="traineeChoiceCard">
+      <p class="hint" id="choiceCourseLabel" style="margin:0 0 8px;font-weight:700"></p>
+      <p class="sub" style="margin:0 0 14px">ماذا تريد أن تفعل الآن؟</p>
+      <div class="actions" style="flex-direction:column;align-items:stretch">
+        <button class="btn secondary" type="button" id="choiceAttendanceBtn" style="margin-bottom:10px">✅ تحضير</button>
+        <button class="btn secondary" type="button" id="choiceQuizBtn">📝 الاختبار المفاجئ (Quiz)</button>
+      </div>
+    </div>
+
+    <div class="card" id="quizSetupCard" hidden>
+      <p class="hint" style="margin:0 0 12px"><button class="mode-link" id="quizBackBtn" type="button">‹ رجوع</button></p>
+      <h3 style="margin:0 0 8px;font-size:15px">📝 الاختبار المفاجئ — <span id="quizCardCourseLabel"></span></h3>
       <div class="field">
         <label for="weekSelect">الأسبوع</label>
         <select id="weekSelect"></select>
@@ -555,20 +629,44 @@
         <button class="btn" id="startBtn">بدء الاختبار</button>
       </div>
     </div>
-    <div class="card" id="attTraineeCard">
-      <h3 style="margin:0 0 8px;font-size:15px">✅ تأكيد الحضور</h3>
-      <p class="sub" style="margin:0 0 12px">عند إعلان المحاضر عن كود التحضير في القاعة، اكتبه هنا خلال ٣٠ ثانية للأسبوع والمحاضرة المختارين أعلاه.</p>
-      <div class="field">
-        <label for="attCodeInput">كود التحضير</label>
-        <input type="text" id="attCodeInput" inputmode="numeric" maxlength="4" placeholder="مثال: 4821" autocomplete="off">
+
+    <div class="card" id="attTraineeCard" hidden>
+      <p class="hint" style="margin:0 0 12px"><button class="mode-link" id="attBackBtn" type="button">‹ رجوع</button></p>
+      <h3 style="margin:0 0 8px;font-size:15px">✅ تأكيد الحضور — <span id="attCardCourseLabel"></span></h3>
+      <p class="hint" id="attTodayDateLine" style="margin:0 0 6px"></p>
+      <p class="sub" id="attTraineeSub" style="margin:0 0 12px">عند إعلان المحاضر عن كود التحضير في القاعة، اكتبه هنا خلال ٣٠ ثانية (لا علاقة له باختيار الأسبوع/المحاضرة أعلاه — الكود نفسه يحدد المحاضرة).</p>
+
+      <div id="attGateClosed" hidden>
+        <p class="notice">⏳ التحضير يظهر فقط مع بداية محاضرتك ولمدة 15 دقيقة بعدها. إن كنت تظن أن هذا خطأ، تحقق من موعد محاضرتك، أو اطلب من المحاضر رمز التجاوز.</p>
+        <div class="field">
+          <label for="attOverrideInput">رمز تجاوز الوقت (من المحاضر فقط)</label>
+          <input type="text" id="attOverrideInput" inputmode="numeric" maxlength="4" placeholder="أدخله إن أعطاك إياه المحاضر" autocomplete="off">
+        </div>
+        <p class="notice" id="attOverrideError" hidden>رمز التجاوز غير صحيح.</p>
+        <div class="actions">
+          <button class="btn secondary" id="attOverrideBtn" type="button">تجاوز والمتابعة</button>
+        </div>
       </div>
-      <p class="notice" id="attConfirmError" hidden></p>
-      <p class="notice" id="attConfirmStatus" hidden>✅ تم تسجيل تأكيد حضورك محليًا. اضغط زر التنزيل أدناه وأرسل الملف للمحاضر.</p>
-      <div class="actions">
-        <button class="btn secondary" id="attConfirmBtn" type="button">تأكيد الحضور الآن</button>
-        <button class="btn secondary" id="attDownloadBtn" type="button" hidden>تنزيل تأكيد الحضور (Excel)</button>
+
+      <div id="attGateOpenForm">
+        <div class="field">
+          <label for="attCodeInput">كود التحضير</label>
+          <input type="text" id="attCodeInput" inputmode="numeric" maxlength="4" placeholder="مثال: 4821" autocomplete="off">
+        </div>
+        <p class="notice" id="attConfirmError" hidden></p>
+        <p class="notice" id="attConfirmStatus" hidden>✅ تم تسجيل تأكيد حضورك محليًا. اضغط زر التنزيل أدناه وأرسل الملف للمحاضر.</p>
+        <div class="actions">
+          <button class="btn secondary" id="attConfirmBtn" type="button">تأكيد الحضور الآن</button>
+          <button class="btn secondary" id="attDownloadBtn" type="button" hidden>تنزيل تأكيد الحضور (Excel)</button>
+        </div>
+      </div>
+      <div id="myAttendanceLogWrap" style="margin-top:20px">
+        <h4 style="margin:0 0 6px;font-size:14px">سجلك الشخصي لتأكيدات الحضور (على هذا الجهاز)</h4>
+        <p class="hint" style="margin:0 0 10px">يعرض هذا السجل فقط التأكيدات التي أرسلتها من هذا الجهاز تحديدًا. السجل الرسمي الكامل يبقى لدى المحاضر بعد رفعك للملف وتجميعه للتقرير.</p>
+        <div id="myAttendanceLogList"></div>
       </div>
     </div>
+
     <p class="hint"><button class="mode-link" id="logoutBtn" type="button">تسجيل خروج</button></p>
   </section>
 
@@ -670,40 +768,46 @@
 
   <!-- INSTRUCTOR -->
   <section id="view-instructor" hidden>
-    <div class="card">
-      <p class="sub" style="margin:0 0 14px">الطريقة الموصى بها: اطلب من كل متدرب أن يرسل لك ملف Excel الذي يُنزّله بعد الاختبار (زر "تنزيل ملف Excel للنتيجة")، ثم ارفع كل الملفات التي وصلتك دفعة واحدة أدناه. كطريقة بديلة يمكنك أيضًا لصق نصوص النتائج (زر "نسخ النتيجة كنص") في المربع أسفله.</p>
-      <div class="field">
-        <label for="instWeek">الأسبوع المطلوب رصده</label>
-        <select id="instWeek"></select>
+    <div id="srweGradesSection">
+      <div class="card">
+        <h3 style="margin:0 0 10px;font-size:16px">📝 كشف درجات الاختبار — التوجيه والتحويل 1</h3>
+        <p class="sub" style="margin:0 0 14px">الطريقة الموصى بها: اطلب من كل متدرب أن يرسل لك ملف Excel الذي يُنزّله بعد الاختبار (زر "تنزيل ملف Excel للنتيجة")، ثم ارفع كل الملفات التي وصلتك دفعة واحدة أدناه. كطريقة بديلة يمكنك أيضًا لصق نصوص النتائج (زر "نسخ النتيجة كنص") في المربع أسفله.</p>
+        <div class="field">
+          <label for="instWeek">الأسبوع المطلوب رصده</label>
+          <select id="instWeek"></select>
+        </div>
+        <div class="field">
+          <label for="xlsxUpload">ملفات Excel المستلمة من المتدربين (يمكن اختيار عدة ملفات دفعة واحدة)</label>
+          <input type="file" id="xlsxUpload" accept=".xlsx" multiple>
+          <span class="hint" id="xlsxUploadStatus" hidden></span>
+        </div>
+        <div class="field">
+          <label for="pasteArea">أو الصق النصوص المستلمة من المتدربين (طريقة بديلة)</label>
+          <textarea id="pasteArea" class="copy-area" style="min-height:120px" placeholder="الصق هنا كل ما استلمته من المتدربين..."></textarea>
+        </div>
+        <div class="actions">
+          <button class="btn" id="compileBtn">تحديث كشف الدرجات</button>
+          <span class="hint" id="parseInfo"></span>
+        </div>
       </div>
-      <div class="field">
-        <label for="xlsxUpload">ملفات Excel المستلمة من المتدربين (يمكن اختيار عدة ملفات دفعة واحدة)</label>
-        <input type="file" id="xlsxUpload" accept=".xlsx" multiple>
-        <span class="hint" id="xlsxUploadStatus" hidden></span>
-      </div>
-      <div class="field">
-        <label for="pasteArea">أو الصق النصوص المستلمة من المتدربين (طريقة بديلة)</label>
-        <textarea id="pasteArea" class="copy-area" style="min-height:120px" placeholder="الصق هنا كل ما استلمته من المتدربين..."></textarea>
-      </div>
-      <div class="actions">
-        <button class="btn" id="compileBtn">تحديث كشف الدرجات</button>
-        <span class="hint" id="parseInfo"></span>
-      </div>
+
+      <div id="instructorResults"></div>
     </div>
 
-    <div id="instructorResults"></div>
-
     <div class="card" id="attAdminCard">
-      <h3 style="margin:0 0 10px;font-size:16px">📋 تحضير المتدربين (Roll Call)</h3>
+      <h3 style="margin:0 0 10px;font-size:16px">📋 تحضير المتدربين (Roll Call) — <span id="attAdminCourseLabel"></span></h3>
       <p class="sub" style="margin:0 0 12px">اضغط "بدء التحضير" وأعلن الكود الظاهر أدناه بصوت مرتفع أو اعرضه على الشاشة. يُغلق التحضير تلقائيًا بعد ٣٠ ثانية، ولا يمكن فتحه من جديد إلا من حسابك.</p>
-      <div class="field">
-        <label for="attWeekSelect">الأسبوع</label>
-        <select id="attWeekSelect"></select>
+      <div id="attSelectorsSectionDate">
+        <div class="field">
+          <label for="attAcaSectionSelect">الشعبة</label>
+          <select id="attAcaSectionSelect"></select>
+        </div>
+        <div class="field">
+          <label for="attAcaDateSelect">تاريخ الجلسة</label>
+          <select id="attAcaDateSelect"></select>
+        </div>
       </div>
-      <div class="field">
-        <label>المحاضرة</label>
-        <div class="seg" id="attLectureSeg"></div>
-      </div>
+      <p class="hint">رمز تجاوز وقت التحضير لهذا اليوم (لإعطائه لأي متدرب يحتاج تحضيرًا خارج وقت محاضرته): <b id="attOverrideCodeDisplay" class="mono"></b></p>
       <div class="actions">
         <button class="btn" id="attStartBtn" type="button">بدء التحضير الآن (٣٠ ثانية)</button>
         <button class="btn secondary" id="attStopBtn" type="button" hidden>إنهاء التحضير الآن</button>
@@ -714,26 +818,67 @@
         <div class="att-countdown" id="attAdminCountdown">00:30</div>
       </div>
       <p class="att-session-log" id="attSessionLog"></p>
-    </div>
-
-    <div class="card" id="attReportCard">
-      <h3 style="margin:0 0 10px;font-size:16px">تقرير الحضور والغياب</h3>
-      <div class="field">
-        <label for="attReportWeek">الأسبوع</label>
-        <select id="attReportWeek"></select>
-      </div>
-      <div class="field">
-        <label for="attXlsxUpload">ملفات تأكيد الحضور المستلمة من المتدربين (Excel)</label>
-        <input type="file" id="attXlsxUpload" accept=".xlsx" multiple>
-        <span class="hint" id="attXlsxUploadStatus" hidden></span>
-      </div>
-      <div class="actions">
-        <button class="btn" id="attCompileBtn" type="button">تحديث تقرير الحضور</button>
-        <span class="hint" id="attParseInfo"></span>
+      <div class="field" style="margin-top:14px">
+        <label>نسخ سجل الجلسات بين أجهزتك (إن بدأت التحضير من جهاز غير جهاز التقرير)</label>
+        <div class="actions" style="margin-top:0">
+          <button class="btn small secondary" id="attExportSessionsBtn" type="button">تنزيل سجل الجلسات</button>
+          <input type="file" id="attImportSessions" accept=".json" style="max-width:220px">
+        </div>
+        <span class="hint" id="attSessionImportStatus" hidden></span>
       </div>
     </div>
 
-    <div id="attendanceResults"></div>
+    <div id="srweAttReportSection">
+      <div class="card" id="attReportCard">
+        <h3 style="margin:0 0 10px;font-size:16px">تقرير الحضور والغياب — التوجيه والتحويل 1</h3>
+        <p class="sub" style="margin:0 0 12px">ارفع كل ملفات تأكيد الحضور المستلمة من المتدربين (لأي شعبة نظرية أو عملية وأي تاريخ)، ثم اضغط "تحديث تقرير الحضور". يمكنك بعدها تنزيل نسخة محدّثة من نفس ملف الإكسل الذي ترفعه أنت للنظام (بنفس الأعمدة والتواريخ)، لتستبدل بها ملفك الحالي مباشرة.</p>
+        <div class="field">
+          <label for="attXlsxUploadSrwe">ملفات تأكيد الحضور المستلمة من المتدربين (Excel)</label>
+          <input type="file" id="attXlsxUploadSrwe" accept=".xlsx" multiple>
+          <span class="hint" id="attXlsxUploadStatus" hidden></span>
+        </div>
+        <div class="actions">
+          <button class="btn" id="attCompileBtnSrwe" type="button">تحديث تقرير الحضور</button>
+          <span class="hint" id="attParseInfo"></span>
+        </div>
+      </div>
+
+      <div id="attendanceResultsSrwe"></div>
+
+      <div class="card" id="srweExportCard" hidden>
+        <h3 style="margin:0 0 10px;font-size:16px">تنزيل ملف الحضور الرئيسي المحدّث</h3>
+        <p class="sub" style="margin:0 0 12px">هذا الملف بنفس تنسيق الملف الذي أرسلته (الأعمدة والتواريخ نفسها لكل شعبة)، مع تحديث أعمدة التواريخ التي أخذتَ لها تحضيرًا عبر النظام فقط — بقية الأعمدة تبقى كما هي حتى تأخذ حضورها.</p>
+        <div class="actions">
+          <button class="btn" id="srweExportMasterBtn" type="button">تنزيل ملف الحضور المحدّث (Excel)</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="acaAttReportSection" hidden>
+      <div class="card" id="attReportCardAca">
+        <h3 style="margin:0 0 10px;font-size:16px">تقرير الحضور والغياب — تطبيقات الحاسب المتقدمة</h3>
+        <p class="sub" style="margin:0 0 12px">ارفع كل ملفات تأكيد الحضور المستلمة من المتدربين (لأي شعبة وأي تاريخ)، ثم اضغط "تحديث تقرير الحضور". يمكنك بعدها تنزيل نسخة محدّثة من نفس ملف الإكسل الذي ترفعه أنت للنظام (بنفس الأعمدة والتواريخ)، لتستبدل بها ملفك الحالي مباشرة.</p>
+        <div class="field">
+          <label for="attXlsxUploadAca">ملفات تأكيد الحضور المستلمة من المتدربين (Excel)</label>
+          <input type="file" id="attXlsxUploadAca" accept=".xlsx" multiple>
+          <span class="hint" id="attXlsxUploadAcaStatus" hidden></span>
+        </div>
+        <div class="actions">
+          <button class="btn" id="attCompileBtnAca" type="button">تحديث تقرير الحضور</button>
+          <span class="hint" id="attParseInfoAca"></span>
+        </div>
+      </div>
+
+      <div id="attendanceResultsAca"></div>
+
+      <div class="card" id="acaExportCard" hidden>
+        <h3 style="margin:0 0 10px;font-size:16px">تنزيل ملف الحضور الرئيسي المحدّث</h3>
+        <p class="sub" style="margin:0 0 12px">هذا الملف بنفس تنسيق الملف الذي أرسلته (الأعمدة والتواريخ نفسها)، مع تحديث أعمدة التواريخ التي أخذتَ لها تحضيرًا عبر النظام فقط — بقية الأعمدة تبقى كما هي حتى تأخذ حضورها.</p>
+        <div class="actions">
+          <button class="btn" id="acaExportMasterBtn" type="button">تنزيل ملف الحضور المحدّث (Excel)</button>
+        </div>
+      </div>
+    </div>
 
     <div class="actions no-print">
       <button class="btn secondary" id="backInstBtn">تسجيل خروج</button>
@@ -746,6 +891,10 @@
 const TERMS=[{id:1,en:'Computer Network',ar:'شبكة الحاسب',level:'سهل',note:'مجموعة أجهزة متصلة لتبادل البيانات والموارد.'},{id:2,en:'LAN – Local Area Network',ar:'الشبكة المحلية',level:'سهل',note:'شبكة تربط الأجهزة داخل موقع محدود.'},{id:3,en:'Switched Network',ar:'شبكة محولة',level:'سهل',note:'شبكة تستخدم المحولات لربط الأجهزة وإدارة حركة البيانات.'},{id:4,en:'Network Convergence',ar:'تقارب الشبكات',level:'متوسط',note:'دمج خدمات الصوت والفيديو والبيانات في شبكة واحدة.'},{id:5,en:'Data Traffic',ar:'حركة بيانات',level:'سهل',note:'المعلومات التي تنتقل عبر الشبكة بين الأجهزة.'},{id:6,en:'Voice Traffic',ar:'حركة الصوت',level:'سهل',note:'البيانات الخاصة بالمكالمات والخدمات الصوتية.'},{id:7,en:'Video Traffic',ar:'حركة الفيديو',level:'سهل',note:'البيانات الخاصة بالفيديو والمؤتمرات المرئية.'},{id:8,en:'Collaboration',ar:'التعاون',level:'سهل',note:'استخدام الشبكة لدعم العمل والتواصل بين المستخدمين.'},{id:9,en:'IP Phone',ar:'هاتف IP',level:'سهل',note:'هاتف يستخدم شبكة البيانات لإجراء المكالمات.'},{id:10,en:'Voice Gateway',ar:'بوابة الصوت',level:'متوسط',note:'جهاز يربط خدمات الصوت التقليدية بشبكة IP.'},{id:11,en:'Video Conferencing',ar:'المؤتمرات المرئية',level:'سهل',note:'التواصل بالصوت والصورة عبر الشبكة.'},{id:12,en:'Mobility',ar:'قابلية التنقل',level:'سهل',note:'الوصول إلى خدمات الشبكة أثناء التنقل.'},{id:13,en:'High Availability',ar:'الإتاحة العالية',level:'متوسط',note:'تصميم الشبكة بحيث تستمر الخدمات في العمل.'},{id:14,en:'Network Security',ar:'أمن الشبكات',level:'سهل',note:'حماية الشبكة والأجهزة والبيانات.'},{id:15,en:'Network Reliability',ar:'موثوقية الشبكة',level:'متوسط',note:'قدرة الشبكة على العمل بشكل صحيح ومستمر.'},{id:16,en:'Hierarchical Network Design',ar:'التصميم الهرمي للشبكة',level:'متوسط',note:'تقسيم الشبكة إلى طبقات لتسهيل إدارتها.'},{id:17,en:'Three-Tier LAN Design',ar:'تصميم LAN ثلاثي الطبقات',level:'متوسط',note:'تصميم يعتمد على طبقات الوصول والتوزيع والمركز.'},{id:18,en:'Two-Tier LAN Design',ar:'تصميم LAN ثنائي الطبقات',level:'متوسط',note:'تصميم يدمج طبقتي المركز والتوزيع.'},{id:19,en:'Core Layer',ar:'طبقة المركز',level:'متوسط',note:'طبقة توفر نقل البيانات بسرعة عالية بين أجزاء الشبكة.'},{id:20,en:'Distribution Layer',ar:'طبقة التوزيع',level:'متوسط',note:'تربط طبقة الوصول بالمركز وتطبق سياسات الشبكة.'},{id:21,en:'Access Layer',ar:'طبقة الوصول',level:'سهل',note:'الطبقة التي تتصل بها أجهزة المستخدمين مباشرة.'},{id:22,en:'Collapsed Core/Distribution',ar:'مركز/توزيع مدمج',level:'صعب',note:'دمج وظيفتي طبقتي المركز والتوزيع.'},{id:23,en:'Hierarchical',ar:'هرمي',level:'سهل',note:'تنظيم الشبكة في مستويات أو طبقات.'},{id:24,en:'Modularity',ar:'النمطية',level:'متوسط',note:'تقسيم الشبكة إلى أجزاء مستقلة.'},{id:25,en:'Flexibility',ar:'المرونة',level:'سهل',note:'قدرة الشبكة على التكيف مع التغييرات.'},{id:26,en:'Scalability',ar:'قابلية التوسع',level:'متوسط',note:'قدرة الشبكة على النمو دون إعادة تصميمها بالكامل.'},{id:27,en:'Switch',ar:'المحول',level:'سهل',note:'جهاز يربط الأجهزة ويعيد توجيه الإطارات.'},{id:28,en:'LAN Switch',ar:'محول الشبكة المحلية',level:'سهل',note:'محول يستخدم داخل شبكة LAN.'},{id:29,en:'Switched Network Environment',ar:'بيئة الشبكة المحولة',level:'متوسط',note:'بيئة شبكية تعتمد على المحولات.'},{id:30,en:'Form Factor',ar:'عامل الشكل',level:'متوسط',note:'التصميم أو الشكل الفيزيائي للجهاز.'},{id:31,en:'Fixed Configuration Switch',ar:'محول ثابت التكوين',level:'متوسط',note:'محول تكون منافذه ومكوناته محددة مسبقًا.'},{id:32,en:'Modular Switch',ar:'محول تركيبي',level:'متوسط',note:'محول يمكن إضافة وحدات ومكونات إليه.'},{id:33,en:'Stackable Switch',ar:'محول قابل للتجميع',level:'متوسط',note:'محولات يمكن ربطها معًا لتعمل كوحدة منطقية.'},{id:34,en:'Stack',ar:'تجميع المحولات',level:'متوسط',note:'مجموعة محولات مترابطة.'},{id:35,en:'Stack Cable',ar:'كابل التجميع',level:'متوسط',note:'كابل مخصص لربط المحولات القابلة للتجميع.'},{id:36,en:'Chassis',ar:'الهيكل',level:'متوسط',note:'جسم المحول التركيبي الذي يحتوي على فتحات للوحدات.'},{id:37,en:'Line Card',ar:'بطاقة المنافذ',level:'صعب',note:'وحدة يتم تركيبها في الهيكل وتوفر منافذ الشبكة.'},{id:38,en:'Port',ar:'منفذ',level:'سهل',note:'نقطة اتصال في المحول.'},{id:39,en:'High Port Density',ar:'كثافة منافذ عالية',level:'متوسط',note:'وجود عدد كبير من المنافذ في الجهاز.'},{id:40,en:'High-Speed Port',ar:'منفذ عالي السرعة',level:'سهل',note:'منفذ قادر على نقل البيانات بسرعات مرتفعة.'},{id:41,en:'Frame',ar:'إطار',level:'سهل',note:'وحدة البيانات التي يتم التعامل معها في طبقة ربط البيانات.'},{id:42,en:'Frame Forwarding',ar:'إعادة توجيه الإطار',level:'متوسط',note:'إرسال الإطار من منفذ إلى منفذ آخر عبر المحول.'},{id:43,en:'Forwarding Decision',ar:'قرار إعادة التوجيه',level:'متوسط',note:'قرار المحول حول مكان إرسال الإطار.'},{id:44,en:'Ingress Port',ar:'منفذ الدخول',level:'متوسط',note:'المنفذ الذي يدخل منه الإطار إلى المحول.'},{id:45,en:'Destination',ar:'الوجهة',level:'سهل',note:'الجهاز أو الموقع الذي يجب أن تصل إليه البيانات.'},{id:46,en:'Ethernet Frame',ar:'إطار إيثرنت',level:'متوسط',note:'إطار بيانات يستخدم في شبكات Ethernet.'},{id:47,en:'Destination MAC Address',ar:'عنوان MAC للوجهة',level:'متوسط',note:'عنوان الجهاز الذي يجب أن يستقبل الإطار.'},{id:48,en:'Source MAC Address',ar:'عنوان MAC للمصدر',level:'متوسط',note:'عنوان الجهاز الذي قام بإرسال الإطار.'},{id:49,en:'MAC Address',ar:'عنوان MAC',level:'متوسط',note:'عنوان مميز يستخدم للتعرف على واجهة الشبكة.'},{id:50,en:'MAC Address Table',ar:'جدول عناوين MAC',level:'متوسط',note:'جدول يحتفظ بعناوين MAC والمنافذ المرتبطة بها.'},{id:51,en:'Dynamic MAC Address Table',ar:'جدول عناوين MAC الديناميكي',level:'صعب',note:'جدول يتم بناؤه تلقائيًا أثناء استقبال الإطارات.'},{id:52,en:'CAM Table',ar:'جدول CAM',level:'صعب',note:'جدول يستخدمه المحول للبحث السريع عن عناوين MAC.'},{id:53,en:'CAM – Content Addressable Memory',ar:'ذاكرة قابلة للوصول بناءً على المحتوى',level:'صعب',note:'نوع ذاكرة يسمح بالبحث السريع عن المعلومات.'},{id:54,en:'Dynamic Learning',ar:'التعلم الديناميكي',level:'متوسط',note:'تعلم المحول لعناوين MAC تلقائيًا.'},{id:55,en:'Flooding',ar:'الإغراق',level:'صعب',note:'إرسال الإطار إلى عدة منافذ عند عدم معرفة منفذ الوجهة.'},{id:56,en:'Incoming Frame',ar:'إطار وارد',level:'سهل',note:'إطار يصل إلى المحول من جهاز آخر.'},{id:57,en:'Switching Method',ar:'طريقة التحويل',level:'متوسط',note:'الأسلوب الذي يستخدمه المحول لإعادة توجيه الإطارات.'},{id:58,en:'Store-and-Forward Switching',ar:'التحويل بالتخزين وإعادة التوجيه',level:'صعب',note:'يستقبل المحول الإطار بالكامل ثم يفحصه قبل إرساله.'},{id:59,en:'Cut-Through Switching',ar:'التحويل المباشر',level:'صعب',note:'يبدأ المحول إعادة التوجيه قبل استلام الإطار بالكامل.'},{id:60,en:'Error Checking',ar:'التحقق من الأخطاء',level:'متوسط',note:'فحص الإطار للتأكد من سلامته.'},{id:61,en:'FCS – Frame Check Sequence',ar:'تسلسل فحص الإطار',level:'صعب',note:'قيمة تستخدم للتحقق من وجود أخطاء في الإطار.'},{id:62,en:'CRC – Cyclic Redundancy Check',ar:'الفحص الدوري للتكرار',level:'صعب',note:'آلية للتحقق من الأخطاء في البيانات.'},{id:63,en:'Buffering',ar:'التخزين المؤقت',level:'متوسط',note:'الاحتفاظ المؤقت بالبيانات داخل ذاكرة الجهاز.'},{id:64,en:'Frame Header',ar:'ترويسة الإطار',level:'متوسط',note:'جزء يحتوي على معلومات التحكم والعناوين.'},{id:65,en:'Network Header',ar:'ترويسة الشبكة',level:'متوسط',note:'معلومات مرتبطة بطبقة الشبكة.'},{id:66,en:'Transport Header',ar:'ترويسة النقل',level:'متوسط',note:'معلومات مرتبطة بطبقة النقل.'},{id:67,en:'Data',ar:'البيانات',level:'سهل',note:'المحتوى الفعلي الذي يتم نقله.'},{id:68,en:'Preamble',ar:'المقدمة التمهيدية',level:'صعب',note:'جزء في بداية الإطار يساعد في التزامن.'},{id:69,en:'Type Field',ar:'حقل النوع',level:'متوسط',note:'حقل يحدد نوع البيانات أو البروتوكول.'},{id:70,en:'Checksum',ar:'المجموع الاختباري',level:'صعب',note:'قيمة تستخدم للمساعدة في اكتشاف الأخطاء.'},{id:71,en:'Jumbo Frame',ar:'إطار ضخم',level:'متوسط',note:'إطار بحجم أكبر من الإطارات التقليدية.'},{id:72,en:'Microsecond',ar:'ميكروثانية',level:'سهل',note:'وحدة زمنية تساوي جزءًا من مليون من الثانية.'},{id:73,en:'Switching Domain',ar:'مجال التحويل',level:'متوسط',note:'نطاق الشبكة الذي تتم داخله عمليات التحويل.'},{id:74,en:'Collision Domain',ar:'مجال التصادم',level:'متوسط',note:'جزء من الشبكة يمكن أن يحدث فيه تنافس أو تصادم.'},{id:75,en:'Broadcast Domain',ar:'مجال البث',level:'متوسط',note:'نطاق الأجهزة التي تستقبل رسائل البث.'},{id:76,en:'Collision',ar:'تصادم',level:'سهل',note:'حدوث تداخل بين عمليات إرسال في بيئة مشتركة.'},{id:77,en:'Broadcast',ar:'بث',level:'سهل',note:'إرسال رسالة إلى جميع الأجهزة ضمن نطاق البث.'},{id:78,en:'Broadcast Frame',ar:'إطار البث',level:'متوسط',note:'إطار موجه إلى جميع الأجهزة في مجال البث.'},{id:79,en:'Network Segment',ar:'مقطع الشبكة',level:'متوسط',note:'جزء من الشبكة يمثل نطاقًا معينًا للاتصال.'},{id:80,en:'Hub',ar:'لوحة الوصل',level:'سهل',note:'جهاز يربط الأجهزة في بيئة مشتركة.'},{id:81,en:'Separate Collision Domain',ar:'مجال تصادم منفصل',level:'صعب',note:'نطاق تصادم مستقل عن بقية المنافذ.'},{id:82,en:'Network Congestion',ar:'اختناق الشبكة',level:'متوسط',note:'انخفاض الأداء بسبب زيادة حركة البيانات.'},{id:83,en:'Network Performance',ar:'أداء الشبكة',level:'سهل',note:'مستوى كفاءة الشبكة في نقل البيانات.'},{id:84,en:'Broadcast Message',ar:'رسالة بث',level:'متوسط',note:'رسالة يتم إرسالها لجميع الأجهزة ضمن مجال البث.'},{id:85,en:'Full-Duplex',ar:'الإرسال المزدوج الاتجاه المتزامن',level:'متوسط',note:'إرسال واستقبال البيانات في الوقت نفسه.'},{id:86,en:'Internal Switching',ar:'التحويل الداخلي',level:'صعب',note:'عملية معالجة البيانات داخل بنية المحول.'},{id:87,en:'Network Bottleneck',ar:'عنق زجاجة الشبكة',level:'متوسط',note:'نقطة تسبب بطئًا في أداء الشبكة.'},{id:88,en:'Congestion Reduction',ar:'تخفيف الاختناق',level:'متوسط',note:'تقليل التزاحم وتحسين تدفق البيانات.'},{id:89,en:'Traffic Management',ar:'إدارة حركة البيانات',level:'متوسط',note:'تنظيم حركة البيانات داخل الشبكة.'},{id:90,en:'Quality of Service (QoS)',ar:'جودة الخدمة',level:'صعب',note:'إعطاء أولوية لأنواع معينة من حركة البيانات.'},{id:91,en:'Wireless Connectivity',ar:'الاتصال اللاسلكي',level:'سهل',note:'الاتصال بالشبكة دون استخدام كابلات.'},{id:92,en:'Wireless Access Point (WAP)',ar:'نقطة الوصول اللاسلكية',level:'متوسط',note:'جهاز يتيح للأجهزة اللاسلكية الاتصال بالشبكة.'},{id:93,en:'Unified Communications',ar:'الاتصال الموحد',level:'متوسط',note:'دمج وسائل الاتصال مثل الصوت والرسائل والفيديو.'},{id:94,en:'IT Management',ar:'إدارة تقنية المعلومات',level:'سهل',note:'إدارة البنية التقنية والخدمات المرتبطة بها.'}];
 
 const SECTIONS=[{code:'63854',label:'الشعبة النظرية(63854)',students:[{id:'446158780',name:'احمد محمد عائض الحارثي'},{id:'446158867',name:'أنس بن ابراهيم بن عبدالله آل مشاري القرني'},{id:'446158632',name:'حزام رجاء عبدالله العموده'},{id:'446158594',name:'خالد بن سعيد بن طامي السراري الشهراني'},{id:'446158835',name:'خالد محمد خالد الاكلبي'},{id:'446158812',name:'رائد بن عبدالرحمن بن عبدالله السراري الشهراني'},{id:'446158734',name:'ريان علي عبدالله القرني'},{id:'446158683',name:'سعيد بن خالد بن سعيد الشهراني'},{id:'446158703',name:'سعيد بن عبدالله بن محمد السراري الشهراني'},{id:'445178019',name:'سلطان عبدالله بن محمد الشهراني'},{id:'446158677',name:'صقر بن حامد بن صقر السعدي'},{id:'446158853',name:'عبدالرحمن بن عبدالله بن كميخ المنبهي الشهراني'},{id:'446158613',name:'عبدالرحمن عبيد عبدالله آل عيسى'},{id:'443314344',name:'عبدالرحمن محمد راجح الاكلبي'},{id:'446254039',name:'عبدالله شارع عبدالله الجنبه'},{id:'445105461',name:'عبدالله محمد عبدالله الشهراني'},{id:'446158244',name:'عبدالمجيد بن سعود بن بريك آل مهديه الحارثي'},{id:'446158606',name:'عبدالمجيد محمد عبدالرحمن الصعيري'},{id:'446158799',name:'فراس بن حزام بن عايض الشهراني'},{id:'446158793',name:'فواز هياف فواز الهاجري'},{id:'446158623',name:'مبارك بن عائض بن ظافر الشبوي القحطاني'},{id:'446158681',name:'محمد بن عبدالله بن عايض آل مهديه الحارثي'},{id:'446158806',name:'مهند بن عبدالرحمن بن عبدالله السراري الشهراني'},{id:'18542',name:'حساب تجريبي (للاختبار فقط)'}]},{code:'63857',label:'الشعبة النظرية (63857)',students:[{id:'446158849',name:'بندر بن محمد بن سيف القربي الشهراني'},{id:'446184582',name:'زياد صالح محمد القرني'},{id:'446253892',name:'سعد بن عبدالرحمن بن عبدالله آل عوضه'},{id:'446158850',name:'سعيد شارع عبدالله الشهراني'},{id:'446158639',name:'سلطان فايز مفرح آل هتيل'},{id:'446227159',name:'عامر بن محمد بن عامر القوبع'},{id:'446227199',name:'عبدالعزيز بن احمد بن محمد الفزعي الشمراني'},{id:'446158655',name:'عبدالله بن هويج بن شارع الجنيبي الاكلبي'},{id:'446179546',name:'عبدالله سعيد سالم الشهراني'},{id:'446158736',name:'علي بن دشيش بن علي الاعمشي الاكلبي'},{id:'446158610',name:'علي بن عبدالله بن علي السراري الشهراني'},{id:'446156447',name:'علي ناصر مسفر الشهراني'},{id:'446158814',name:'عناد بن فهد بن عايض المنبهي الشهراني'},{id:'446158778',name:'مبارك بن ناصر بن علي الدرعاني الشهراني'},{id:'446158571',name:'محمد بن راجح بن محمد الجبيري الأكلبي'},{id:'446158810',name:'محمد بن سعود بن هيف الشبوي'},{id:'446158593',name:'محمد بن علي بن محمد الشهراني'},{id:'446266804',name:'محمد خالد محمد عسل'},{id:'446158625',name:'منصور بن محمد بن حضينان الفاضلي الخالدي'},{id:'446158817',name:'مهند بن بريك بن محمد الذويب الاكلبي'},{id:'446158654',name:'موسى بن محمد بن فراج الحليسي الشهراني'},{id:'446158873',name:'نواف بن محمد بن زبران الفزعي الشمراني'},{id:'18542',name:'حساب تجريبي (للاختبار فقط)'}]},{code:'74306',label:'الشعبة النظري(74306)',students:[{id:'446158874',name:'ابراهيم بن عايض بن ظافر المنبهي الشهراني'},{id:'446158627',name:'احمد بن عايض بن بديع المهداني الحارثي'},{id:'446158815',name:'أنس بن هياف بن جريب السراري الشهراني'},{id:'446188430',name:'بدر ظافر جريب الشهراني'},{id:'446156828',name:'بندر ظافر جريب الشهراني'},{id:'446158704',name:'تركي بن قباس بن محمد آل فالح الجهمي'},{id:'445239356',name:'حسن عبدالكريم عون القحطاني'},{id:'444121250',name:'سعد مشبب مسعر المعاوي'},{id:'446158660',name:'سلمان عايض بن سالم الحارثي'},{id:'446158644',name:'ظافر صبيخان بن محمد الشهراني'},{id:'446158686',name:'عبدالرحمن بن عبدالله بن عامر المنبهي الشهراني'},{id:'446158626',name:'عبدالرحمن علي بن ظافر القرني'},{id:'446158685',name:'عبدالسلام بن علي بن محمد الثابتي الشهري'},{id:'446174476',name:'عبدالسلام علي عايض الشهراني'},{id:'446158595',name:'عبدالعزيز بن علي بن عبدالرحمن المليحي الشهراني'},{id:'446158771',name:'عبدالعزيز محمد ظافر الشهراني'},{id:'446158813',name:'عبدالعزيز ناصر بن عبدالعزيز الاكلبي'},{id:'446158592',name:'علي مسعود علي الشهراني'},{id:'446158664',name:'فيصل بن محمد بن ناصر الحارثي'},{id:'446158621',name:'متعب بن عبدالله بن جبل بن محمد السريعي الشهراني'},{id:'446158836',name:'محمد سعد بن سياف الشهراني'},{id:'18542',name:'حساب تجريبي (للاختبار فقط)'}]}];
+
+const ACA_SECTIONS=[{"code":"63905","label":"شعبة 63905 — الثلاثاء 11:00","totalScheduledDays":19,"title":"تطبيقات الحاسب المتقدمة — شعبة رقم 63905 — يوم الثلاثاء الساعة 11:00","sheetName":"تطبيقات شعبة 63905 ","dates":["12/03/1448","19/03/1448","26/03/1448","04/04/1448","11/04/1448","18/04/1448","25/04/1448","02/05/1448","09/05/1448","16/05/1448","23/05/1448","30/05/1448","07/06/1448","14/06/1448","21/06/1448","28/06/1448","06/07/1448","13/07/1448","20/07/1448","27/07/1448"],"students":[{"id":"446232703","name":"أيوب ناصر محمد العامري","history":["حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446227085","name":"تركي سعيد بن عائض الشهراني","history":["حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446156423","name":"خالد بن ناصر بن فلاح الشهراني","history":["حاضر","غائب","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"445239280","name":"سعد محمد سيف الدوسري","history":["حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446155857","name":"سعيد بن فيصل بن مسفر الاكلبي","history":["حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"445117409","name":"سلطان منصور مشعل الحارثى","history":["حاضر","غائب","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446242951","name":"عبدالرحمن جمعان مبارك الشهراني","history":["حاضر","غائب","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446156231","name":"عبدالمجيد بن عايض بن محمد القحطاني","history":["حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446227130","name":"علي بن مسفر بن بن محمد المسلمي الغامدي","history":["حاضر","غائب","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446234604","name":"علي دخييل حبيب الحارثي","history":["حاضر","غائب","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446155854","name":"علي زامل محمد الشهراني","history":["حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446230240","name":"فايز محمد شارع الهاجري","history":["حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446244282","name":"محمد سعود عنزي الاكلبي","history":["حاضر","غائب","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446156258","name":"مشبب ناصر منيس الشهراني","history":["غائب","غائب","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446156387","name":"مقرن بن حمد بن محمد آل عثوان العلياني","history":["حاضر","غائب","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"445239302","name":"ناصر سيف ناصر الشهراني","history":["حاضر","غائب","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446232634","name":"ناصر عبييد بن عايض الحارثي","history":["حاضر","غائب","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446159336","name":"ناصربن مذكر بن محمد القربي الشهراني","history":["حاضر","غائب","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446240143","name":"نجم فايز عثمان الشهراني","history":["حاضر","غائب","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446155562","name":"هذال ناصر منيس الشهراني","history":["غائب","غائب","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446232833","name":"هزاع مقعد عبدالله البيشي","history":["حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"18542","name":"حساب تجريبي (للاختبار فقط)","history":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]}]},{"code":"63912","label":"شعبة 63912 — الاثنين 13:00","totalScheduledDays":19,"title":"تطبيقات الحاسب المتقدمة — شعبة رقم 63912 — يوم الاثنين الساعة 13:00","sheetName":"تطبيقات شعبة 63912 ","dates":["11/03/1448","18/03/1448","25/03/1448","03/04/1448","10/04/1448","17/04/1448","24/04/1448","01/05/1448","08/05/1448","15/05/1448","22/05/1448","29/05/1448","06/06/1448","13/06/1448","20/06/1448","27/06/1448","05/07/1448","12/07/1448","19/07/1448","26/07/1448"],"students":[{"id":"446231848","name":"حزام محمد حزام آل جدران","history":["حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446226958","name":"خالد بن علي بن مفلح آل خاطره الحارثي","history":["حاضر","غائب","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446233944","name":"خالد غرم محمد الحارثي","history":["حاضر","غائب","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446226954","name":"سعد حمود عفتان الحارثي","history":["حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446178459","name":"سعد سالم ابن زايد الشهراني","history":["حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446157161","name":"سياف بن لبدان ابن خالد الداودي القحطاني","history":["حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158866","name":"سيف ظافر عبدالله الشهراني","history":["حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446227030","name":"عارف محمد بن عبدالله الغامدي","history":["حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446234476","name":"عايض شعلان عاتق الاكلبي","history":["حاضر","غائب","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446226956","name":"عبدالرحمن بن عائض بن عبدالرحمن البشيبشي الغامدي","history":["حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158875","name":"عبدالعزيز خلف شباب الواسي","history":["حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158777","name":"عبدالله بن بداح بن ظافر الشهراني","history":["حاضر","غائب","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158876","name":"عبدالمجيد مبارك جمعان الشهراني","history":["حاضر","غائب","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158610","name":"علي بن عبدالله بن علي السراري الشهراني","history":["حاضر","غائب","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158814","name":"عناد بن فهد بن عايض المنبهي الشهراني","history":["حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446226955","name":"عوض بن محمد بن عوض آل حسن القحطاني","history":["حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158795","name":"فارس ناصر علي الدوسري","history":["حاضر","غائب","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446234666","name":"محسن مسفر محسن الاكلبي","history":["حاضر","غائب","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158810","name":"محمد بن سعود بن هيف الشبوي","history":["حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446234778","name":"محمد مسفر محسن الاكلبي","history":["حاضر","غائب","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158654","name":"موسى بن محمد بن فراج الحليسي الشهراني","history":["حاضر","غائب","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"445117447","name":"ناصر سالم ناصر الشهراني","history":["حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"18542","name":"حساب تجريبي (للاختبار فقط)","history":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]}]}];
+
+const SRWE_SECTIONS=[{"code":"63854","label":"الشعبة النظرية 63854 — الأحد 7:30","kind":"theory","pairCode":"63856","title":"التوجيه والتحويل 1 — شعبة نظري رقم 63854 — يوم الأحد الساعة 7:30","sheetName":"الشعبة النظري(63854)","totalScheduledDays":19,"dates":["10/03/1448","17/03/1448","24/03/1448","02/04/1448","09/04/1448","16/04/1448","23/04/1448","30/04/1448","07/05/1448","14/05/1448","21/05/1448","28/05/1448","05/06/1448","12/06/1448","19/06/1448","26/06/1448","04/07/1448","11/07/1448","18/07/1448","25/07/1448"],"students":[{"id":"446158780","name":"احمد محمد عائض الحارثي","history":["حاضر","حاضر","حاضر","غائب",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158867","name":"أنس بن ابراهيم بن عبدالله آل مشاري القرني","history":["حاضر","حاضر","غائب","غائب",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158632","name":"حزام رجاء عبدالله العموده","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158594","name":"خالد بن سعيد بن طامي السراري الشهراني","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158835","name":"خالد محمد خالد الاكلبي","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158812","name":"رائد بن عبدالرحمن بن عبدالله السراري الشهراني","history":["حاضر","حاضر","حاضر","غائب",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158734","name":"ريان علي عبدالله القرني","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158683","name":"سعيد بن خالد بن سعيد الشهراني","history":["حاضر","حاضر","حاضر","غائب",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158703","name":"سعيد بن عبدالله بن محمد السراري الشهراني","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"445178019","name":"سلطان عبدالله بن محمد الشهراني","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158677","name":"صقر بن حامد بن صقر السعدي","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158853","name":"عبدالرحمن بن عبدالله بن كميخ المنبهي الشهراني","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158613","name":"عبدالرحمن عبيد عبدالله آل عيسى","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"443314344","name":"عبدالرحمن محمد راجح الاكلبي","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446254039","name":"عبدالله شارع عبدالله الجنبه","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"445105461","name":"عبدالله محمد عبدالله الشهراني","history":["حاضر","حاضر","غائب","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158244","name":"عبدالمجيد بن سعود بن بريك آل مهديه الحارثي","history":["حاضر","حاضر","غائب","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158606","name":"عبدالمجيد محمد عبدالرحمن الصعيري","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158799","name":"فراس بن حزام بن عايض الشهراني","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158793","name":"فواز هياف فواز الهاجري","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158623","name":"مبارك بن عائض بن ظافر الشبوي القحطاني","history":["حاضر","غائب","حاضر","غائب",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158681","name":"محمد بن عبدالله بن عايض آل مهديه الحارثي","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158806","name":"مهند بن عبدالرحمن بن عبدالله السراري الشهراني","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"18542","name":"حساب تجريبي (للاختبار فقط)","history":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]}]},{"code":"63857","label":"الشعبة النظرية 63857 — الأحد 9:15","kind":"theory","pairCode":"63858","title":"التوجيه والتحويل 1 — شعبة نظري رقم 63857 — يوم الأحد الساعة 9:15","sheetName":"الشعبة النظرية (63857)","totalScheduledDays":19,"dates":["10/03/1448","17/03/1448","24/03/1448","02/04/1448","09/04/1448","16/04/1448","23/04/1448","30/04/1448","07/05/1448","14/05/1448","21/05/1448","28/05/1448","05/06/1448","12/06/1448","19/06/1448","26/06/1448","04/07/1448","11/07/1448","18/07/1448","25/07/1448"],"students":[{"id":"446158849","name":"بندر بن محمد بن سيف القربي الشهراني","history":["حاضر","غائب","حاضر","غائب",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446184582","name":"زياد صالح محمد القرني","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446253892","name":"سعد بن عبدالرحمن بن عبدالله آل عوضه","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158850","name":"سعيد شارع عبدالله الشهراني","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158639","name":"سلطان فايز مفرح آل هتيل","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446254026","name":"سلطان معيض بن عايض الحارثي (تم سحبه)","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446227159","name":"عامر بن محمد بن عامر القوبع","history":["حاضر","حاضر","حاضر","غائب",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446227199","name":"عبدالعزيز بن احمد بن محمد الفزعي الشمراني","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158655","name":"عبدالله بن هويج بن شارع الجنيبي الاكلبي","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446179546","name":"عبدالله سعيد سالم الشهراني","history":["حاضر","حاضر","غائب","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158736","name":"علي بن دشيش بن علي الاعمشي الاكلبي","history":["حاضر","حاضر","حاضر","غائب",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158610","name":"علي بن عبدالله بن علي السراري الشهراني","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446156447","name":"علي ناصر مسفر الشهراني","history":["حاضر","حاضر","غائب","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158814","name":"عناد بن فهد بن عايض المنبهي الشهراني","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158778","name":"مبارك بن ناصر بن علي الدرعاني الشهراني","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158571","name":"محمد بن راجح بن محمد الجبيري الأكلبي","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158810","name":"محمد بن سعود بن هيف الشبوي","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158593","name":"محمد بن علي بن محمد الشهراني","history":["حاضر","حاضر","غائب","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446266804","name":"محمد خالد محمد عسل","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158625","name":"منصور بن محمد بن حضينان الفاضلي الخالدي","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158817","name":"مهند بن بريك بن محمد الذويب الاكلبي","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158654","name":"موسى بن محمد بن فراج الحليسي الشهراني","history":["حاضر","غائب","حاضر","متأخر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158873","name":"نواف بن محمد بن زبران الفزعي الشمراني","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"18542","name":"حساب تجريبي (للاختبار فقط)","history":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]}]},{"code":"74306","label":"الشعبة النظرية 74306 — الأحد 11:00","kind":"theory","pairCode":"74307","title":"التوجيه والتحويل 1 — شعبة نظري رقم 74306 — يوم الأحد الساعة 11:00","sheetName":"الشعبة النظري(74306)","totalScheduledDays":19,"dates":["10/03/1448","17/03/1448","24/03/1448","02/04/1448","09/04/1448","16/04/1448","23/04/1448","30/04/1448","07/05/1448","14/05/1448","21/05/1448","28/05/1448","05/06/1448","12/06/1448","19/06/1448","26/06/1448","04/07/1448","11/07/1448","18/07/1448","25/07/1448"],"students":[{"id":"446158874","name":"ابراهيم بن عايض بن ظافر المنبهي الشهراني","history":["حاضر","حاضر","غائب","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158627","name":"احمد بن عايض بن بديع المهداني الحارثي","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158815","name":"أنس بن هياف بن جريب السراري الشهراني","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446188430","name":"بدر ظافر جريب الشهراني","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446156828","name":"بندر ظافر جريب الشهراني","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158704","name":"تركي بن قباس بن محمد آل فالح الجهمي","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"445239356","name":"حسن عبدالكريم عون القحطاني","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"444121250","name":"سعد مشبب مسعر المعاوي","history":["حاضر","حاضر","غائب","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158660","name":"سلمان عايض بن سالم الحارثي","history":["حاضر","حاضر","غائب","غائب",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158644","name":"ظافر صبيخان بن محمد الشهراني","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158686","name":"عبدالرحمن بن عبدالله بن عامر المنبهي الشهراني","history":["حاضر","حاضر","غائب","غائب",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158626","name":"عبدالرحمن علي بن ظافر القرني","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158685","name":"عبدالسلام بن علي بن محمد الثابتي الشهري","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446174476","name":"عبدالسلام علي عايض الشهراني","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158595","name":"عبدالعزيز بن علي بن عبدالرحمن المليحي الشهراني","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158771","name":"عبدالعزيز محمد ظافر الشهراني","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158813","name":"عبدالعزيز ناصر بن عبدالعزيز الاكلبي","history":["حاضر","غائب","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158592","name":"علي مسعود علي الشهراني","history":["حاضر","غائب","غائب","غائب",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158664","name":"فيصل بن محمد بن ناصر الحارثي","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158621","name":"متعب بن عبدالله بن جبل بن محمد السريعي الشهراني","history":["حاضر","حاضر","حاضر","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158836","name":"محمد سعد بن سياف الشهراني","history":["حاضر","حاضر","غائب","حاضر",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"18542","name":"حساب تجريبي (للاختبار فقط)","history":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]}]},{"code":"63856","label":"الشعبة العملية 63856 — الثلاثاء 7:30 والأربعاء 9:15","kind":"practical","pairCode":"63854","title":"التوجيه والتحويل 1 — شعبة عملي رقم 63856 — يوم الثلاثاء الساعة 7:30 والأربعاء الساعة 9:15","sheetName":"الشعبة العملية(63856)","totalScheduledDays":40,"dates":["12/03/1448","13/03/1448","19/03/1448","20/03/1448","26/03/1448","27/03/1448","04/04/1448","05/04/1448","11/04/1448","12/04/1448","18/04/1448","19/04/1448","25/04/1448","26/04/1448","02/05/1448","03/05/1448","09/05/1448","10/05/1448","16/05/1448","17/05/1448","23/05/1448","24/05/1448","30/05/1448","01/06/1448","07/06/1448","08/06/1448","14/06/1448","15/06/1448","21/06/1448","22/06/1448","28/06/1448","29/06/1448","06/07/1448","07/07/1448","13/07/1448","14/07/1448","20/07/1448","21/07/1448","27/07/1448","28/07/1448"],"students":[{"id":"446158780","name":"احمد محمد عائض الحارثي","history":["حاضر","حاضر","غائب","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158867","name":"أنس بن ابراهيم بن عبدالله آل مشاري القرني","history":["حاضر","حاضر","غائب","غائب","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158632","name":"حزام رجاء عبدالله العموده","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158594","name":"خالد بن سعيد بن طامي السراري الشهراني","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158835","name":"خالد محمد خالد الاكلبي","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158812","name":"رائد بن عبدالرحمن بن عبدالله السراري الشهراني","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158734","name":"ريان علي عبدالله القرني","history":["حاضر","حاضر","حاضر","غائب","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158683","name":"سعيد بن خالد بن سعيد الشهراني","history":["حاضر","حاضر","حاضر","غائب","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158703","name":"سعيد بن عبدالله بن محمد السراري الشهراني","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"445178019","name":"سلطان عبدالله بن محمد الشهراني","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158677","name":"صقر بن حامد بن صقر السعدي","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158853","name":"عبدالرحمن بن عبدالله بن كميخ المنبهي الشهراني","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158613","name":"عبدالرحمن عبيد عبدالله آل عيسى","history":["حاضر","حاضر","غائب","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"443314344","name":"عبدالرحمن محمد راجح الاكلبي","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446254039","name":"عبدالله شارع عبدالله الجنبه","history":["حاضر","حاضر","غائب","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"445105461","name":"عبدالله محمد عبدالله الشهراني","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158244","name":"عبدالمجيد بن سعود بن بريك آل مهديه الحارثي","history":["حاضر","حاضر","حاضر","غائب","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158606","name":"عبدالمجيد محمد عبدالرحمن الصعيري","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158799","name":"فراس بن حزام بن عايض الشهراني","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158793","name":"فواز هياف فواز الهاجري","history":["مستأذن","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158623","name":"مبارك بن عائض بن ظافر الشبوي القحطاني","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158681","name":"محمد بن عبدالله بن عايض آل مهديه الحارثي","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158806","name":"مهند بن عبدالرحمن بن عبدالله السراري الشهراني","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"18542","name":"حساب تجريبي (للاختبار فقط)","history":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]}]},{"code":"63858","label":"الشعبة العملية 63858 — الثلاثاء 9:15 والأربعاء 7:30","kind":"practical","pairCode":"63857","title":"التوجيه والتحويل 1 — شعبة عملي رقم 63858 — يوم الثلاثاء الساعة 9:15 والأربعاء الساعة 7:30","sheetName":"الشعبة العملية (63858)","totalScheduledDays":40,"dates":["12/03/1448","13/03/1448","19/03/1448","20/03/1448","26/03/1448","27/03/1448","04/04/1448","05/04/1448","11/04/1448","12/04/1448","18/04/1448","19/04/1448","25/04/1448","26/04/1448","02/05/1448","03/05/1448","09/05/1448","10/05/1448","16/05/1448","17/05/1448","23/05/1448","24/05/1448","30/05/1448","01/06/1448","07/06/1448","08/06/1448","14/06/1448","15/06/1448","21/06/1448","22/06/1448","28/06/1448","29/06/1448","06/07/1448","07/07/1448","13/07/1448","14/07/1448","20/07/1448","21/07/1448","27/07/1448","28/07/1448"],"students":[{"id":"446158849","name":"بندر بن محمد بن سيف القربي الشهراني","history":["حاضر","حاضر","غائب","غائب","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446184582","name":"زياد صالح محمد القرني","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446253892","name":"سعد بن عبدالرحمن بن عبدالله آل عوضه","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158850","name":"سعيد شارع عبدالله الشهراني","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158639","name":"سلطان فايز مفرح آل هتيل","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446254026","name":"سلطان معيض بن عايض الحارثي (تم سحبه)","history":["حاضر","حاضر","حاضر","غائب","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446227159","name":"عامر بن محمد بن عامر القوبع","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446227199","name":"عبدالعزيز بن احمد بن محمد الفزعي الشمراني","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158655","name":"عبدالله بن هويج بن شارع الجنيبي الاكلبي","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446179546","name":"عبدالله سعيد سالم الشهراني","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158736","name":"علي بن دشيش بن علي الاعمشي الاكلبي","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158610","name":"علي بن عبدالله بن علي السراري الشهراني","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446156447","name":"علي ناصر مسفر الشهراني","history":["حاضر","حاضر","غائب","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158814","name":"عناد بن فهد بن عايض المنبهي الشهراني","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158778","name":"مبارك بن ناصر بن علي الدرعاني الشهراني","history":["حاضر","حاضر","غائب","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158571","name":"محمد بن راجح بن محمد الجبيري الأكلبي","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158810","name":"محمد بن سعود بن هيف الشبوي","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158593","name":"محمد بن علي بن محمد الشهراني","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446266804","name":"محمد خالد محمد عسل","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158625","name":"منصور بن محمد بن حضينان الفاضلي الخالدي","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158817","name":"مهند بن بريك بن محمد الذويب الاكلبي","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158654","name":"موسى بن محمد بن فراج الحليسي الشهراني","history":["حاضر","حاضر","غائب","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"446158873","name":"نواف بن محمد بن زبران الفزعي الشمراني","history":["حاضر","حاضر","حاضر","حاضر","ملغاة","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]},{"id":"18542","name":"حساب تجريبي (للاختبار فقط)","history":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]}]},{"code":"74307","label":"الشعبة العملية 74307 — الاثنين والأربعاء 11:00","kind":"practical","pairCode":"74306","title":"التوجيه والتحويل 1 — شعبة عملي رقم 74307 — يوم الاثنين والأربعاء الساعة 11:00","sheetName":"الشعبة العملي(74307)","totalScheduledDays":40,"dates":["12/03/1448","13/03/1448","19/03/1448","20/03/1448","26/03/1448","27/03/1448","04/04/1448","05/04/1448","11/04/1448","12/04/1448","18/04/1448","19/04/1448","25/04/1448","26/04/1448","02/05/1448","03/05/1448","09/05/1448","10/05/1448","16/05/1448","17/05/1448","23/05/1448","24/05/1448","30/05/1448","01/06/1448","07/06/1448","08/06/1448","14/06/1448","15/06/1448","21/06/1448","22/06/1448","28/06/1448","29/06/1448","06/07/1448","07/07/1448","13/07/1448","14/07/1448","20/07/1448","21/07/1448","27/07/1448","28/07/1448"],"students":[{"id":"446158874","name":"ابراهيم بن عايض بن ظافر المنبهي الشهراني","history":["حاضر","حاضر","حاضر","غائب","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"حاضر",null,null,null,null,null,null,null,null,null]},{"id":"446158627","name":"احمد بن عايض بن بديع المهداني الحارثي","history":["حاضر","حاضر","حاضر","حاضر","غائب","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"غائب",null,null,null,null,null,null,null,null,null]},{"id":"446158815","name":"أنس بن هياف بن جريب السراري الشهراني","history":["حاضر","حاضر","حاضر","حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"حاضر",null,null,null,null,null,null,null,null,null]},{"id":"446188430","name":"بدر ظافر جريب الشهراني","history":["حاضر","حاضر","حاضر","حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"حاضر",null,null,null,null,null,null,null,null,null]},{"id":"446156828","name":"بندر ظافر جريب الشهراني","history":["حاضر","حاضر","حاضر","حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"حاضر",null,null,null,null,null,null,null,null,null]},{"id":"446158704","name":"تركي بن قباس بن محمد آل فالح الجهمي","history":["حاضر","حاضر","حاضر","حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"حاضر",null,null,null,null,null,null,null,null,null]},{"id":"445239356","name":"حسن عبدالكريم عون القحطاني","history":["حاضر","حاضر","حاضر","حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"حاضر",null,null,null,null,null,null,null,null,null]},{"id":"444121250","name":"سعد مشبب مسعر المعاوي","history":["حاضر","حاضر","حاضر","حاضر","غائب","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"غائب",null,null,null,null,null,null,null,null,null]},{"id":"446158660","name":"سلمان عايض بن سالم الحارثي","history":["حاضر","حاضر","حاضر","حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"حاضر",null,null,null,null,null,null,null,null,null]},{"id":"446158644","name":"ظافر صبيخان بن محمد الشهراني","history":["حاضر","حاضر","حاضر","حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"حاضر",null,null,null,null,null,null,null,null,null]},{"id":"446158686","name":"عبدالرحمن بن عبدالله بن عامر المنبهي الشهراني","history":["حاضر","حاضر","حاضر","حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"حاضر",null,null,null,null,null,null,null,null,null]},{"id":"446158626","name":"عبدالرحمن علي بن ظافر القرني","history":["حاضر","حاضر","حاضر","حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"حاضر",null,null,null,null,null,null,null,null,null]},{"id":"446158685","name":"عبدالسلام بن علي بن محمد الثابتي الشهري","history":["حاضر","حاضر","حاضر","حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"حاضر",null,null,null,null,null,null,null,null,null]},{"id":"446174476","name":"عبدالسلام علي عايض الشهراني","history":["حاضر","حاضر","حاضر","حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"حاضر",null,null,null,null,null,null,null,null,null]},{"id":"446158595","name":"عبدالعزيز بن علي بن عبدالرحمن المليحي الشهراني","history":["حاضر","حاضر","حاضر","حاضر","غائب","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"غائب",null,null,null,null,null,null,null,null,null]},{"id":"446158771","name":"عبدالعزيز محمد ظافر الشهراني","history":["حاضر","حاضر","حاضر","حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"حاضر",null,null,null,null,null,null,null,null,null]},{"id":"446158813","name":"عبدالعزيز ناصر بن عبدالعزيز الاكلبي","history":["حاضر","حاضر","حاضر","حاضر","غائب","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"غائب",null,null,null,null,null,null,null,null,null]},{"id":"446158592","name":"علي مسعود علي الشهراني","history":["حاضر","حاضر","غائب","حاضر","غائب","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"غائب",null,null,null,null,null,null,null,null,null]},{"id":"446158664","name":"فيصل بن محمد بن ناصر الحارثي","history":["حاضر","حاضر","حاضر","حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"حاضر",null,null,null,null,null,null,null,null,null]},{"id":"446158621","name":"متعب بن عبدالله بن جبل بن محمد السريعي الشهراني","history":["حاضر","حاضر","غائب","حاضر","حاضر","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"حاضر",null,null,null,null,null,null,null,null,null]},{"id":"446158836","name":"محمد سعد بن سياف الشهراني","history":["حاضر","حاضر","حاضر","حاضر","غائب","ملغاة",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"غائب",null,null,null,null,null,null,null,null,null]},{"id":"18542","name":"حساب تجريبي (للاختبار فقط)","history":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]}]}];
 
 /* ---------- optional direct questions per lecture (MCQ / true-false / short answer) ----------
    Keyed by "<week>_<lecture>". Empty by default — a lecture with no entry here simply shows
@@ -948,6 +1097,167 @@ let state = {
 
 const el = id => document.getElementById(id);
 
+/* ---------- multi-course support ----------
+   'srwe' = مقرر التوجيه والتحويل 1 (السيناريو الأصلي الكامل: اختبار + درجات + تحضير)
+   'aca'  = مقرر تطبيقات الحاسب المتقدمة (تحضير فقط حاليًا، حسب تواريخ كل شعبة الفعلية) */
+let CURRENT_COURSE = null;
+
+function acaSectionByCode(code){
+  return ACA_SECTIONS.find(s=>s.code===code) || null;
+}
+
+function srweSectionByCode(code){
+  return SRWE_SECTIONS.find(s=>s.code===code) || null;
+}
+
+function sectionsForCourse(course){
+  return course === 'aca' ? ACA_SECTIONS : SRWE_SECTIONS;
+}
+
+function sectionByCodeForCourse(code, course){
+  return course === 'aca' ? acaSectionByCode(code) : srweSectionByCode(code);
+}
+
+function selectCourse(course){
+  CURRENT_COURSE = course;
+  loggedInIdentity = null;
+  setLoginRole('trainee');
+  applyCourseVisibility();
+  showView('view-login');
+}
+
+function applyCourseVisibility(){
+  const isAca = CURRENT_COURSE === 'aca';
+  // trainee setup screen: هل يوجد اختبار لهذا المقرر أصلًا؟ (حاليًا فقط مقرر التوجيه والتحويل)
+  const traineeSub = el('attTraineeSub');
+  if(traineeSub){
+    traineeSub.textContent = isAca
+      ? 'عند إعلان المحاضر عن كود التحضير في القاعة، اكتبه هنا خلال ٣٠ ثانية.'
+      : 'عند إعلان المحاضر عن كود التحضير في القاعة، اكتبه هنا خلال ٣٠ ثانية — الكود نفسه هو من يحدد الأسبوع والمحاضرة تلقائيًا.';
+  }
+  // admin (instructor) screen
+  const attAdminCourseLabel = el('attAdminCourseLabel');
+  if(attAdminCourseLabel) attAdminCourseLabel.textContent = courseLabel(CURRENT_COURSE);
+  const srweGrades = el('srweGradesSection');
+  if(srweGrades) srweGrades.hidden = isAca;
+  const srweReport = el('srweAttReportSection');
+  if(srweReport) srweReport.hidden = isAca;
+  const acaReport = el('acaAttReportSection');
+  if(acaReport) acaReport.hidden = !isAca;
+}
+
+/* ---------- trainee: "تحضير أو اختبار مفاجئ" choice screen ----------
+   يظهر هذا الخيار في كل المقررات؛ لكن زر الاختبار المفاجئ يُخفى في المقررات التي
+   لا تملك اختبارًا بعد (حاليًا: تطبيقات الحاسب المتقدمة). ---------- */
+function courseHasQuiz(course){
+  return course !== 'aca';
+}
+
+function showTraineeChoice(){
+  const choiceCard = el('traineeChoiceCard');
+  if(choiceCard) choiceCard.hidden = false;
+  const quizCard = el('quizSetupCard');
+  if(quizCard) quizCard.hidden = true;
+  const attCard = el('attTraineeCard');
+  if(attCard) attCard.hidden = true;
+  const quizBtn = el('choiceQuizBtn');
+  if(quizBtn) quizBtn.hidden = !courseHasQuiz(CURRENT_COURSE);
+  const choiceLabel = el('choiceCourseLabel');
+  if(choiceLabel) choiceLabel.textContent = 'المقرر الحالي: ' + courseLabel(CURRENT_COURSE);
+}
+
+function chooseAttendance(){
+  const choiceCard = el('traineeChoiceCard');
+  if(choiceCard) choiceCard.hidden = true;
+  const attCard = el('attTraineeCard');
+  if(attCard) attCard.hidden = false;
+  const quizCard = el('quizSetupCard');
+  if(quizCard) quizCard.hidden = true;
+  const dateLine = el('attTodayDateLine');
+  if(dateLine) dateLine.textContent = 'تاريخ اليوم: ' + new Date().toLocaleDateString('ar-SA');
+  const attLabel = el('attCardCourseLabel');
+  if(attLabel) attLabel.textContent = courseLabel(CURRENT_COURSE);
+  applyAttendanceGate();
+  renderMyAttendanceLog();
+}
+
+function chooseQuiz(){
+  const choiceCard = el('traineeChoiceCard');
+  if(choiceCard) choiceCard.hidden = true;
+  const quizCard = el('quizSetupCard');
+  if(quizCard) quizCard.hidden = false;
+  const attCard = el('attTraineeCard');
+  if(attCard) attCard.hidden = true;
+  const quizLabel = el('quizCardCourseLabel');
+  if(quizLabel) quizLabel.textContent = courseLabel(CURRENT_COURSE);
+}
+
+/* ---------- trainee: personal, on-this-device attendance confirmation log ----------
+   لا يوجد خادم خلفي، فلا يمكن للمتدرب رؤية سجله الرسمي الكامل (ذاك موجود فقط لدى
+   المحاضر بعد تجميع التقرير). هذا سجل محلي بحت: يعرض فقط ما أرسله المتدرب من هذا
+   الجهاز تحديدًا، ليطمئن أن تأكيده سُجِّل ويستطيع إعادة تنزيل الملف عند الحاجة.
+   ملاحظة (إصلاح): يُخزَّن هذا السجل بمفتاح "المقرر:الرقم التدريبي" وليس الرقم
+   التدريبي وحده — لأن نفس الرقم (مثل الحساب التجريبي 18542) قد يكون مسجَّلًا في
+   أكثر من مقرر على هذا الجهاز، وكان تخزينه سابقًا بمفتاح الرقم وحده يجعل تأكيدات
+   مقرر تظهر مختلطة داخل مقرر آخر. ---------- */
+const MY_ATTENDANCE_LOG_KEY = 'nettermquiz.attendance.mylog.v1';
+
+function myLogKey(course, studentId){
+  return `${course || 'srwe'}:${studentId}`;
+}
+function loadMyAttendanceLog(){
+  try{
+    const raw = localStorage.getItem(MY_ATTENDANCE_LOG_KEY);
+    return raw ? JSON.parse(raw) : {};
+  }catch(e){ return {}; }
+}
+function saveMyAttendanceLog(log){
+  try{ localStorage.setItem(MY_ATTENDANCE_LOG_KEY, JSON.stringify(log)); }catch(e){}
+}
+function recordMyAttendance(record){
+  const log = loadMyAttendanceLog();
+  const key = myLogKey(record.course, record.studentId);
+  if(!log[key]) log[key] = [];
+  log[key].push(record);
+  saveMyAttendanceLog(log);
+}
+function courseLabel(course){
+  return course === 'aca' ? 'تطبيقات الحاسب المتقدمة' : 'التوجيه والتحويل 1';
+}
+function downloadAttendanceXlsxFor(record){
+  if(typeof XLSX === 'undefined'){
+    alert('تعذر تحميل مكتبة Excel (تأكد من اتصالك بالإنترنت).');
+    return;
+  }
+  try{
+    const wb = buildAttendanceWorkbook(record);
+    const filename = `تحضير_${record.course || 'srwe'}_${record.studentId}_${record.code}.xlsx`;
+    XLSX.writeFile(wb, filename);
+  }catch(e){
+    alert('تعذر تنزيل الملف.');
+  }
+}
+function renderMyAttendanceLog(){
+  const box = el('myAttendanceLogList');
+  if(!box || !loggedInIdentity) return;
+  const log = loadMyAttendanceLog();
+  const entries = (log[myLogKey(CURRENT_COURSE, loggedInIdentity.id)] || []).slice().sort((a,b)=> b.confirmedAt - a.confirmedAt);
+  if(!entries.length){
+    box.innerHTML = '<p class="hint">لا يوجد أي تأكيد حضور مُرسَل من هذا الجهاز بعد.</p>';
+    return;
+  }
+  box.innerHTML = `
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>المقرر</th><th>الكود</th><th>وقت التأكيد</th><th></th></tr></thead>
+        <tbody>${entries.map((r,i)=>`<tr><td class="mono">${i+1}</td><td>${escapeHtml(courseLabel(r.course))}</td><td class="mono">${escapeHtml(String(r.code))}</td><td>${new Date(r.confirmedAt).toLocaleString('ar-SA')}</td><td><button class="btn small secondary" data-my-att-idx="${i}">تنزيل Excel</button></td></tr>`).join('')}</tbody>
+      </table>
+    </div>`;
+  box.querySelectorAll('[data-my-att-idx]').forEach(btn=>{
+    btn.addEventListener('click', ()=> downloadAttendanceXlsxFor(entries[Number(btn.dataset.myAttIdx)]));
+  });
+}
+
 /* ---------- normalization & grading ---------- */
 function normalize(s){
   let x = String(s||'').trim();
@@ -999,7 +1309,6 @@ function buildSetup(){
   buildLectureSeg();
 
   refreshInstWeekOptions();
-  buildAttAdminSelectors();
 }
 
 function refreshInstWeekOptions(){
@@ -1009,6 +1318,8 @@ function refreshInstWeekOptions(){
 function renderIdentityBanner(){
   if(!loggedInIdentity) return;
   el('setupName').textContent = loggedInIdentity.name;
+  const courseEl = el('setupCourse');
+  if(courseEl) courseEl.textContent = courseLabel(CURRENT_COURSE);
   el('setupSection').textContent = loggedInIdentity.sectionLabel;
   el('setupId').textContent = loggedInIdentity.id;
 }
@@ -1074,10 +1385,12 @@ function findTraineeById(username){
   // Login by training ID only. We search every section's roster in order,
   // so a trainee whose ID happens to appear in more than one section list
   // (a known data duplicate — see id 446158874) is matched to the first
-  // section that lists it.
+  // section that lists it. Which roster we search depends on the course
+  // chosen on the course-select screen.
   const id = normalizeDigitsInput(username);
   if(!id) return null;
-  for(const sec of SECTIONS){
+  const sections = CURRENT_COURSE === 'aca' ? ACA_SECTIONS : SECTIONS;
+  for(const sec of sections){
     const student = sec.students.find(st=>st.id === id);
     if(student) return { id: student.id, name: student.name, sectionCode: sec.code, sectionLabel: sec.label };
   }
@@ -1093,8 +1406,11 @@ function attemptLogin(){
       errorEl.hidden = true;
       el('loginUsername').value = '';
       el('loginPassword').value = '';
+      applyCourseVisibility();
       refreshInstWeekOptions();
-      buildAttAdminSelectors();
+      buildAttSectionDateSelectors();
+      const overrideDisplay = el('attOverrideCodeDisplay');
+      if(overrideDisplay) overrideDisplay.textContent = computeDailyOverrideCode(new Date());
       renderAttendanceSessionBanner();
       showView('view-instructor');
     }else{
@@ -1108,11 +1424,15 @@ function attemptLogin(){
     loggedInIdentity = identity;
     state.sectionCode = identity.sectionCode;
     state.studentId = identity.id;
-    savePrefs({ studentId: identity.id, weekIndex: state.weekIndex, lectureIndex: state.lectureIndex });
+    if(CURRENT_COURSE !== 'aca'){
+      savePrefs({ studentId: identity.id, weekIndex: state.weekIndex, lectureIndex: state.lectureIndex });
+    }
     errorEl.hidden = true;
     el('loginPassword').value = '';
+    applyCourseVisibility();
     renderIdentityBanner();
     resetAttendanceUI();
+    showTraineeChoice();
     showView('view-setup');
   }else{
     errorEl.textContent = 'الرقم التدريبي غير مسجّل في قائمة المتدربين. تأكد من كتابته بدقة.';
@@ -1124,10 +1444,17 @@ function logout(){
   loggedInIdentity = null;
   state.sectionCode = null;
   state.studentId = null;
+  attGateOverrideActive = false;
   el('loginPassword').value = '';
   el('loginError').hidden = true;
   clearInterval(attCountdownInterval);
   showView('view-login');
+}
+
+function backToCourseSelect(){
+  logout();
+  CURRENT_COURSE = null;
+  showView('view-course');
 }
 
 /* ---------- exam lock (best-effort: a web page cannot truly block
@@ -1674,7 +2001,6 @@ async function useCapability(name){
    ثم يكتبه كل متدرب حاضر في نافذته الخاصة؛ ساعة كل جهاز تتحقق محليًا من الوقت. عند
    التجميع لاحقًا، يقارن حساب المسؤول توقيت كل تأكيد بسجل الجلسات المحفوظ في متصفحه
    (بنفس أسلوب حفظ التفضيلات المستخدم في بقية النموذج) لتمييز من أكّد ضمن الوقت. ---------- */
-let attAdminState = { weekIndex: null, lectureIndex: null };
 const ATTENDANCE_CODE_PREFIX = 'NETATT1';
 const ATTENDANCE_WINDOW_SECONDS = 30;
 const ATTENDANCE_GRACE_SECONDS = 15; // مهلة إضافية لبطء الكتابة/الشبكة عند تأكيد المتدرب
@@ -1704,41 +2030,50 @@ function formatSeconds(totalSeconds){
   return `${mm}:${ss}`;
 }
 
-/* --- admin: week/lecture pickers for a new attendance session --- */
-function buildAttAdminSelectors(){
-  const weekSelect = el('attWeekSelect');
-  if(!weekSelect) return;
-  weekSelect.innerHTML = el('weekSelect').innerHTML;
-  if(!attAdminState.weekIndex || !WEEKS.some(w=>w.index===attAdminState.weekIndex)){
-    attAdminState.weekIndex = WEEKS[0].index;
-  }
-  weekSelect.value = attAdminState.weekIndex;
-  weekSelect.onchange = ()=>{
-    attAdminState.weekIndex = Number(weekSelect.value);
-    attAdminState.lectureIndex = null;
-    buildAttLectureSeg();
-  };
-  buildAttLectureSeg();
+/* --- admin: section/date pickers for a new attendance session (both courses use
+   the same شعبة/تاريخ model now — SRWE was converted from the old أسبوع/محاضرة
+   model to match the real per-section schedule in the instructor's master file) --- */
+let attAcaAdminState = { sectionCode: null, date: null };
+let attSrweAdminState = { sectionCode: null, date: null };
 
-  const reportWeek = el('attReportWeek');
-  if(reportWeek) reportWeek.innerHTML = el('weekSelect').innerHTML;
+function attAdminStateForCourse(course){
+  return course === 'aca' ? attAcaAdminState : attSrweAdminState;
 }
 
-function buildAttLectureSeg(){
-  const seg = el('attLectureSeg');
-  if(!seg) return;
-  const week = WEEKS.find(w=>w.index===attAdminState.weekIndex) || WEEKS[0];
-  if(!attAdminState.lectureIndex || !week.lectures.some(l=>l.index===attAdminState.lectureIndex)){
-    attAdminState.lectureIndex = week.lectures[0].index;
+function buildAttSectionDateSelectors(){
+  const course = CURRENT_COURSE === 'aca' ? 'aca' : 'srwe';
+  const sections = sectionsForCourse(course);
+  const st = attAdminStateForCourse(course);
+  const secSelect = el('attAcaSectionSelect');
+  if(!secSelect) return;
+  secSelect.innerHTML = sections.map(s=>`<option value="${s.code}">${escapeHtml(s.label)}</option>`).join('');
+  if(!st.sectionCode || !sections.some(s=>s.code===st.sectionCode)){
+    st.sectionCode = sections[0].code;
   }
-  seg.innerHTML = week.lectures.map(l=>`<button type="button" class="chip-btn" data-lecture="${l.index}">المحاضرة ${l.index}</button>`).join('');
-  seg.querySelectorAll('.chip-btn').forEach(btn=>{
-    btn.setAttribute('aria-pressed', String(Number(btn.dataset.lecture)===attAdminState.lectureIndex));
-    btn.addEventListener('click', ()=>{
-      attAdminState.lectureIndex = Number(btn.dataset.lecture);
-      seg.querySelectorAll('.chip-btn').forEach(b=>b.setAttribute('aria-pressed', String(b===btn)));
-    });
-  });
+  secSelect.value = st.sectionCode;
+  secSelect.onchange = ()=>{
+    st.sectionCode = secSelect.value;
+    st.date = null;
+    buildAttDateSelect();
+  };
+  buildAttDateSelect();
+}
+
+function buildAttDateSelect(){
+  const course = CURRENT_COURSE === 'aca' ? 'aca' : 'srwe';
+  const sections = sectionsForCourse(course);
+  const st = attAdminStateForCourse(course);
+  const dateSelect = el('attAcaDateSelect');
+  if(!dateSelect) return;
+  const sec = sectionByCodeForCourse(st.sectionCode, course) || sections[0];
+  dateSelect.innerHTML = sec.dates.map((d,i)=>`<option value="${d}">${d}</option>`).join('');
+  if(!st.date || !sec.dates.includes(st.date)){
+    // افتراضيًا: أول تاريخ لم يُؤخذ له تحضير بعد بحسب سجل الجلسات المحفوظ محليًا (وإلا أول تاريخ في القائمة)
+    const taken = new Set(attendanceSessions.filter(s=>(s.course||'srwe')===course && s.section===sec.code).map(s=>s.date));
+    st.date = sec.dates.find(d=>!taken.has(d)) || sec.dates[0];
+  }
+  dateSelect.value = st.date;
+  dateSelect.onchange = ()=>{ st.date = dateSelect.value; };
 }
 
 /* --- admin: start / stop the 30-second attendance session (full admin control) --- */
@@ -1765,22 +2100,25 @@ function renderAttendanceSessionBanner(){
 function renderAttendanceSessionLog(){
   const logEl = el('attSessionLog');
   if(!logEl) return;
-  const recent = attendanceSessions.slice(-5).reverse();
+  const relevant = attendanceSessions.filter(s=> (s.course||'srwe') === (CURRENT_COURSE||'srwe'));
+  const recent = relevant.slice(-5).reverse();
   if(!recent.length){ logEl.textContent = ''; return; }
   logEl.textContent = 'آخر الجلسات: ' + recent.map(s=>{
     const t = new Date(s.startAt).toLocaleTimeString('ar-SA');
-    return `أسبوع ${s.week}/محاضرة ${s.lecture} — كود ${s.code} — ${t}`;
+    return `شعبة ${s.section} — ${s.date} — كود ${s.code} — ${t}`;
   }).join(' | ');
 }
 
 function startAttendanceSession(){
-  const week = attAdminState.weekIndex;
-  const lecture = attAdminState.lectureIndex;
-  if(!week || !lecture) return;
   const code = genAttendanceCode();
   const startAt = Date.now();
   const endAt = startAt + ATTENDANCE_WINDOW_SECONDS * 1000;
-  activeAttendanceSession = { id: String(startAt), week, lecture, code, startAt, endAt };
+  const course = CURRENT_COURSE === 'aca' ? 'aca' : 'srwe';
+  const st = attAdminStateForCourse(course);
+  const sectionCode = st.sectionCode;
+  const date = st.date;
+  if(!sectionCode || !date) return;
+  activeAttendanceSession = { id: String(startAt), course, section: sectionCode, date, code, startAt, endAt };
   attendanceSessions.push(activeAttendanceSession);
   saveAttendanceSessions();
   renderAttendanceSessionBanner();
@@ -1810,7 +2148,84 @@ function stopAttendanceSessionNow(){
   renderAttendanceSessionBanner();
 }
 
-/* --- trainee: confirm attendance with the code announced by the admin --- */
+/* --- جدول مواعيد المحاضرات الأسبوعية الثابتة لكل شعبة (يوم الأسبوع + الوقت) ----------
+   يُستخدم فقط لإظهار/إخفاء خيار "تحضير" للمتدرب — لا علاقة له بمطابقة كود التحضير
+   نفسه (تلك تتم لاحقًا عبر جلسات المسؤول كما هو موضح أعلاه). ساعة كل جهاز تتحقق
+   محليًا من الوقت، بنفس فلسفة بقية النموذج بلا خادم خلفي. الشعب العملية تجتمع
+   مرتين أسبوعيًا في يومين/وقتين مختلفين، فلها أكثر من موعد واحد. أيام الأسبوع حسب
+   Date.getDay(): 0=الأحد 1=الاثنين 2=الثلاثاء 3=الأربعاء 4=الخميس 5=الجمعة 6=السبت. */
+const SECTION_SCHEDULE = {
+  '63854': [{ day:0, h:7,  m:30 }],
+  '63857': [{ day:0, h:9,  m:15 }],
+  '74306': [{ day:0, h:11, m:0  }],
+  '63856': [{ day:2, h:7,  m:30 }, { day:3, h:9,  m:15 }],
+  '63858': [{ day:2, h:9,  m:15 }, { day:3, h:7,  m:30 }],
+  '74307': [{ day:1, h:11, m:0  }, { day:3, h:11, m:0  }],
+  '63905': [{ day:2, h:11, m:0  }],
+  '63912': [{ day:1, h:13, m:0  }]
+};
+const ATTENDANCE_GATE_WINDOW_MIN = 15;
+
+/* رمز تجاوز يومي: مُشتق فقط من تاريخ اليوم (بلا أي مزامنة)، فيحسبه جهاز المحاضر
+   وجهاز المتدرب كلاهما بنفس الطريقة ويتطابقان تلقائيًا دون خادم خلفي. يتغيّر كل
+   يوم تلقائيًا — يعرضه المحاضر في لوحة "تحضير المتدربين"، ويُدخله أي متدرب يحتاج
+   تحضيرًا خارج نافذة محاضرته المعتادة (مثل هذا الحساب التجريبي نفسه، أو حالة
+   استثنائية يقررها المحاضر). ---------- */
+function computeDailyOverrideCode(date){
+  const d = date.getDate(), m = date.getMonth() + 1, y = date.getFullYear();
+  const n = (d * 97 + m * 131 + y * 7) % 10000;
+  return String(n).padStart(4, '0');
+}
+
+let attGateOverrideActive = false;
+
+function sectionCodesForGate(identity, course){
+  if(!identity) return [];
+  if(course === 'aca') return [identity.sectionCode];
+  const sec = srweSectionByCode(identity.sectionCode);
+  const codes = [identity.sectionCode];
+  if(sec && sec.pairCode) codes.push(sec.pairCode);
+  return codes;
+}
+
+function isAttendanceGateOpen(identity, course, now){
+  const codes = sectionCodesForGate(identity, course);
+  const minutesNow = now.getHours() * 60 + now.getMinutes();
+  return codes.some(code => (SECTION_SCHEDULE[code] || []).some(entry=>{
+    if(now.getDay() !== entry.day) return false;
+    const start = entry.h * 60 + entry.m;
+    return minutesNow >= start && minutesNow <= start + ATTENDANCE_GATE_WINDOW_MIN;
+  }));
+}
+
+function applyAttendanceGate(){
+  const closedBox = el('attGateClosed');
+  const openForm = el('attGateOpenForm');
+  if(!closedBox || !openForm) return;
+  const course = CURRENT_COURSE === 'aca' ? 'aca' : 'srwe';
+  const open = attGateOverrideActive || isAttendanceGateOpen(loggedInIdentity, course, new Date());
+  closedBox.hidden = open;
+  openForm.hidden = !open;
+}
+
+function submitAttendanceOverride(){
+  const input = el('attOverrideInput');
+  const errorEl = el('attOverrideError');
+  const code = normalizeDigitsInput(input ? input.value : '');
+  if(code && code === computeDailyOverrideCode(new Date())){
+    attGateOverrideActive = true;
+    if(errorEl) errorEl.hidden = true;
+    applyAttendanceGate();
+  }else{
+    if(errorEl) errorEl.hidden = false;
+  }
+}
+
+/* --- trainee: confirm attendance with the code announced by the admin ---
+   ملاحظة مهمة (إصلاح): لا نعتمد إطلاقًا على أي أسبوع/محاضرة يختارها المتدرب في
+   شاشة الإعداد — فتلك القائمة تخص اختبار الترجمة فقط وقد لا تُطابق المحاضرة
+   الحالية فعلاً (وهذا كان سبب فشل رصد الحضور سابقًا). الكود وحده هو الذي يحدّد
+   المحاضرة، عبر مطابقته لاحقًا بجلسة المسؤول المخزَّنة. ---------- */
 function resetAttendanceUI(){
   lastAttendanceRecord = null;
   const codeInput = el('attCodeInput');
@@ -1821,6 +2236,22 @@ function resetAttendanceUI(){
   if(statusEl) statusEl.hidden = true;
   const dlBtn = el('attDownloadBtn');
   if(dlBtn) dlBtn.hidden = true;
+}
+
+/* قيد الجهاز: يمنع تحضير متدرب مختلف من نفس الجهاز/المتصفح خلال ساعة واحدة —
+   بحيث يستطيع كل متدرب تحضير نفسه فقط من جهازه، ولا يمكن تمرير الجهاز لتحضير
+   زملاء غير حاضرين فعليًا. تحضير نفس المتدرب مرة أخرى من نفس الجهاز مسموح دائمًا. */
+const ATT_DEVICE_LOCK_KEY = 'nettermquiz.attendance.devicelock.v1';
+const ATT_DEVICE_LOCK_MS = 60 * 60 * 1000;
+
+function loadDeviceLock(){
+  try{
+    const raw = localStorage.getItem(ATT_DEVICE_LOCK_KEY);
+    return raw ? JSON.parse(raw) : null;
+  }catch(e){ return null; }
+}
+function saveDeviceLock(lock){
+  try{ localStorage.setItem(ATT_DEVICE_LOCK_KEY, JSON.stringify(lock)); }catch(e){}
 }
 
 function confirmAttendance(){
@@ -1838,24 +2269,33 @@ function confirmAttendance(){
     errorEl.hidden = false;
     return;
   }
+  const lock = loadDeviceLock();
+  if(lock && lock.studentId !== loggedInIdentity.id && (Date.now() - lock.at) < ATT_DEVICE_LOCK_MS){
+    const minutesLeft = Math.max(1, Math.ceil((ATT_DEVICE_LOCK_MS - (Date.now() - lock.at)) / 60000));
+    errorEl.textContent = `تم تحضير متدرب آخر من هذا الجهاز قبل قليل. كل متدرب يجب أن يؤكد حضوره من جهازه الخاص — يمكن تحضير متدرب مختلف من نفس الجهاز بعد ${minutesLeft} دقيقة تقريبًا.`;
+    errorEl.hidden = false;
+    return;
+  }
   lastAttendanceRecord = {
     studentId: loggedInIdentity.id,
     name: loggedInIdentity.name,
     sectionCode: loggedInIdentity.sectionCode,
-    week: state.weekIndex,
-    lecture: state.lectureIndex,
     code,
-    confirmedAt: Date.now()
+    confirmedAt: Date.now(),
+    course: CURRENT_COURSE || 'srwe'
   };
+  saveDeviceLock({ studentId: loggedInIdentity.id, at: lastAttendanceRecord.confirmedAt });
+  recordMyAttendance(lastAttendanceRecord);
   statusEl.hidden = false;
   el('attDownloadBtn').hidden = false;
+  renderMyAttendanceLog();
 }
 
 function buildAttendanceWorkbook(record){
   const wb = XLSX.utils.book_new();
   const rows = [
-    ['المفتاح','الرقم التدريبي','الاسم','رمز الشعبة','الأسبوع','المحاضرة','الكود','طابع زمني للتأكيد','وقت التأكيد'],
-    [ATTENDANCE_CODE_PREFIX, record.studentId, record.name, record.sectionCode, record.week, record.lecture, record.code, record.confirmedAt, new Date(record.confirmedAt).toLocaleString('ar-SA')]
+    ['المفتاح','الرقم التدريبي','الاسم','رمز الشعبة','الكود','طابع زمني للتأكيد','وقت التأكيد','المقرر'],
+    [ATTENDANCE_CODE_PREFIX, record.studentId, record.name, record.sectionCode, record.code, record.confirmedAt, new Date(record.confirmedAt).toLocaleString('ar-SA'), record.course || 'srwe']
   ];
   const ws = XLSX.utils.aoa_to_sheet(rows);
   XLSX.utils.book_append_sheet(wb, ws, 'تحضير');
@@ -1864,26 +2304,20 @@ function buildAttendanceWorkbook(record){
 
 function downloadAttendanceXlsx(){
   if(!lastAttendanceRecord) return;
-  if(typeof XLSX === 'undefined'){
-    alert('تعذر تحميل مكتبة Excel (تأكد من اتصالك بالإنترنت).');
-    return;
-  }
-  try{
-    const wb = buildAttendanceWorkbook(lastAttendanceRecord);
-    const filename = `تحضير_${lastAttendanceRecord.studentId}_اسبوع${lastAttendanceRecord.week}_محاضرة${lastAttendanceRecord.lecture}.xlsx`;
-    XLSX.writeFile(wb, filename);
-  }catch(e){
-    alert('تعذر تنزيل ملف تأكيد الحضور.');
-  }
+  downloadAttendanceXlsxFor(lastAttendanceRecord);
 }
 
-/* --- admin: compile the attendance/absence report from uploaded confirmation files --- */
-let uploadedAttendanceMap = {};
-let uploadedAttendanceFileNames = new Set();
+/* --- admin: compile the attendance/absence report from uploaded confirmation files ---
+   كل تأكيد مرفوع يحمل فقط (الرقم التدريبي، الكود، وقت التأكيد) — بلا أسبوع/محاضرة.
+   نطابق كل تأكيد بجلسات هذا الجهاز المخزَّنة (attendanceSessions) بحسب الكود ونافذة
+   الوقت، ونأخذ الأسبوع/المحاضرة من الجلسة المطابقة نفسها — وليس من تخمين المتدرب. --- */
+let uploadedAttendanceMapSrwe = {};
+let uploadedAttendanceFileNamesSrwe = new Set();
 
-async function handleAttendanceXlsxUpload(fileList){
+async function handleSrweAttendanceXlsxUpload(fileList){
   const files = Array.from(fileList || []);
   let readCount = 0;
+  let skippedOtherCourse = 0;
   for(const file of files){
     try{
       const buf = await file.arrayBuffer();
@@ -1894,128 +2328,377 @@ async function handleAttendanceXlsxUpload(fileList){
       const dataRow = rows.find(r => String(r[0]).trim() === ATTENDANCE_CODE_PREFIX);
       if(!dataRow) continue;
       const studentId = String(dataRow[1]).trim();
+      const name = String(dataRow[2] || '').trim();
       const sectionCode = String(dataRow[3]).trim();
-      const week = Number(dataRow[4]);
-      const lecture = Number(dataRow[5]);
-      const code = String(dataRow[6]).trim();
-      const confirmedAt = Number(dataRow[7]);
-      if(!studentId || !sectionCode || !week || !lecture || !code) continue;
-      if(!uploadedAttendanceMap[studentId]) uploadedAttendanceMap[studentId] = { sectionCode, lectures:{} };
-      uploadedAttendanceMap[studentId].sectionCode = sectionCode;
-      uploadedAttendanceMap[studentId].lectures[`${week}_${lecture}`] = { week, lecture, code, confirmedAt };
-      uploadedAttendanceFileNames.add(file.name);
+      const code = String(dataRow[4]).trim();
+      const confirmedAt = Number(dataRow[5]);
+      const course = String(dataRow[7] || 'srwe').trim() || 'srwe';
+      if(!studentId || !sectionCode || !code || !confirmedAt) continue;
+      if(course !== 'srwe'){ skippedOtherCourse++; continue; } // ملف تحضير من مقرر آخر — تجاهله هنا
+      if(!uploadedAttendanceMapSrwe[studentId]) uploadedAttendanceMapSrwe[studentId] = { sectionCode, name, confirmations: [] };
+      uploadedAttendanceMapSrwe[studentId].sectionCode = sectionCode;
+      const already = uploadedAttendanceMapSrwe[studentId].confirmations.some(c=> c.code===code && c.confirmedAt===confirmedAt);
+      if(!already) uploadedAttendanceMapSrwe[studentId].confirmations.push({ code, confirmedAt });
+      uploadedAttendanceFileNamesSrwe.add(file.name);
       readCount++;
     }catch(e){ /* تجاهل الملفات غير القابلة للقراءة */ }
   }
   const status = el('attXlsxUploadStatus');
   if(status){
     status.hidden = false;
-    status.textContent = `تم قراءة ${readCount} ملف من أصل ${files.length} بنجاح — إجمالي ملفات التحضير المرفوعة حتى الآن: ${uploadedAttendanceFileNames.size}.`;
+    status.textContent = `تم قراءة ${readCount} ملف من أصل ${files.length} بنجاح — إجمالي ملفات التحضير المرفوعة حتى الآن: ${uploadedAttendanceFileNamesSrwe.size}.` + (skippedOtherCourse ? ` (تم تجاهل ${skippedOtherCourse} ملف يخص مقررًا آخر)` : '');
   }
 }
 
-function isAttendanceValid(week, lecture, code, confirmedAt){
-  return attendanceSessions.some(s =>
-    s.week === week && s.lecture === lecture && String(s.code) === String(code) &&
-    confirmedAt >= s.startAt && confirmedAt <= (s.endAt + ATTENDANCE_GRACE_SECONDS * 1000)
+function findMatchingSession(confirmation, course){
+  const wantCourse = course || 'srwe';
+  const candidates = attendanceSessions.filter(s =>
+    (s.course||'srwe') === wantCourse &&
+    String(s.code) === String(confirmation.code) &&
+    confirmation.confirmedAt >= s.startAt &&
+    confirmation.confirmedAt <= (s.endAt + ATTENDANCE_GRACE_SECONDS * 1000)
   );
+  if(!candidates.length) return null;
+  candidates.sort((a,b)=> Math.abs(confirmation.confirmedAt - a.startAt) - Math.abs(confirmation.confirmedAt - b.startAt));
+  return candidates[0];
 }
 
-function compileAttendanceWeek(map, weekIndex){
-  const week = WEEKS.find(w=>w.index===weekIndex);
-  const lecIndexes = week.lectures.map(l=>l.index);
-  const bySection = SECTIONS.map(sec=>{
+/* --- compile a full section/date attendance report for a course (SRWE was
+   converted from the old أسبوع/محاضرة abstraction to this same model used by
+   ACA, since the instructor's master file has real per-section schedules —
+   including twice-weekly practical sections — that a shared week/lecture
+   number could not represent). --- */
+function compileSectionDateCourse(map, course){
+  const sections = sectionsForCourse(course);
+  // نحسب unmatchedCount مرّة واحدة فقط لكل تأكيد مرفوع (وليس مرة لكل شعبة ينتمي
+  // إليها المتدرب) — وإلا فمتدرب ينتمي لشعبتين (نظري وعملي، كما في مقرر التوجيه
+  // والتحويل) يُحتسب تأكيده غير المطابَق مرتين بدل مرة.
+  let unmatchedCount = 0;
+  Object.keys(map).forEach(studentId=>{
+    const confirmations = (map[studentId] && map[studentId].confirmations) || [];
+    confirmations.forEach(c=>{
+      const session = findMatchingSession(c, course);
+      if(!session){
+        const codeKnown = attendanceSessions.some(s=> (s.course||'srwe')===course && String(s.code) === String(c.code));
+        if(!codeKnown) unmatchedCount++;
+      }
+    });
+  });
+  const bySection = sections.map(sec=>{
+    const processedDates = sec.dates.filter(d=>
+      attendanceSessions.some(s=> (s.course||'srwe')===course && s.section===sec.code && s.date===d)
+    );
     const rows = sec.students.map(st=>{
       const rec = map[st.id];
-      const cells = lecIndexes.map(li=>{
-        const entry = rec && rec.lectures[`${weekIndex}_${li}`];
-        if(!entry) return { state:'absent' };
-        const valid = isAttendanceValid(weekIndex, li, entry.code, entry.confirmedAt);
-        return { state: valid ? 'present' : 'unverified', code: entry.code, confirmedAt: entry.confirmedAt };
+      const confirmations = (rec && rec.confirmations) || [];
+      const matched = confirmations.map(c=>({ c, session: findMatchingSession(c, course) }));
+      const cells = sec.dates.map((d, idx)=>{
+        const historical = st.history[idx];
+        if(historical !== null && historical !== undefined) return { state:'historical', text: historical };
+        if(processedDates.includes(d)){
+          const hit = matched.find(m=> m.session && m.session.section===sec.code && m.session.date===d);
+          return hit ? { state:'present' } : { state:'absent' };
+        }
+        return { state:'blank' };
       });
-      const presentCount = cells.filter(c=>c.state==='present').length;
-      return { id: st.id, name: st.name, cells, presentCount, totalLectures: lecIndexes.length };
+      return { id: st.id, name: st.name, cells };
     });
-    return { section: sec, rows };
+    return { section: sec, rows, processedDates };
   });
-  return { weekIndex, lecIndexes, bySection };
+  return { bySection, unmatchedCount };
 }
+function compileAcaAll(map){ return compileSectionDateCourse(map, 'aca'); }
+function compileSrweAll(map){ return compileSectionDateCourse(map, 'srwe'); }
 
-function attendanceCellHtml(cell){
+function acaCellHtml(cell){
   if(cell.state === 'present') return `<span class="status-pill ok">✓ حاضر</span>`;
-  if(cell.state === 'unverified') return `<span class="status-pill warn" title="تم استلام كود (${escapeHtml(cell.code)}) لكنه لا يطابق أي جلسة تحضير محفوظة على هذا الجهاز">⚠ غير مؤكد</span>`;
-  return `<span class="status-pill bad">✗ غائب</span>`;
+  if(cell.state === 'absent') return `<span class="status-pill bad">✗ غائب</span>`;
+  if(cell.state === 'historical'){
+    if(cell.text === 'حاضر') return `<span class="status-pill ok">✓ حاضر</span>`;
+    if(cell.text === 'غائب') return `<span class="status-pill bad">✗ غائب</span>`;
+    return `<span class="status-pill warn">${escapeHtml(String(cell.text))}</span>`;
+  }
+  return `<span class="absent-cell">—</span>`;
 }
 
-function renderAttendanceResults(compiled){
-  const box = el('attendanceResults');
+function renderSectionDateResults(compiled, course){
+  const boxId = course === 'aca' ? 'attendanceResultsAca' : 'attendanceResultsSrwe';
+  const exportCardId = course === 'aca' ? 'acaExportCard' : 'srweExportCard';
+  const xlsxAttr = course === 'aca' ? 'data-aca-xlsx-section' : 'data-srwe-xlsx-section';
+  const box = el(boxId);
   if(!box) return;
-  const parts = compiled.bySection.map(({section, rows})=>{
+  const courseNoun = course === 'aca' ? 'مقرر تطبيقات الحاسب المتقدمة' : 'مقرر التوجيه والتحويل 1';
+  const parts = compiled.bySection.map(({section, rows, processedDates})=>{
     const head = [`<th>#</th>`, `<th>الرقم التدريبي</th>`, `<th>الاسم</th>`]
-      .concat(compiled.lecIndexes.map(li=>`<th>محاضرة ${li}</th>`))
-      .concat([`<th>إجمالي الحضور</th>`]).join('');
+      .concat(section.dates.map(d=>`<th>${d}</th>`)).join('');
     const body = rows.map((r,i)=>{
-      const cells = r.cells.map(c=>`<td>${attendanceCellHtml(c)}</td>`).join('');
-      return `<tr><td class="mono">${i+1}</td><td class="mono">${r.id}</td><td>${escapeHtml(r.name)}</td>${cells}<td class="mono">${r.presentCount}/${r.totalLectures}</td></tr>`;
+      const cells = r.cells.map(c=>`<td>${acaCellHtml(c)}</td>`).join('');
+      return `<tr><td class="mono">${i+1}</td><td class="mono">${r.id}</td><td>${escapeHtml(r.name)}</td>${cells}</tr>`;
     }).join('');
     return `
       <div class="section-block card">
         <h3>${escapeHtml(section.label)}</h3>
-        <p class="section-sub">عدد المتدربين: ${rows.length}</p>
+        <p class="section-sub">عدد المتدربين: ${rows.length} — عدد التواريخ التي أُخذ لها تحضير عبر النظام حتى الآن: ${processedDates.length} من أصل ${section.dates.length}</p>
         <div class="table-wrap">
           <table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>
         </div>
         <div class="actions no-print">
-          <button class="btn small secondary" data-att-csv-section="${section.code}">تنزيل CSV لهذه الشعبة</button>
+          <button class="btn small secondary" ${xlsxAttr}="${section.code}">تنزيل Excel لهذه الشعبة (xlsx)</button>
         </div>
       </div>`;
   }).join('');
 
-  const toolbar = `
-    <div class="actions no-print" style="margin-top:18px">
-      <button class="btn small" id="attCsvAllBtn">تنزيل CSV لجميع الشعب</button>
-    </div>`;
+  const warn = compiled.unmatchedCount > 0
+    ? `<p class="notice">⚠ يوجد ${compiled.unmatchedCount} تأكيد حضور وارد برمز لا يطابق أي جلسة محفوظة على هذا الجهاز ل${courseNoun}. إن بدأت التحضير من جهاز آخر، نزّل سجل الجلسات من ذلك الجهاز ثم استورده أعلاه في بطاقة التحضير، ثم اضغط "تحديث تقرير الحضور" مجددًا.</p>`
+    : '';
 
-  box.innerHTML = parts + toolbar;
+  box.innerHTML = warn + parts;
 
-  box.querySelectorAll('[data-att-csv-section]').forEach(btn=>{
+  box.querySelectorAll(`[${xlsxAttr}]`).forEach(btn=>{
     btn.addEventListener('click', ()=>{
-      const sec = compiled.bySection.find(s=>s.section.code===btn.dataset.attCsvSection);
-      exportAttendanceCsv(compiled, [sec], `حضور_${sec.section.code}_الاسبوع${compiled.weekIndex}.csv`);
+      const code = btn.getAttribute(xlsxAttr);
+      const sec = compiled.bySection.find(s=>s.section.code===code);
+      exportSectionXlsx(sec);
     });
   });
-  const csvAll = el('attCsvAllBtn');
-  if(csvAll) csvAll.addEventListener('click', ()=> exportAttendanceCsv(compiled, compiled.bySection, `حضور_الاسبوع${compiled.weekIndex}.csv`));
-}
 
-function attendanceCellCsvText(cell){
-  if(cell.state === 'present') return 'حاضر';
-  if(cell.state === 'unverified') return 'غير مؤكد';
-  return 'غائب';
+  if(course === 'aca') lastAcaCompiled = compiled; else lastSrweCompiled = compiled;
+  const exportCard = el(exportCardId);
+  if(exportCard) exportCard.hidden = false;
 }
+function renderAcaAttendanceResults(compiled){ renderSectionDateResults(compiled, 'aca'); }
+function renderSrweAttendanceResults(compiled){ renderSectionDateResults(compiled, 'srwe'); }
 
-async function exportAttendanceCsv(compiled, sections, filename){
-  const rows = [];
-  rows.push(['القسم','الرقم التدريبي','الاسم', ...compiled.lecIndexes.map(li=>'محاضرة '+li), 'إجمالي الحضور']);
-  sections.forEach(sec=>{
-    sec.rows.forEach(r=>{
-      const cells = r.cells.map(attendanceCellCsvText);
-      rows.push([sec.section.label, r.id, r.name, ...cells, `${r.presentCount}/${r.totalLectures}`]);
+function exportSectionXlsx(sec){
+  const aoa = [['#','الرقم التدريبي','الاسم', ...sec.section.dates]];
+  sec.rows.forEach((r,i)=>{
+    const vals = r.cells.map(c=>{
+      if(c.state === 'historical') return c.text;
+      if(c.state === 'present') return 'حاضر';
+      if(c.state === 'absent') return 'غائب';
+      return '';
     });
+    aoa.push([i+1, r.id, r.name, ...vals]);
   });
-  const csv = '﻿' + rows.map(r=>r.map(csvEscape).join(',')).join('\r\n');
-  const downloads = await useCapability('downloads');
-  if(!downloads){
-    alert('التنزيل المباشر غير متاح في هذا العارض.');
+  downloadAoaAsXlsx(`حضور_${sec.section.code}.xlsx`, aoa, 'تحضير');
+}
+function exportAcaSectionXlsx(sec){ exportSectionXlsx(sec); }
+
+function downloadAoaAsXlsx(filename, sheetsOrAoa, maybeSheetName){
+  if(typeof XLSX === 'undefined'){
+    alert('تعذر تحميل مكتبة Excel (تأكد من اتصالك بالإنترنت).');
     return;
   }
   try{
-    await downloads.save({ filename, data: csv });
+    const wb = XLSX.utils.book_new();
+    // sheetsOrAoa: إما مصفوفة صفوف واحدة (aoa) + اسم ورقة واحد، أو مصفوفة [{name, aoa}, ...] لعدة أوراق
+    const sheets = Array.isArray(sheetsOrAoa[0]) ? [{ name: maybeSheetName || 'Sheet1', aoa: sheetsOrAoa }] : sheetsOrAoa;
+    sheets.forEach(s=>{
+      const ws = XLSX.utils.aoa_to_sheet(s.aoa);
+      XLSX.utils.book_append_sheet(wb, ws, String(s.name).slice(0,31));
+    });
+    XLSX.writeFile(wb, filename);
   }catch(e){
-    if(e && e.code === 'declined') return;
-    alert('تعذر حفظ ملف تقرير الحضور.');
+    alert('تعذر تنزيل ملف Excel.');
   }
 }
+
+/* --- admin: copy the local session log to/from another device the admin also
+   used (e.g. started attendance from a phone, then compiles the report on a
+   laptop) — a lightweight file exchange, same spirit as everything else here. */
+function downloadTextFile(filename, text, mime){
+  try{
+    const blob = new Blob([text], { type: mime || 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=> URL.revokeObjectURL(url), 4000);
+  }catch(e){
+    alert('تعذر تنزيل الملف.');
+  }
+}
+
+function exportSessionLogFile(){
+  const data = JSON.stringify({ exportedAt: Date.now(), sessions: attendanceSessions }, null, 2);
+  downloadTextFile(`سجل_جلسات_التحضير_${new Date().toISOString().slice(0,10)}.json`, data, 'application/json;charset=utf-8');
+}
+
+async function handleSessionLogImport(fileList){
+  const files = Array.from(fileList || []);
+  let importedCount = 0;
+  for(const file of files){
+    try{
+      const text = await file.text();
+      const data = JSON.parse(text);
+      const incoming = Array.isArray(data) ? data : (data.sessions || []);
+      incoming.forEach(s=>{
+        if(!s || !s.id) return;
+        if(!attendanceSessions.some(x=>x.id===s.id)){
+          attendanceSessions.push(s);
+          importedCount++;
+        }
+      });
+    }catch(e){ /* تجاهل الملفات غير الصالحة */ }
+  }
+  if(importedCount){
+    attendanceSessions.sort((a,b)=> a.startAt - b.startAt);
+    saveAttendanceSessions();
+  }
+  const status = el('attSessionImportStatus');
+  if(status){
+    status.hidden = false;
+    status.textContent = `تم استيراد ${importedCount} جلسة جديدة. إجمالي الجلسات المحفوظة على هذا الجهاز الآن: ${attendanceSessions.length}.`;
+  }
+  renderAttendanceSessionLog();
+}
+
+/* ---------- ACA (تطبيقات الحاسب المتقدمة) attendance report + master-file export ----------
+   خلافًا لمقرر التوجيه والتحويل، لا يوجد هنا "أسابيع/محاضرات" — بل تواريخ فعلية لكل شعبة
+   (كما في ملف الإكسل الذي زوّدنا به المحاضر)، ولكل شعبة أعمدة تواريخ مختلفة لأنها تلتقي
+   في يوم مختلف من الأسبوع. أول عمودين (وأحيانًا الثالث "ملغاة") يحملان بيانات تاريخية
+   أُدخلت يدويًا سلفًا في الملف الأصلي، ونحافظ عليها كما هي دون أي تغيير. أما التواريخ التي
+   لم تُؤخذ لها بيانات بعد فتبقى فارغة حتى يأخذ المحاضر تحضيرها فعليًا عبر هذا النظام. ---------- */
+let uploadedAttendanceMapAca = {};
+let uploadedAttendanceFileNamesAca = new Set();
+let lastAcaCompiled = null;
+let lastSrweCompiled = null;
+
+async function handleAcaAttendanceXlsxUpload(fileList){
+  const files = Array.from(fileList || []);
+  let readCount = 0;
+  let skippedOtherCourse = 0;
+  for(const file of files){
+    try{
+      const buf = await file.arrayBuffer();
+      const wb = XLSX.read(buf, { type:'array' });
+      const sheetName = wb.SheetNames.includes('تحضير') ? 'تحضير' : wb.SheetNames[0];
+      const ws = wb.Sheets[sheetName];
+      const rows = XLSX.utils.sheet_to_json(ws, { header:1 });
+      const dataRow = rows.find(r => String(r[0]).trim() === ATTENDANCE_CODE_PREFIX);
+      if(!dataRow) continue;
+      const studentId = String(dataRow[1]).trim();
+      const name = String(dataRow[2] || '').trim();
+      const sectionCode = String(dataRow[3]).trim();
+      const code = String(dataRow[4]).trim();
+      const confirmedAt = Number(dataRow[5]);
+      const course = String(dataRow[7] || '').trim();
+      if(!studentId || !sectionCode || !code || !confirmedAt) continue;
+      if(course !== 'aca'){ skippedOtherCourse++; continue; } // ملف تحضير من مقرر آخر — تجاهله هنا
+      if(!uploadedAttendanceMapAca[studentId]) uploadedAttendanceMapAca[studentId] = { sectionCode, name, confirmations: [] };
+      uploadedAttendanceMapAca[studentId].sectionCode = sectionCode;
+      const already = uploadedAttendanceMapAca[studentId].confirmations.some(c=> c.code===code && c.confirmedAt===confirmedAt);
+      if(!already) uploadedAttendanceMapAca[studentId].confirmations.push({ code, confirmedAt });
+      uploadedAttendanceFileNamesAca.add(file.name);
+      readCount++;
+    }catch(e){ /* تجاهل الملفات غير القابلة للقراءة */ }
+  }
+  const status = el('attXlsxUploadAcaStatus');
+  if(status){
+    status.hidden = false;
+    status.textContent = `تم قراءة ${readCount} ملف من أصل ${files.length} بنجاح — إجمالي ملفات التحضير المرفوعة حتى الآن: ${uploadedAttendanceFileNamesAca.size}.` + (skippedOtherCourse ? ` (تم تجاهل ${skippedOtherCourse} ملف يخص مقررًا آخر)` : '');
+  }
+}
+
+function colLetter(n){
+  let s = '';
+  while(n > 0){
+    const rem = (n - 1) % 26;
+    s = String.fromCharCode(65 + rem) + s;
+    n = Math.floor((n - 1) / 26);
+  }
+  return s;
+}
+
+/* --- rebuild a master workbook matching the instructor's original file exactly:
+   نفس العناوين المدمجة، نفس الترويسة، ونفس أعمدة الإجمالي الستة — بما فيها عمود
+   "إجمالي أيام التدريب المقررة (ثابت)" الذي يحمل رقمًا ثابتًا واحدًا فقط في صف أول
+   متدرب (تمامًا كما في الملف الأصلي)، وتشير إليه كل صيغة نسبة الغياب في كل الصفوف
+   بمرجع مطلق ($) — وهذا ليس خطأً، بل هو نفس أسلوب الملف الأصلي لعدد أيام التدريب
+   الثابت لكل شعبة. --- */
+function buildMasterWorkbookForCourse(compiled, course){
+  const wb = XLSX.utils.book_new();
+  compiled.bySection.forEach(({section, rows})=>{
+    const numDates = section.dates.length;
+    const totalCols = 2 + numDates + 6; // الرقم + الاسم + التواريخ + 6 أعمدة إجمالي
+    const headerRow = ['الرقم التدريبي','الاسم', ...section.dates, 'إجمالي الحضور','إجمالي الغياب','إجمالي التأخير','إجمالي الاستئذان','نسبة الغياب (%)','إجمالي أيام التدريب المقررة (ثابت)'];
+    const title = section.title || section.label;
+    const aoa = [ [title], headerRow ];
+    rows.forEach(r=>{
+      const dateVals = r.cells.map(c=>{
+        if(c.state === 'historical') return c.text;
+        if(c.state === 'present') return 'حاضر';
+        if(c.state === 'absent') return 'غائب';
+        return null;
+      });
+      const idVal = /^\d+$/.test(String(r.id)) ? Number(r.id) : r.id;
+      aoa.push([idVal, r.name, ...dateVals, null, null, null, null, null, null]);
+    });
+    const ws = XLSX.utils.aoa_to_sheet(aoa);
+    ws['!merges'] = [{ s:{r:0,c:0}, e:{r:0, c: totalCols-1} }];
+
+    const dateStartColIdx = 2; // C
+    const dateEndColIdx = 2 + numDates - 1;
+    const dateStartLetter = colLetter(dateStartColIdx + 1);
+    const dateEndLetter = colLetter(dateEndColIdx + 1);
+    const presentColIdx = dateEndColIdx + 1;
+    const absentColIdx = presentColIdx + 1;
+    const lateColIdx = absentColIdx + 1;
+    const excuseColIdx = lateColIdx + 1;
+    const pctColIdx = excuseColIdx + 1;
+    const totalDaysColIdx = pctColIdx + 1;
+    const presentLetter = colLetter(presentColIdx + 1);
+    const absentLetter = colLetter(absentColIdx + 1);
+    const lateLetter = colLetter(lateColIdx + 1);
+    const excuseLetter = colLetter(excuseColIdx + 1);
+    const pctLetter = colLetter(pctColIdx + 1);
+    const totalDaysLetter = colLetter(totalDaysColIdx + 1);
+
+    // العمود السادس (إجمالي أيام التدريب المقررة) يحمل قيمة واحدة فقط في صف أول
+    // متدرب (الصف 3) — وكل صيغ النسبة في كل الصفوف تشير لهذه الخلية الثابتة نفسها.
+    ws[`${totalDaysLetter}3`] = { t:'n', v: section.totalScheduledDays };
+
+    rows.forEach((r, i)=>{
+      const excelRow = i + 3; // الصف 1: العنوان، الصف 2: الترويسة، الصف 3 فصاعدًا: المتدربون
+      const rowRange = `${dateStartLetter}${excelRow}:${dateEndLetter}${excelRow}`;
+      ws[`${presentLetter}${excelRow}`] = { t:'n', f: `COUNTIF(${rowRange},"حاضر")` };
+      ws[`${absentLetter}${excelRow}`] = { t:'n', f: `COUNTIF(${rowRange},"غائب")` };
+      ws[`${lateLetter}${excelRow}`] = { t:'n', f: `COUNTIF(${rowRange},"متأخر")` };
+      ws[`${excuseLetter}${excelRow}`] = { t:'n', f: `COUNTIF(${rowRange},"مستأذن")` };
+      ws[`${pctLetter}${excelRow}`] = { f: `IF($${totalDaysLetter}$3=0,"",${absentLetter}${excelRow}/$${totalDaysLetter}$3)` };
+    });
+
+    XLSX.utils.book_append_sheet(wb, ws, (section.sheetName || section.code).slice(0,31));
+  });
+  return wb;
+}
+function buildAcaMasterWorkbook(compiled){ return buildMasterWorkbookForCourse(compiled, 'aca'); }
+function buildSrweMasterWorkbook(compiled){ return buildMasterWorkbookForCourse(compiled, 'srwe'); }
+
+function exportMasterWorkbookForCourse(course){
+  const compiled = course === 'aca' ? lastAcaCompiled : lastSrweCompiled;
+  if(!compiled){
+    alert('اضغط "تحديث تقرير الحضور" أولاً.');
+    return;
+  }
+  if(typeof XLSX === 'undefined'){
+    alert('تعذر تحميل مكتبة Excel (تأكد من اتصالك بالإنترنت).');
+    return;
+  }
+  try{
+    const wb = buildMasterWorkbookForCourse(compiled, course);
+    const namePart = course === 'aca' ? 'تطبيقات_الحاسب_المتقدمة' : 'التوجيه_والتحويل_1';
+    const filename = `تحضير_${namePart}_${new Date().toISOString().slice(0,10)}.xlsx`;
+    XLSX.writeFile(wb, filename);
+  }catch(e){
+    alert('تعذر تنزيل ملف الحضور المحدث.');
+  }
+}
+function exportAcaMasterWorkbook(){ exportMasterWorkbookForCourse('aca'); }
+function exportSrweMasterWorkbook(){ exportMasterWorkbookForCourse('srwe'); }
 
 /* ---------- instructor view ---------- */
 let uploadedXlsxMap = {};
@@ -2292,7 +2975,7 @@ let lastCompiled = null;
 
 /* ---------- view switching ---------- */
 function showView(name){
-  ['view-login','view-setup','view-quiz','view-results','view-instructor'].forEach(id=>{
+  ['view-course','view-login','view-setup','view-quiz','view-results','view-instructor'].forEach(id=>{
     el(id).hidden = (id !== name);
   });
   window.scrollTo({top:0, behavior:'instant'});
@@ -2311,6 +2994,10 @@ el('loginBtn').addEventListener('click', attemptLogin);
 el('loginUsername').addEventListener('keydown', (e)=>{ if(e.key === 'Enter') attemptLogin(); });
 el('loginPassword').addEventListener('keydown', (e)=>{ if(e.key === 'Enter') attemptLogin(); });
 el('logoutBtn').addEventListener('click', logout);
+el('choiceAttendanceBtn').addEventListener('click', chooseAttendance);
+el('choiceQuizBtn').addEventListener('click', chooseQuiz);
+el('quizBackBtn').addEventListener('click', showTraineeChoice);
+el('attBackBtn').addEventListener('click', showTraineeChoice);
 
 el('startBtn').addEventListener('click', ()=>{
   lastIdentity = loggedInIdentity;
@@ -2368,21 +3055,40 @@ el('backInstBtn').addEventListener('click', logout);
 el('attConfirmBtn').addEventListener('click', confirmAttendance);
 el('attCodeInput').addEventListener('keydown', (e)=>{ if(e.key === 'Enter') confirmAttendance(); });
 el('attDownloadBtn').addEventListener('click', downloadAttendanceXlsx);
+el('attOverrideBtn').addEventListener('click', submitAttendanceOverride);
+el('attOverrideInput').addEventListener('keydown', (e)=>{ if(e.key === 'Enter') submitAttendanceOverride(); });
 
 el('attStartBtn').addEventListener('click', startAttendanceSession);
 el('attStopBtn').addEventListener('click', stopAttendanceSessionNow);
 
-el('attXlsxUpload').addEventListener('change', (e)=>{
-  handleAttendanceXlsxUpload(e.target.files);
+el('attExportSessionsBtn').addEventListener('click', exportSessionLogFile);
+el('attImportSessions').addEventListener('change', (e)=>{
+  handleSessionLogImport(e.target.files);
 });
-el('attCompileBtn').addEventListener('click', ()=>{
-  const map = uploadedAttendanceMap;
-  const weekIndex = Number(el('attReportWeek').value);
+
+el('attXlsxUploadSrwe').addEventListener('change', (e)=>{
+  handleSrweAttendanceXlsxUpload(e.target.files);
+});
+el('attCompileBtnSrwe').addEventListener('click', ()=>{
+  const map = uploadedAttendanceMapSrwe;
   const studentsFound = Object.keys(map).length;
-  el('attParseInfo').textContent = `تم رصد ${uploadedAttendanceFileNames.size} ملف تحضير مرفوع — لعدد ${studentsFound} متدرب إجمالاً.`;
-  const compiled = compileAttendanceWeek(map, weekIndex);
-  renderAttendanceResults(compiled);
+  el('attParseInfo').textContent = `تم رصد ${uploadedAttendanceFileNamesSrwe.size} ملف تحضير مرفوع — لعدد ${studentsFound} متدرب إجمالاً.`;
+  const compiled = compileSrweAll(map);
+  renderSrweAttendanceResults(compiled);
 });
+el('srweExportMasterBtn').addEventListener('click', exportSrweMasterWorkbook);
+
+el('attXlsxUploadAca').addEventListener('change', (e)=>{
+  handleAcaAttendanceXlsxUpload(e.target.files);
+});
+el('attCompileBtnAca').addEventListener('click', ()=>{
+  const map = uploadedAttendanceMapAca;
+  const studentsFound = Object.keys(map).length;
+  el('attParseInfoAca').textContent = `تم رصد ${uploadedAttendanceFileNamesAca.size} ملف تحضير مرفوع — لعدد ${studentsFound} متدرب إجمالاً.`;
+  const compiled = compileAcaAll(map);
+  renderAcaAttendanceResults(compiled);
+});
+el('acaExportMasterBtn').addEventListener('click', exportAcaMasterWorkbook);
 
 el('xlsxUpload').addEventListener('change', (e)=>{
   handleXlsxUpload(e.target.files);
@@ -2407,9 +3113,13 @@ el('compileBtn').addEventListener('click', ()=>{
   }
 });
 
+el('courseSrweBtn').addEventListener('click', ()=> selectCourse('srwe'));
+el('courseAcaBtn').addEventListener('click', ()=> selectCourse('aca'));
+el('backToCourseBtn').addEventListener('click', backToCourseSelect);
+
 buildSetup();
 setLoginRole('trainee');
 if(prefs.studentId) el('loginUsername').value = prefs.studentId;
-showView('view-login');
+showView('view-course');
 </script>
 </body></html>
