@@ -591,7 +591,7 @@
     .wrap{max-width:100%;padding:0;}
     .card{box-shadow:none;border:1px solid #ccc;}
   }
-</style></head><body>
+</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 <div class="wrap" dir="rtl" lang="ar">
@@ -674,10 +674,10 @@
       <p class="hint" style="margin:0 0 12px"><button class="mode-link" id="attBackBtn" type="button">‹ رجوع</button></p>
       <h3 style="margin:0 0 8px;font-size:15px">✅ تأكيد الحضور — <span id="attCardCourseLabel"></span></h3>
       <p class="hint" id="attTodayDateLine" style="margin:0 0 6px"></p>
-      <p class="sub" id="attTraineeSub" style="margin:0 0 12px">عند إعلان المحاضر عن كود التحضير في القاعة، اكتبه هنا خلال ٣٠ ثانية (لا علاقة له باختيار الأسبوع/المحاضرة أعلاه — الكود نفسه يحدد المحاضرة).</p>
+      <p class="sub" id="attTraineeSub" style="margin:0 0 12px">عند إعلان المحاضر عن كود التحضير في القاعة، اكتبه هنا خلال دقيقة واحدة (٦٠ ثانية) (لا علاقة له باختيار الأسبوع/المحاضرة أعلاه — الكود نفسه يحدد المحاضرة).</p>
 
       <div id="attGateClosed" hidden>
-        <p class="notice">⏳ التحضير يظهر فقط مع بداية محاضرتك ولمدة 15 دقيقة بعدها. إن كنت تظن أن هذا خطأ، تحقق من موعد محاضرتك، أو اطلب من المحاضر رمز التجاوز.</p>
+        <p class="notice">⏳ التحضير يظهر فقط مع بداية محاضرتك ولمدة ساعة ونصف (90 دقيقة) بعدها. إن كنت تظن أن هذا خطأ، تحقق من موعد محاضرتك، أو اطلب من المحاضر رمز التجاوز.</p>
         <div class="field">
           <label for="attOverrideInput">رمز تجاوز الوقت (من المحاضر فقط)</label>
           <input type="text" id="attOverrideInput" inputmode="numeric" maxlength="4" placeholder="أدخله إن أعطاك إياه المحاضر" autocomplete="off">
@@ -698,6 +698,9 @@
         <div class="actions">
           <button class="btn secondary" id="attConfirmBtn" type="button">تأكيد الحضور الآن</button>
           <button class="btn secondary" id="attDownloadBtn" type="button" hidden>تنزيل تأكيد الحضور (Excel)</button>
+        </div>
+        <div class="actions" id="attHomeBtnWrap" hidden style="margin-top:6px">
+          <button class="btn" id="attHomeBtn" type="button">🏠 العودة إلى الشاشة الرئيسية (للدخول على الاختبار المفاجئ)</button>
         </div>
       </div>
       <div id="myAttendanceLogWrap" style="margin-top:20px">
@@ -836,7 +839,7 @@
 
     <div class="card" id="attAdminCard">
       <h3 style="margin:0 0 10px;font-size:16px">📋 تحضير المتدربين (Roll Call) — <span id="attAdminCourseLabel"></span></h3>
-      <p class="sub" style="margin:0 0 12px">اضغط "بدء التحضير" وأعلن الكود الظاهر أدناه بصوت مرتفع أو اعرضه على الشاشة. يُغلق التحضير تلقائيًا بعد ٣٠ ثانية، ولا يمكن فتحه من جديد إلا من حسابك.</p>
+      <p class="sub" style="margin:0 0 12px">اضغط "بدء التحضير" وأعلن الكود الظاهر أدناه بصوت مرتفع أو اعرضه على الشاشة. يُغلق التحضير تلقائيًا بعد دقيقة واحدة (٦٠ ثانية)، ولا يمكن فتحه من جديد إلا من حسابك.</p>
       <div id="attSelectorsSectionDate">
         <div class="field">
           <label for="attAcaSectionSelect">الشعبة</label>
@@ -849,13 +852,13 @@
       </div>
       <p class="hint">رمز تجاوز وقت التحضير لهذا اليوم (لإعطائه لأي متدرب يحتاج تحضيرًا خارج وقت محاضرته): <b id="attOverrideCodeDisplay" class="mono"></b></p>
       <div class="actions">
-        <button class="btn" id="attStartBtn" type="button">بدء التحضير الآن (٣٠ ثانية)</button>
+        <button class="btn" id="attStartBtn" type="button">بدء التحضير الآن (٦٠ ثانية)</button>
         <button class="btn secondary" id="attStopBtn" type="button" hidden>إنهاء التحضير الآن</button>
       </div>
       <div class="att-banner no-print" id="attAdminBanner" hidden>
         <div>كود التحضير لهذه الجلسة</div>
         <div class="att-code-big" id="attAdminCode">----</div>
-        <div class="att-countdown" id="attAdminCountdown">00:30</div>
+        <div class="att-countdown" id="attAdminCountdown">01:00</div>
       </div>
       <p class="att-session-log" id="attSessionLog"></p>
       <div class="field" style="margin-top:14px">
@@ -1173,8 +1176,8 @@ function applyCourseVisibility(){
   const traineeSub = el('attTraineeSub');
   if(traineeSub){
     traineeSub.textContent = isAca
-      ? 'عند إعلان المحاضر عن كود التحضير في القاعة، اكتبه هنا خلال ٣٠ ثانية.'
-      : 'عند إعلان المحاضر عن كود التحضير في القاعة، اكتبه هنا خلال ٣٠ ثانية — الكود نفسه هو من يحدد الأسبوع والمحاضرة تلقائيًا.';
+      ? 'عند إعلان المحاضر عن كود التحضير في القاعة، اكتبه هنا خلال دقيقة واحدة (٦٠ ثانية).'
+      : 'عند إعلان المحاضر عن كود التحضير في القاعة، اكتبه هنا خلال دقيقة واحدة (٦٠ ثانية) — الكود نفسه هو من يحدد الأسبوع والمحاضرة تلقائيًا.';
   }
   // admin (instructor) screen
   const attAdminCourseLabel = el('attAdminCourseLabel');
@@ -2037,14 +2040,14 @@ async function useCapability(name){
   }catch(e){ return null; }
 }
 
-/* ---------- attendance / roll-call (admin-controlled, 30-second window) ----------
+/* ---------- attendance / roll-call (admin-controlled, 60-second window) ----------
    لا يوجد خادم خلفي (backend) في هذا النموذج — إنه صفحة ثابتة. لذلك يعتمد "الإغلاق
-   التلقائي بعد 30 ثانية" على أن المسؤول يبدأ الجلسة ويُعلن الكود (بصوته أو على الشاشة)
+   التلقائي بعد 60 ثانية" على أن المسؤول يبدأ الجلسة ويُعلن الكود (بصوته أو على الشاشة)
    ثم يكتبه كل متدرب حاضر في نافذته الخاصة؛ ساعة كل جهاز تتحقق محليًا من الوقت. عند
    التجميع لاحقًا، يقارن حساب المسؤول توقيت كل تأكيد بسجل الجلسات المحفوظ في متصفحه
    (بنفس أسلوب حفظ التفضيلات المستخدم في بقية النموذج) لتمييز من أكّد ضمن الوقت. ---------- */
 const ATTENDANCE_CODE_PREFIX = 'NETATT1';
-const ATTENDANCE_WINDOW_SECONDS = 30;
+const ATTENDANCE_WINDOW_SECONDS = 60;
 const ATTENDANCE_GRACE_SECONDS = 15; // مهلة إضافية لبطء الكتابة/الشبكة عند تأكيد المتدرب
 const ATTENDANCE_STORE_KEY = 'nettermquiz.attendance.sessions.v1';
 
@@ -2118,7 +2121,7 @@ function buildAttDateSelect(){
   dateSelect.onchange = ()=>{ st.date = dateSelect.value; };
 }
 
-/* --- admin: start / stop the 30-second attendance session (full admin control) --- */
+/* --- admin: start / stop the 60-second attendance session (full admin control) --- */
 function renderAttendanceSessionBanner(){
   const banner = el('attAdminBanner');
   const startBtn = el('attStartBtn');
@@ -2206,7 +2209,7 @@ const SECTION_SCHEDULE = {
   '63905': [{ day:2, h:11, m:0  }],
   '63912': [{ day:1, h:13, m:0  }]
 };
-const ATTENDANCE_GATE_WINDOW_MIN = 15;
+const ATTENDANCE_GATE_WINDOW_MIN = 90;
 
 /* رمز تجاوز يومي: مُشتق فقط من تاريخ اليوم (بلا أي مزامنة)، فيحسبه جهاز المحاضر
    وجهاز المتدرب كلاهما بنفس الطريقة ويتطابقان تلقائيًا دون خادم خلفي. يتغيّر كل
@@ -2278,6 +2281,8 @@ function resetAttendanceUI(){
   if(statusEl) statusEl.hidden = true;
   const dlBtn = el('attDownloadBtn');
   if(dlBtn) dlBtn.hidden = true;
+  const homeWrap = el('attHomeBtnWrap');
+  if(homeWrap) homeWrap.hidden = true;
 }
 
 /* قيد الجهاز: يمنع تحضير متدرب مختلف من نفس الجهاز/المتصفح خلال ساعة واحدة —
@@ -2330,6 +2335,8 @@ function confirmAttendance(){
   recordMyAttendance(lastAttendanceRecord);
   statusEl.hidden = false;
   el('attDownloadBtn').hidden = false;
+  const homeWrap = el('attHomeBtnWrap');
+  if(homeWrap) homeWrap.hidden = false;
   renderMyAttendanceLog();
 }
 
@@ -2463,11 +2470,14 @@ function acaCellHtml(cell){
   return `<span class="absent-cell">—</span>`;
 }
 
-/* --- نافذة "المتدربون الذين لم يحضروا": لكل شعبة، تُحسب آخر تاريخ أُخذ له تحضير
-   فعليًا عبر النظام (آخر عنصر في processedDates، وهي مرتبة زمنيًا لأنها مُشتقة من
-   sec.dates)، ثم تُسرد أسماء/أرقام المتدربين الذين حالتهم في ذلك التاريخ تحديدًا
-   "غائب" (سواء غياب جديد رصده النظام، أو غياب تاريخي كان مُدخلاً سلفًا في الملف
-   الأصلي). شعبة لم يُؤخذ لها أي تحضير بعد تظهر بملاحظة توضيحية بدل قائمة فارغة. --- */
+/* --- نافذة "المتدربون الذين لم يحضروا": تخص الشعبة الحالية المختارة في بطاقة
+   "بدء جلسة تحضير" فقط (attAdminStateForCourse) — كل شعبة مستقلة تمامًا عن غيرها
+   ولا تظهر أي شعبة أخرى في هذه البطاقة. يُحسب آخر تاريخ أُخذ له تحضير فعليًا عبر
+   النظام لهذه الشعبة تحديدًا (آخر عنصر في processedDates الخاصة بها، وهي مرتبة
+   زمنيًا لأنها مُشتقة من sec.dates)، ثم تُسرد أسماء/أرقام المتدربين الذين حالتهم
+   في ذلك التاريخ "غائب" (سواء غياب جديد رصده النظام، أو غياب تاريخي كان مُدخلاً
+   سلفًا في الملف الأصلي). يُعرض أيضًا رقم الشعبة والتاريخ ووقت جلسة التحضير نفسها
+   (من سجل الجلسات المحفوظ) لتوضيح الهوية الكاملة للشعبة المعروضة. --- */
 function computeAbsenteesForSection(sec){
   const { section, rows, processedDates } = sec;
   if(!processedDates.length) return { section, date:null, absentees:[] };
@@ -2483,30 +2493,48 @@ function computeAbsenteesForSection(sec){
   return { section, date:lastDate, absentees };
 }
 
-function buildAbsenteesPanelHtml(compiled){
-  const sections = compiled.bySection.map(sec=>{
-    const { section, date, absentees } = computeAbsenteesForSection(sec);
-    if(date === null){
-      return `<div class="absentee-section">
-        <h4>${escapeHtml(section.label)}</h4>
-        <p class="hint">لم يُؤخذ تحضير بعد لهذه الشعبة.</p>
-      </div>`;
-    }
-    if(!absentees.length){
-      return `<div class="absentee-section">
-        <h4>${escapeHtml(section.label)} — ${date}</h4>
-        <p class="hint">✅ جميع المتدربين حاضرون في آخر تحضير مأخوذ.</p>
-      </div>`;
-    }
-    const items = absentees.map(a=>`<li><span class="mono">${escapeHtml(a.id)}</span> — ${escapeHtml(a.name)}</li>`).join('');
-    return `<div class="absentee-section">
-      <h4>${escapeHtml(section.label)} — ${date} (${absentees.length} غائب)</h4>
-      <ul class="absentee-list">${items}</ul>
+/* آخر جلسة تحضير محفوظة لهذه الشعبة/التاريخ تحديدًا، لعرض وقتها. */
+function lastSessionTimeFor(course, sectionCode, date){
+  const matches = attendanceSessions.filter(s=>
+    (s.course||'srwe') === course && s.section === sectionCode && s.date === date
+  );
+  if(!matches.length) return null;
+  const last = matches.reduce((a,b)=> b.startAt > a.startAt ? b : a);
+  return new Date(last.startAt).toLocaleTimeString('ar-SA', { hour:'2-digit', minute:'2-digit' });
+}
+
+function buildAbsenteesPanelHtml(compiled, course){
+  const st = attAdminStateForCourse(course || (CURRENT_COURSE === 'aca' ? 'aca' : 'srwe'));
+  const currentCode = st ? st.sectionCode : null;
+  const sec = compiled.bySection.find(s=> s.section.code === currentCode);
+  if(!sec){
+    return `<div class="card section-block absentee-panel">
+      <h3>📋 المتدربون الذين لم يحضروا — الشعبة الحالية</h3>
+      <p class="hint">اختر شعبة من بطاقة "بدء جلسة تحضير" أعلاه لعرض غيابها هنا.</p>
     </div>`;
-  }).join('');
+  }
+  const { section, date, absentees } = computeAbsenteesForSection(sec);
+  const idLine = `الشعبة ${escapeHtml(section.code)} — ${escapeHtml(section.label)}`;
+  if(date === null){
+    return `<div class="card section-block absentee-panel">
+      <h3>📋 المتدربون الذين لم يحضروا — ${idLine}</h3>
+      <p class="hint">لم يُؤخذ تحضير بعد لهذه الشعبة.</p>
+    </div>`;
+  }
+  const time = lastSessionTimeFor(course || (CURRENT_COURSE === 'aca' ? 'aca' : 'srwe'), section.code, date);
+  const whenLine = `التاريخ: ${date}${time ? ' — الوقت: ' + time : ''}`;
+  if(!absentees.length){
+    return `<div class="card section-block absentee-panel">
+      <h3>📋 المتدربون الذين لم يحضروا — ${idLine}</h3>
+      <p class="hint">${whenLine}</p>
+      <p class="hint">✅ جميع المتدربين حاضرون في آخر تحضير مأخوذ.</p>
+    </div>`;
+  }
+  const items = absentees.map(a=>`<li><span class="mono">${escapeHtml(a.id)}</span> — ${escapeHtml(a.name)}</li>`).join('');
   return `<div class="card section-block absentee-panel">
-    <h3>📋 المتدربون الذين لم يحضروا (بحسب آخر تاريخ أُخذ له تحضير في كل شعبة)</h3>
-    ${sections}
+    <h3>📋 المتدربون الذين لم يحضروا — ${idLine}</h3>
+    <p class="hint">${whenLine} — عدد الغائبين: ${absentees.length}</p>
+    <ul class="absentee-list">${items}</ul>
   </div>`;
 }
 
@@ -2541,7 +2569,7 @@ function renderSectionDateResults(compiled, course){
     ? `<p class="notice">⚠ يوجد ${compiled.unmatchedCount} تأكيد حضور وارد برمز لا يطابق أي جلسة محفوظة على هذا الجهاز ل${courseNoun}. إن بدأت التحضير من جهاز آخر، نزّل سجل الجلسات من ذلك الجهاز ثم استورده أعلاه في بطاقة التحضير، ثم اضغط "تحديث تقرير الحضور" مجددًا.</p>`
     : '';
 
-  box.innerHTML = buildAbsenteesPanelHtml(compiled) + warn + parts;
+  box.innerHTML = buildAbsenteesPanelHtml(compiled, course) + warn + parts;
 
   box.querySelectorAll(`[${xlsxAttr}]`).forEach(btn=>{
     btn.addEventListener('click', ()=>{
@@ -3144,6 +3172,7 @@ el('backInstBtn').addEventListener('click', logout);
 el('attConfirmBtn').addEventListener('click', confirmAttendance);
 el('attCodeInput').addEventListener('keydown', (e)=>{ if(e.key === 'Enter') confirmAttendance(); });
 el('attDownloadBtn').addEventListener('click', downloadAttendanceXlsx);
+el('attHomeBtn').addEventListener('click', showTraineeChoice);
 el('attOverrideBtn').addEventListener('click', submitAttendanceOverride);
 el('attOverrideInput').addEventListener('keydown', (e)=>{ if(e.key === 'Enter') submitAttendanceOverride(); });
 
@@ -3211,4 +3240,5 @@ setLoginRole('trainee');
 if(prefs.studentId) el('loginUsername').value = prefs.studentId;
 showView('view-course');
 </script>
+
 </body></html>
