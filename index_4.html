@@ -665,6 +665,7 @@
         <label>المحاضرة</label>
         <div class="seg" id="lectureSeg"></div>
       </div>
+      <p class="notice" id="weekNoContentNotice" hidden>لم يُضَف اختبار لهذا الأسبوع بعد. يمكنك اختيار أسبوع آخر يحتوي على اختبار.</p>
       <div class="actions">
         <button class="btn" id="startBtn">بدء الاختبار</button>
       </div>
@@ -1115,11 +1116,10 @@ function directQuestionsFor(week, lecture){
 }
 
 const LECTURE_SIZE = 5;
-const LECTURES_PER_WEEK = 3;
+const LECTURES_PER_WEEK = 1; // كل محاضرة اختبار = أسبوع تقويمي واحد (مطابقة مباشرة لأسابيع التقويم التدريبي)
 const CODE_PREFIX = 'NETQ1';
 const EXAM_DURATION_SECONDS = 5 * 60;
 const POINTS_PER_TERM = 0.02; // درجة كل مصطلح من الدرجة الكلية للمقرر
-const ACTIVE_WEEKS_COUNT = 6; // عدد الأسابيع الفعلية المعروضة في النموذج هذا الفصل
 
 function chunk(arr, size){
   const out = [];
@@ -1132,8 +1132,73 @@ const LECTURES = lectureChunks.map((terms,i)=>({
   index:i+1,
   terms: terms.map(t=>({...t, dir: (t.id % 2 === 0) ? 'ar2en' : 'en2ar'}))
 }));
-const weekChunks = chunk(LECTURES, LECTURES_PER_WEEK);
-const WEEKS = weekChunks.map((lects,i)=>({index:i+1, lectures:lects})).slice(0, ACTIVE_WEEKS_COUNT);
+
+/* ---------- تقويم أسابيع الفصل التدريبي الأول 1448هـ (من ملف "توزيع أسابيع العام التدريبي")
+   — تنتهي الأسابيع المعروضة في المنصة عند الأسبوع 17 (آخر أسبوع تدريسي قبل أسبوعي
+   الاختبارات النهائية 18 و19). start = تاريخ الأحد الميلادي لذلك الأسبوع (الأحد–الخميس). --- */
+const WEEK_CALENDAR = {
+  1:  { start:'2026-08-23', hijri:'10–14/03/1448' },
+  2:  { start:'2026-08-30', hijri:'17–21/03/1448' },
+  3:  { start:'2026-09-06', hijri:'24–28/03/1448' },
+  4:  { start:'2026-09-13', hijri:'02–06/04/1448' },
+  5:  { start:'2026-09-20', hijri:'09–13/04/1448' },
+  6:  { start:'2026-09-27', hijri:'16–20/04/1448' },
+  7:  { start:'2026-10-04', hijri:'23–27/04/1448' },
+  8:  { start:'2026-10-11', hijri:'30/04–04/05/1448' },
+  9:  { start:'2026-10-18', hijri:'07–11/05/1448' },
+  10: { start:'2026-10-25', hijri:'14–18/05/1448' },
+  11: { start:'2026-11-01', hijri:'21–25/05/1448' },
+  12: { start:'2026-11-08', hijri:'28/05–02/06/1448' },
+  13: { start:'2026-11-15', hijri:'05–09/06/1448' },
+  14: { start:'2026-11-29', hijri:'19–23/06/1448' },
+  15: { start:'2026-12-06', hijri:'26/06–01/07/1448' },
+  16: { start:'2026-12-13', hijri:'04–08/07/1448' },
+  17: { start:'2026-12-20', hijri:'11–15/07/1448' },
+};
+const TOTAL_CALENDAR_WEEKS = 17; // آخر أسبوع موجود في المنصة (قبل أسبوعي الاختبارات النهائية)
+
+function weekDateLabel(weekNum){
+  const c = WEEK_CALENDAR[weekNum];
+  if(!c) return '';
+  const start = new Date(c.start + 'T00:00:00');
+  const end = new Date(start.getTime());
+  end.setDate(end.getDate() + 4);
+  const fmt = d => d.toLocaleDateString('ar-SA', { day:'2-digit', month:'2-digit' });
+  return `${c.hijri}هـ • ${fmt(start)}–${fmt(end)}م`;
+}
+
+/* الأسبوع الحالي الفعلي، محسوبًا دائمًا من تاريخ اليوم الحقيقي (لا رقم ثابت قد يصبح قديمًا):
+   أول أسبوع يبدأ تاريخه (الأحد) في تاريخ اليوم أو بعده يعني أننا ما زلنا قبله أو في بدايته؛
+   فنعتمد آخر أسبوع بدأ تاريخه في الماضي أو اليوم نفسه. */
+function computeCurrentWeekIndex(){
+  const today = new Date(); today.setHours(0,0,0,0);
+  let result = 1;
+  for(let w = 1; w <= TOTAL_CALENDAR_WEEKS; w++){
+    const c = WEEK_CALENDAR[w];
+    if(!c) continue;
+    const start = new Date(c.start + 'T00:00:00');
+    if(start.getTime() <= today.getTime()) result = w; else break;
+  }
+  return result;
+}
+const CURRENT_WEEK_INDEX = computeCurrentWeekIndex();
+
+const WEEKS = Array.from({ length: TOTAL_CALENDAR_WEEKS }, (_, i) => {
+  const weekNum = i + 1;
+  const lec = LECTURES[i]; // متاح فقط للأسابيع التي أُضيف لها محتوى اختبار حتى الآن
+  return { index: weekNum, lectures: lec ? [lec] : [] };
+});
+
+/* أقرب أسبوع فيه محتوى اختبار فعلي للأسبوع الحالي — إن لم يُضَف محتوى لهذا الأسبوع بعد
+   نستخدم آخر أسبوع سابق له محتوى (أحدث ما تم تدريسه فعليًا)، لا الأسبوع الأول. */
+function defaultWeekIndexForToday(){
+  for(let w = Math.min(CURRENT_WEEK_INDEX, TOTAL_CALENDAR_WEEKS); w >= 1; w--){
+    const wk = WEEKS.find(x=>x.index===w);
+    if(wk && wk.lectures.length) return w;
+  }
+  const firstWithContent = WEEKS.find(w=>w.lectures.length);
+  return firstWithContent ? firstWithContent.index : 1;
+}
 
 function pointsFor(termCount){
   return Math.round(termCount * POINTS_PER_TERM * 100) / 100;
@@ -1156,7 +1221,9 @@ const prefs = loadPrefs();
 let state = {
   sectionCode: null,
   studentId: null,
-  weekIndex: prefs.weekIndex || 1,
+  // الأسبوع الافتراضي دائمًا هو الأسبوع الحالي الفعلي (وليس آخر اختيار محفوظ، حتى لا يبقى
+  // عالقًا على أسبوع قديم مضى تاريخه)؛ يبقى بإمكان المتدرب اختيار أسبوع آخر يدويًا من القائمة.
+  weekIndex: defaultWeekIndexForToday(),
   lectureIndex: prefs.lectureIndex || 1,
   directQIndex: 0
 };
@@ -1361,11 +1428,17 @@ function currentSection(){
 function buildSetup(){
   const weekSelect = el('weekSelect');
   weekSelect.innerHTML = WEEKS.map(w=>{
-    const first = w.lectures[0].index, last = w.lectures[w.lectures.length-1].index;
-    return `<option value="${w.index}">الأسبوع ${w.index} (المحاضرات ${first}–${last})</option>`;
+    const hasContent = w.lectures.length > 0;
+    const isCurrent = w.index === CURRENT_WEEK_INDEX;
+    const dateLabel = weekDateLabel(w.index);
+    const suffix = hasContent ? '' : ' — لم يُضَف اختبار لهذا الأسبوع بعد';
+    const currentMark = isCurrent ? ' (الأسبوع الحالي)' : '';
+    const label = `الأسبوع ${w.index}${currentMark} — ${dateLabel}${suffix}`;
+    return `<option value="${w.index}"${hasContent ? '' : ' disabled'}>${label}</option>`;
   }).join('');
-  if(WEEKS.some(w=>w.index===state.weekIndex)) weekSelect.value = state.weekIndex;
-  else state.weekIndex = Number(weekSelect.value);
+  if(WEEKS.some(w=>w.index===state.weekIndex && w.lectures.length)) weekSelect.value = state.weekIndex;
+  else state.weekIndex = defaultWeekIndexForToday();
+  weekSelect.value = state.weekIndex;
 
   weekSelect.addEventListener('change', ()=>{
     state.weekIndex = Number(weekSelect.value);
@@ -1394,6 +1467,16 @@ function renderIdentityBanner(){
 function buildLectureSeg(){
   const week = WEEKS.find(w=>w.index===state.weekIndex);
   const seg = el('lectureSeg');
+  const notice = el('weekNoContentNotice');
+  const startBtn = el('startBtn');
+  if(!week || !week.lectures.length){
+    seg.innerHTML = '';
+    if(notice) notice.hidden = false;
+    if(startBtn) startBtn.disabled = true;
+    return;
+  }
+  if(notice) notice.hidden = true;
+  if(startBtn) startBtn.disabled = false;
   seg.innerHTML = week.lectures.map(l=>`<button type="button" class="chip-btn" data-lecture="${l.index}">المحاضرة ${l.index}</button>`).join('');
   if(!week.lectures.some(l=>l.index===state.lectureIndex)) state.lectureIndex = week.lectures[0].index;
   seg.querySelectorAll('.chip-btn').forEach(btn=>{
@@ -1407,6 +1490,7 @@ function buildLectureSeg(){
 
 function currentLecture(){
   const week = WEEKS.find(w=>w.index===state.weekIndex);
+  if(!week) return undefined;
   return week.lectures.find(l=>l.index===state.lectureIndex);
 }
 
